@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Guide complet et accessible pour ajouter une variable d'environnement sur Windows, avec PHP comme exemple : PATH, php -v, php -S et lancement de scripts.">
+  <title>Guide Variables d'environnement Windows | Exemple avec PHP</title>
+
+  <style>
+    /* CSS autonome : remplacement de Tailwind CSS */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+      color: #52606d;
+      background:
+        radial-gradient(circle at 15% 0%, rgba(6, 182, 212, .10), transparent 30rem),
+        radial-gradient(circle at 85% 10%, rgba(0, 212, 255, .08), transparent 25rem),
+        #f6f9fc;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: inherit;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      margin: 0;
+    }
+
+    h1,
+    h2,
+    h3,
+    p,
+    ul,
+    ol {
+      margin-top: 0;
+    }
+
+    ul,
+    ol {
+      padding-left: 1.5rem;
+    }
+
+    code,
+    pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    pre {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      margin: 0;
+    }
+
+    .mx-auto {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .max-w-7xl {
+      max-width: 80rem;
+    }
+
+    .max-w-4xl {
+      max-width: 56rem;
+    }
+
+    .max-w-3xl {
+      max-width: 48rem;
+    }
+
+    .min-w-0 {
+      min-width: 0;
+    }
+
+    .min-w-full {
+      min-width: 100%;
+    }
+
+    .flex {
+      display: flex;
+    }
+
+    .inline-flex {
+      display: inline-flex;
+    }
+
+    .grid {
+      display: grid;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .block {
+      display: block;
+    }
+
+    .items-center {
+      align-items: center;
+    }
+
+    .items-start {
+      align-items: flex-start;
+    }
+
+    .justify-between {
+      justify-content: space-between;
+    }
+
+    .justify-center {
+      justify-content: center;
+    }
+
+    .flex-wrap {
+      flex-wrap: wrap;
+    }
+
+    .flex-col {
+      flex-direction: column;
+    }
+
+    .gap-2 {
+      gap: .5rem;
+    }
+
+    .gap-3 {
+      gap: .75rem;
+    }
+
+    .gap-4 {
+      gap: 1rem;
+    }
+
+    .gap-5 {
+      gap: 1.25rem;
+    }
+
+    .gap-6 {
+      gap: 1.5rem;
+    }
+
+    .gap-10 {
+      gap: 2.5rem;
+    }
+
+    .grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid-cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .space-y-3> :not([hidden])~ :not([hidden]) {
+      margin-top: .75rem;
+    }
+
+    .space-y-5> :not([hidden])~ :not([hidden]) {
+      margin-top: 1.25rem;
+    }
+
+    .space-y-14> :not([hidden])~ :not([hidden]) {
+      margin-top: 3.5rem;
+    }
+
+    .mt-2 {
+      margin-top: .5rem;
+    }
+
+    .mt-3 {
+      margin-top: .75rem;
+    }
+
+    .mt-4 {
+      margin-top: 1rem;
+    }
+
+    .mt-5 {
+      margin-top: 1.25rem;
+    }
+
+    .mt-7 {
+      margin-top: 1.75rem;
+    }
+
+    .mt-9 {
+      margin-top: 2.25rem;
+    }
+
+    .mb-3 {
+      margin-bottom: .75rem;
+    }
+
+    .mb-6 {
+      margin-bottom: 1.5rem;
+    }
+
+    .p-3 {
+      padding: .75rem;
+    }
+
+    .p-4 {
+      padding: 1rem;
+    }
+
+    .p-5 {
+      padding: 1.25rem;
+    }
+
+    .p-6 {
+      padding: 1.5rem;
+    }
+
+    .p-8 {
+      padding: 2rem;
+    }
+
+    .px-2 {
+      padding-left: .5rem;
+      padding-right: .5rem;
+    }
+
+    .px-3 {
+      padding-left: .75rem;
+      padding-right: .75rem;
+    }
+
+    .px-4 {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    .px-5 {
+      padding-left: 1.25rem;
+      padding-right: 1.25rem;
+    }
+
+    .px-6 {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+
+    .py-2 {
+      padding-top: .5rem;
+      padding-bottom: .5rem;
+    }
+
+    .py-3 {
+      padding-top: .75rem;
+      padding-bottom: .75rem;
+    }
+
+    .py-4 {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+
+    .py-10 {
+      padding-top: 2.5rem;
+      padding-bottom: 2.5rem;
+    }
+
+    .py-12 {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+
+    .py-20 {
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+    }
+
+    .w-6 {
+      width: 1.5rem;
+    }
+
+    .h-6 {
+      height: 1.5rem;
+    }
+
+    .w-9 {
+      width: 2.25rem;
+    }
+
+    .h-9 {
+      height: 2.25rem;
+    }
+
+    .text-left {
+      text-align: left;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .text-white {
+      color: #fff;
+    }
+
+    .text-ink {
+      color: #0a2540;
+    }
+
+    .text-slate-300 {
+      color: #cbd5e1;
+    }
+
+    .text-slate-400 {
+      color: #94a3b8;
+    }
+
+    .text-slate-500 {
+      color: #64748b;
+    }
+
+    .text-slate-700 {
+      color: #52606d;
+    }
+
+    .text-cyan-700 {
+      color: #0e7490;
+    }
+
+    .text-red-800 {
+      color: #991b1b;
+    }
+
+    .text-amber-900 {
+      color: #78350f;
+    }
+
+    .text-cyanx {
+      color: #00d4ff;
+    }
+
+    .text-cyan {
+      color: #06b6d4;
+    }
+
+    .text-xs {
+      font-size: .75rem;
+      line-height: 1rem;
+    }
+
+    .text-sm {
+      font-size: .875rem;
+      line-height: 1.25rem;
+    }
+
+    .text-lg {
+      font-size: 1.125rem;
+      line-height: 1.75rem;
+    }
+
+    .text-xl {
+      font-size: 1.25rem;
+      line-height: 1.75rem;
+    }
+
+    .text-3xl {
+      font-size: 1.875rem;
+      line-height: 2.25rem;
+    }
+
+    .text-5xl {
+      font-size: 3rem;
+      line-height: 1;
+    }
+
+    .font-bold {
+      font-weight: 700;
+    }
+
+    .font-semibold {
+      font-weight: 600;
+    }
+
+    .font-black {
+      font-weight: 900;
+    }
+
+    .uppercase {
+      text-transform: uppercase;
+    }
+
+    .tracking-tight {
+      letter-spacing: -.025em;
+    }
+
+    .tracking-wider {
+      letter-spacing: .05em;
+    }
+
+    .tracking-widest {
+      letter-spacing: .1em;
+    }
+
+    .leading-6 {
+      line-height: 1.5rem;
+    }
+
+    .leading-7 {
+      line-height: 1.75rem;
+    }
+
+    .leading-8 {
+      line-height: 2rem;
+    }
+
+    .rounded-lg {
+      border-radius: .5rem;
+    }
+
+    .rounded-xl {
+      border-radius: .75rem;
+    }
+
+    .rounded-2xl {
+      border-radius: 1rem;
+    }
+
+    .rounded-3xl {
+      border-radius: 1.5rem;
+    }
+
+    .rounded-full {
+      border-radius: 9999px;
+    }
+
+    .border {
+      border-width: 1px;
+      border-style: solid;
+    }
+
+    .border-b {
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
+    }
+
+    .border-t {
+      border-top-width: 1px;
+      border-top-style: solid;
+    }
+
+    .border-slate-200 {
+      border-color: #e2e8f0;
+    }
+
+    .border-slate-200\/70 {
+      border-color: rgba(226, 232, 240, .7);
+    }
+
+    .border-cyan-100 {
+      border-color: #cffafe;
+    }
+
+    .border-amber-200 {
+      border-color: #fde68a;
+    }
+
+    .bg-white {
+      background-color: #fff;
+    }
+
+    .bg-white\/85 {
+      background-color: rgba(255, 255, 255, .85);
+    }
+
+    .bg-cyan-50 {
+      background-color: #ecfeff;
+    }
+
+    .bg-slate-50 {
+      background-color: #f8fafc;
+    }
+
+    .bg-red-50 {
+      background-color: #fef2f2;
+    }
+
+    .bg-amber-50 {
+      background-color: #fffbeb;
+    }
+
+    .bg-ink {
+      background-color: #0a2540;
+    }
+
+    .bg-cyan {
+      background-color: #06b6d4;
+    }
+
+    .shadow-sm {
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .05);
+    }
+
+    .shadow-glow {
+      box-shadow: 0 20px 60px rgba(6, 182, 212, .20);
+    }
+
+    .overflow-hidden {
+      overflow: hidden;
+    }
+
+    .overflow-x-auto {
+      overflow-x: auto;
+    }
+
+    .sticky {
+      position: sticky;
+    }
+
+    .top-24 {
+      top: 6rem;
+    }
+
+    .top-0 {
+      top: 0;
+    }
+
+    .z-50 {
+      z-index: 50;
+    }
+
+    .backdrop-blur-xl {
+      backdrop-filter: blur(24px);
+    }
+
+    .backdrop-blur-xl {
+      -webkit-backdrop-filter: blur(24px);
+    }
+
+    .place-items-center {
+      place-items: center;
+    }
+
+    .opacity-90:hover {
+      opacity: .9;
+    }
+
+    .hover\:text-cyan:hover {
+      color: #06b6d4;
+    }
+
+    .hover\:border-cyan:hover {
+      border-color: #06b6d4;
+    }
+
+    .divide-y> :not([hidden])~ :not([hidden]) {
+      border-top-width: 1px;
+      border-top-style: solid;
+    }
+
+    .divide-slate-100> :not([hidden])~ :not([hidden]) {
+      border-color: #f1f5f9;
+    }
+
+    header.sticky {
+      position: sticky;
+    }
+
+    table {
+      border-collapse: collapse;
+    }
+
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(6, 182, 212, .045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(6, 182, 212, .045) 1px, transparent 1px);
+      background-size: 36px 36px;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, .78);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(6, 182, 212, .10);
+    }
+
+    .env-card {
+      border: 1px solid #e6ebf1;
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(50, 50, 93, .06);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .env-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 45px rgba(50, 50, 93, .10);
+    }
+
+    .code {
+      background: #0a2540;
+      color: #cffafe;
+      border-radius: 14px;
+      padding: 1rem;
+      font-size: .84rem;
+      line-height: 1.65;
+      overflow-x: auto;
+    }
+
+    .constant {
+      font-family: 'Courier New', Courier, monospace;
+      background: #ecfeff;
+      color: #0e7490;
+      border-radius: 8px;
+      padding: .15rem .45rem;
+      font-size: .88rem;
+      font-weight: 700;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      padding: .28rem .65rem;
+      border-radius: 999px;
+      font-size: .72rem;
+      font-weight: 700;
+      background: #ecfeff;
+      color: #0e7490;
+    }
+
+    .sidebar-link {
+      display: block;
+      padding: .55rem .7rem;
+      border-radius: .6rem;
+      color: #52606d;
+      font-size: .9rem;
+    }
+
+    .sidebar-link:hover {
+      background: #ecfeff;
+      color: #0e7490;
+    }
+
+    .sidebar-link.active {
+      background: #ecfeff;
+      color: #0e7490;
+      font-weight: 700;
+    }
+
+    .step-num {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.25rem;
+      height: 2.25rem;
+      min-width: 2.25rem;
+      border-radius: 9999px;
+      background: #06b6d4;
+      color: #fff;
+      font-weight: 900;
+      font-size: .95rem;
+    }
+
+    body.dark {
+      background:
+        radial-gradient(circle at 15% 0%, rgba(6, 182, 212, .12), transparent 30rem),
+        radial-gradient(circle at 85% 10%, rgba(0, 212, 255, .08), transparent 25rem),
+        #020617 !important;
+      color: #e2e8f0 !important;
+    }
+
+    body.dark .bg-white,
+    body.dark .bg-white\/85 {
+      background-color: #0f172a !important;
+    }
+
+    body.dark .bg-cyan-50 {
+      background-color: #083344 !important;
+    }
+
+    body.dark .bg-slate-50 {
+      background-color: #1e293b !important;
+    }
+
+    body.dark .divide-slate-100> :not([hidden])~ :not([hidden]) {
+      border-color: #334155 !important;
+    }
+
+    body.dark .text-slate-400,
+    body.dark .text-slate-500 {
+      color: #94a3b8 !important;
+    }
+
+    body.dark .bg-red-50 {
+      background-color: #450a0a !important;
+    }
+
+    body.dark .text-red-800 {
+      color: #fecaca !important;
+    }
+
+    body.dark .bg-amber-50 {
+      background-color: #451a03 !important;
+    }
+
+    body.dark .text-amber-900 {
+      color: #fde68a !important;
+    }
+
+    body.dark .text-ink {
+      color: #f8fafc !important;
+    }
+
+    body.dark .text-slate-700 {
+      color: #cbd5e1 !important;
+    }
+
+    body.dark .text-slate-300 {
+      color: #cbd5e1 !important;
+    }
+
+    body.dark .text-cyan-700 {
+      color: #67e8f9 !important;
+    }
+
+    body.dark .constant {
+      background: #083344 !important;
+      color: #67e8f9 !important;
+    }
+
+    body.dark .border-slate-200,
+    body.dark .border-slate-200\/70 {
+      border-color: #334155 !important;
+    }
+
+    body.dark .border-cyan-100 {
+      border-color: #164e63 !important;
+    }
+
+    body.dark .env-card {
+      background: #0f172a !important;
+      border-color: #334155 !important;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, .25);
+    }
+
+    body.dark .sidebar-link {
+      color: #cbd5e1 !important;
+    }
+
+    body.dark .sidebar-link:hover {
+      background: #1e293b !important;
+      color: #a5f3fc !important;
+    }
+
+    body.dark .sidebar-link.active {
+      background: #0e4b5c !important;
+      color: #a5f3fc !important;
+    }
+
+    body.dark .grid-bg {
+      background-image:
+        linear-gradient(rgba(6, 182, 212, .08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(6, 182, 212, .08) 1px, transparent 1px);
+    }
+
+    body.dark .glass {
+      background: rgba(15, 23, 42, .82) !important;
+      border-color: rgba(148, 163, 184, .18) !important;
+    }
+
+    body.dark footer {
+      background-color: #020617 !important;
+      border-color: #334155 !important;
+    }
+
+    body.dark button {
+      background-color: #0f172a !important;
+      border-color: #475569 !important;
+      color: #e2e8f0 !important;
+    }
+
+    body.dark button:hover {
+      background-color: #1e293b !important;
+      border-color: #22d3ee !important;
+      color: #a5f3fc !important;
+    }
+
+    @media (min-width:768px) {
+      .md\:flex {
+        display: flex;
+      }
+
+      .md\:grid-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .md\:grid-cols-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .md\:text-xl {
+        font-size: 1.25rem;
+        line-height: 1.75rem;
+      }
+
+      .md\:text-7xl {
+        font-size: 4.5rem;
+        line-height: 1;
+      }
+
+      .md\:py-28 {
+        padding-top: 7rem;
+        padding-bottom: 7rem;
+      }
+
+      .md\:p-12 {
+        padding: 3rem;
+      }
+    }
+
+    @media (min-width:1024px) {
+      .lg\:block {
+        display: block;
+      }
+
+      .lg\:grid-cols-\[240px_minmax\(0\2c 1fr\)\] {
+        grid-template-columns: 240px minmax(0, 1fr);
+      }
+    }
+  </style>
+</head>
+
+<body class="text-slate-700">
+
+  <header class="sticky top-0 z-50 border-b border-slate-200/70 bg-white/85 backdrop-blur-xl">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
+      <a href="index.html" class="flex items-center gap-3 font-black text-ink">
+        <span class="grid h-9 w-9 place-items-center rounded-xl bg-cyan text-white shadow-glow">%P</span>
+        <span>Guide Variables d'environnement</span>
+      </a>
+      <!-- <nav class="hidden gap-6 text-sm font-semibold md:flex">
+        <a href="#commencer" class="hover:text-cyan">Comprendre</a>
+        <a href="#ajouter" class="hover:text-cyan">Ajouter au PATH</a>
+        <a href="#verifier" class="hover:text-cyan">Vérifier</a>
+        <a href="#lancer" class="hover:text-cyan">Lancer un script</a>
+      </nav> -->
+      <button onclick="toggleTheme()"
+        class="rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold hover:border-cyan hover:text-cyan">Mode
+        nuit</button>
+    </div>
+  </header>
+
+  <section class="grid-bg overflow-hidden">
+    <div class="mx-auto max-w-7xl px-5 py-20 md:py-28">
+      <div class="max-w-4xl">
+        <div
+          class="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan-100 bg-cyan-50 px-4 py-2 text-sm font-bold text-cyan-700">
+          Guide pratique · Windows & ligne de commande
+        </div>
+        <h1 class="max-w-4xl text-5xl font-black tracking-tight text-ink md:text-7xl">
+          Ajouter une <span class="text-cyan-700">variable d'environnement</span> sur Windows.
+        </h1>
+        <p class="mt-7 max-w-3xl text-lg leading-8 md:text-xl">
+          On prend PHP comme exemple concret : ajouter son dossier au <strong>PATH</strong> de Windows pour pouvoir
+          taper <code>php</code> depuis n'importe quel dossier dans l'invite de commandes, puis lancer un script ou
+          un mini serveur de développement.
+        </p>
+        <div class="mt-9 flex flex-wrap gap-3">
+          <a href="#commencer"
+            class="rounded-xl bg-cyan px-6 py-3 font-bold text-white shadow-glow hover:opacity-90">Commencer le
+            guide</a>
+          <a href="#ajouter"
+            class="rounded-xl border border-slate-200 bg-white px-6 py-3 font-bold text-ink hover:border-cyan">Aller
+            aux étapes</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="mx-auto max-w-7xl px-5 py-12">
+    <div class="grid gap-10 lg:grid-cols-[240px_minmax(0,1fr)]">
+
+      <aside class="hidden lg:block">
+        <div class="sticky top-24 glass rounded-2xl p-4 shadow-sm">
+          <p class="mb-3 px-2 text-xs font-black uppercase tracking-widest text-slate-400">Sommaire</p>
+          <a class="sidebar-link" href="#commencer">01. C'est quoi une variable d'environnement</a>
+          <a class="sidebar-link" href="#path">02. Le PATH, à quoi ça sert</a>
+          <a class="sidebar-link" href="#ajouter">03. Ajouter PHP au PATH</a>
+          <a class="sidebar-link" href="#verifier">04. Vérifier que ça fonctionne</a>
+          <a class="sidebar-link" href="#lancer">05. Lancer un script PHP</a>
+          <a class="sidebar-link" href="#serveur">06. Lancer un serveur PHP</a>
+          <a class="sidebar-link" href="#erreurs">07. Erreurs fréquentes</a>
+        </div>
+      </aside>
+
+      <div class="min-w-0 space-y-14">
+
+        <section id="commencer">
+          <div class="mb-6">
+            <span class="tag">01 · Les bases</span>
+            <h2 class="mt-4 text-3xl font-black text-ink">C'est quoi une variable d'environnement ?</h2>
+            <p class="mt-3 leading-7">Une variable d'environnement est une information stockée au niveau du
+              système d'exploitation, que n'importe quel programme peut lire. Elle sert par exemple à indiquer
+              où trouver certains outils, ou à configurer un comportement sans toucher au code.</p>
+          </div>
+
+          <div class="grid gap-5 md:grid-cols-2">
+            <div class="env-card p-6">
+              <h3 class="font-black text-ink">Exemples courants</h3>
+              <ul class="mt-4 space-y-3 text-sm leading-6">
+                <li><span class="constant">PATH</span> : liste des dossiers où Windows cherche les programmes
+                  exécutables.</li>
+                <li><span class="constant">JAVA_HOME</span> : emplacement de l'installation de Java.</li>
+                <li><span class="constant">TEMP</span> / <span class="constant">TMP</span> : dossier des fichiers
+                  temporaires.</li>
+              </ul>
+            </div>
+            <div class="env-card p-6">
+              <h3 class="font-black text-ink">Pourquoi s'en servir avec PHP</h3>
+              <p class="mt-4 leading-6">Sans configuration, Windows ne sait pas où se trouve <code>php.exe</code>.
+                Il faut soit taper le chemin complet à chaque fois, soit - plus pratique - ajouter le dossier de PHP
+                au <span class="constant">PATH</span> une bonne fois pour toutes.</p>
+            </div>
+          </div>
+
+          <div class="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm leading-6 text-amber-900">
+            <strong>Prérequis :</strong> avoir déjà téléchargé et décompressé PHP quelque part sur le disque, par
+            exemple dans <code>C:\php</code>. Ce guide part de cet exemple de chemin.
+          </div>
+        </section>
+
+        <section id="path">
+          <div class="mb-6">
+            <span class="tag">02 · PATH</span>
+            <h2 class="mt-4 text-3xl font-black text-ink">Le PATH, à quoi ça sert</h2>
+            <p class="mt-3 leading-7">Quand tu tapes une commande dans l'invite de commandes (comme
+              <code>php</code>), Windows regarde dans chacun des dossiers listés dans le <span
+                class="constant">PATH</span>, dans l'ordre, jusqu'à trouver un programme portant ce nom.
+            </p>
+          </div>
+
+          <article class="env-card p-6">
+            <h3 class="text-xl font-black text-ink">Sans PHP dans le PATH</h3>
+            <div class="mt-4 code">
+              <pre>C:\Users\toi&gt; php -v
+'php' n'est pas reconnu en tant que commande interne
+ou externe, un programme exécutable ou un fichier de commandes.</pre>
+            </div>
+            <p class="mt-3 text-sm">C'est le message classique qui indique que Windows ne trouve pas
+              <code>php.exe</code> dans aucun des dossiers du PATH.
+            </p>
+          </article>
+        </section>
+
+        <section id="ajouter">
+          <div class="mb-6">
+            <span class="tag">03 · Étapes</span>
+            <h2 class="mt-4 text-3xl font-black text-ink">Ajouter PHP au PATH sur Windows</h2>
+            <p class="mt-3 leading-7">On suppose que PHP est décompressé dans <code>C:\php</code> (adapte le chemin
+              si le tien est différent).</p>
+          </div>
+
+          <div class="space-y-5">
+            <article class="env-card p-6 flex gap-4 items-start">
+              <span class="step-num">1</span>
+              <div>
+                <h3 class="text-lg font-black text-ink">Ouvrir les variables d'environnement</h3>
+                <p class="mt-2 text-sm leading-6">Clique sur le menu Démarrer, tape <span class="constant">variables
+                    d'environnement</span> et ouvre <strong>« Modifier les variables
+                    d'environnement système »</strong>.</p>
+              </div>
+            </article>
+
+            <article class="env-card p-6 flex gap-4 items-start">
+              <span class="step-num">2</span>
+              <div>
+                <h3 class="text-lg font-black text-ink">Ouvrir la fenêtre des variables</h3>
+                <p class="mt-2 text-sm leading-6">Dans la fenêtre « Propriétés système » qui s'ouvre, clique sur le
+                  bouton <strong>« Variables d'environnement… »</strong> en bas.</p>
+              </div>
+            </article>
+
+            <article class="env-card p-6 flex gap-4 items-start">
+              <span class="step-num">3</span>
+              <div>
+                <h3 class="text-lg font-black text-ink">Sélectionner la variable Path</h3>
+                <p class="mt-2 text-sm leading-6">Dans la section <strong>« Variables utilisateur »</strong> (ou
+                  <strong>« Variables système »</strong> pour que ce soit valable pour tous les comptes), sélectionne
+                  la ligne <span class="constant">Path</span> puis clique sur <strong>« Modifier… »</strong>.
+                </p>
+              </div>
+            </article>
+
+            <article class="env-card p-6 flex gap-4 items-start">
+              <span class="step-num">4</span>
+              <div>
+                <h3 class="text-lg font-black text-ink">Ajouter le dossier de PHP</h3>
+                <p class="mt-2 text-sm leading-6">Clique sur <strong>« Nouveau »</strong> et colle le chemin du
+                  dossier contenant <code>php.exe</code> (souvent dans le dossier "bin") :</p>
+                <div class="mt-3 code">
+                  <pre>C:php\bin\</pre>
+                </div>
+              </div>
+            </article>
+
+            <article class="env-card p-6 flex gap-4 items-start">
+              <span class="step-num">5</span>
+              <div>
+                <h3 class="text-lg font-black text-ink">Valider et redémarrer le terminal ou votre console ou interprète
+                  de commandes (cmd)</h3>
+                <p class="mt-2 text-sm leading-6">Clique sur <strong>« OK »</strong> sur chacune des fenêtres
+                  ouvertes. Ferme ensuite tout invite de commandes déjà ouvert et rouvre-en un nouveau : le PATH
+                  n'est relu qu'à l'ouverture d'un nouveau terminal.</p>
+              </div>
+            </article>
+          </div>
+
+          <div class="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm leading-6 text-amber-900">
+            <strong>Attention :</strong> ne supprime pas le contenu existant de la variable <span
+              class="constant">Path</span>. On vient seulement en <strong>ajouter un nouveau</strong>, jamais remplacer
+            les
+            autres.
+          </div>
+        </section>
+
+        <section id="verifier">
+          <div class="mb-6">
+            <span class="tag">04 · Vérification</span>
+            <h2 class="mt-4 text-3xl font-black text-ink">Vérifier que ça fonctionne</h2>
+            <p class="mt-3 leading-7">Ouvre un nouveau terminal (cmd ou powershell) et tape :</p>
+          </div>
+
+          <article class="env-card p-6">
+            <div class="code">
+              <pre>C:\Users\toi&gt; php -v
+
+PHP 8.3.0 (cli) (built: ...)
+Copyright (c) The PHP Group
+Zend Engine v4.3.0, Copyright (c) Zend Technologies</pre>
+            </div>
+            <p class="mt-3 text-sm">Si la version de PHP s'affiche, c'est gagné : la commande <span
+                class="constant">php</span> est maintenant reconnue depuis n'importe quel dossier.</p>
+          </article>
+        </section>
+
+        <section id="lancer">
+          <div class="mb-6">
+            <span class="tag">05 · Exécuter</span>
+            <h2 class="mt-4 text-3xl font-black text-ink">Lancer un script PHP depuis le cmd</h2>
+            <p class="mt-3 leading-7">Place-toi (avec <span class="constant">cd</span>) dans le dossier qui contient
+              ton fichier PHP, puis exécute-le avec la commande <span class="constant">php</span> suivie du nom du
+              fichier.</p>
+          </div>
+
+          <article class="env-card p-6">
+            <div class="code">
+              <pre>C:\Users\toi&gt; cd C:\mon-projet
+C:\mon-projet&gt; php test.php
+
+Bonjour depuis PHP !</pre>
+            </div>
+            <p class="mt-3 text-sm">Cette commande exécute le script <code>test.php</code> directement, comme le
+              ferait un script en ligne de commande - sans passer par un navigateur.</p>
+          </article>
+        </section>
+
+        <section id="serveur">
+          <div class="mb-6">
+            <span class="tag">06 · Serveur local</span>
+            <h2 class="mt-4 text-3xl font-black text-ink">Lancer un serveur de développement PHP</h2>
+            <p class="mt-3 leading-7">PHP intègre un mini serveur web, pratique pour tester un site sans installer
+              Apache ou Nginx. On le lance avec l'option <span class="constant">-S</span> suivie d'une adresse et
+              d'un port.</p>
+          </div>
+
+          <article class="env-card p-6">
+            <div class="code">
+              <pre>C:\mon-projet&gt; php -S localhost:8000
+
+[Sun Sep 12 10:00:00 2026] PHP 8.3.0 Development Server
+(http://localhost:8000) started</pre>
+            </div>
+            <p class="mt-3 text-sm">Il suffit ensuite d'ouvrir <code>http://localhost:8000</code> dans le
+              navigateur. Le serveur sert les fichiers du dossier courant (celui où la commande a été lancée).
+              Pour l'arrêter : <span class="constant">Ctrl + C</span> dans le terminal.</p>
+            <p class="mt-3 rounded-lg bg-slate-50 p-3 text-sm">
+              Le port <code>8000</code> n'a rien d'obligatoire : n'importe quel port libre fonctionne, par exemple
+              <code>php -S localhost:8080</code> ou <code>php -S localhost:3000</code>.
+            </p>
+          </article>
+        </section>
+
+        <section id="erreurs">
+          <div class="mb-6">
+            <span class="tag">07 · À retenir</span>
+            <h2 class="mt-4 text-3xl font-black text-ink">Erreurs fréquentes</h2>
+          </div>
+
+          <article class="env-card p-6">
+            <ul class="space-y-3 text-sm leading-6">
+              <li><strong>« php n'est pas reconnu »</strong> : le PATH n'a pas été mis à jour, ou le terminal n'a
+                pas été rouvert après la modification.</li>
+              <li><strong>Mauvais chemin ajouté</strong> : vérifie que le dossier ajouté au PATH contient bien
+                directement <code>php.exe</code>, et pas un sous-dossier ou un dossier parent.</li>
+              <li><strong>Port déjà utilisé</strong> avec <code>php -S</code> : choisis un autre numéro de port, par
+                exemple <code>8001</code> à la place de <code>8000</code>.</li>
+              <li><strong>Plusieurs versions de PHP installées</strong> : si <code>php -v</code> affiche une version
+                inattendue, une autre installation de PHP est peut-être placée avant la tienne dans le PATH.</li>
+            </ul>
+          </article>
+        </section>
+
+        <section class="rounded-3xl bg-ink p-8 text-white md:p-12">
+          <span class="text-sm font-bold text-cyanx">Une variable, beaucoup de confort</span>
+          <h2 class="mt-3 text-3xl font-black">Le principe est le même pour n'importe quel outil.</h2>
+          <p class="mt-4 max-w-3xl leading-7 text-slate-300">
+            Ce qui vaut pour PHP vaut pour Node.js, Python, Git ou n'importe quel exécutable : ajouter son dossier
+            d'installation au <strong>PATH</strong> permet de le lancer depuis n'importe où dans le terminal, sans
+            jamais retaper le chemin complet.
+          </p>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="border-t border-slate-200 bg-white">
+    <div class="mx-auto max-w-7xl px-5 py-10 text-sm text-slate-500">
+      <strong class="text-ink">Guide Variables d'environnement</strong> · Exemple pratique avec PHP sur Windows.
+    </div>
+  </footer>
+
+  <script>
+    function applyTheme(dark) {
+      document.body.classList.toggle('dark', dark);
+      const button = document.querySelector('button[onclick="toggleTheme()"]');
+      if (button) {
+        button.textContent = dark ? 'Mode jour' : 'Mode nuit';
+      }
+      localStorage.setItem('env-theme', dark ? 'dark' : 'light');
+    }
+
+    function toggleTheme() {
+      applyTheme(!document.body.classList.contains('dark'));
+    }
+
+    const savedTheme = localStorage.getItem('env-theme');
+    if (savedTheme === 'dark') {
+      applyTheme(true);
+    }
+
+    // Met en évidence automatiquement la section actuellement consultée
+    const sidebarLinks = document.querySelectorAll('.sidebar-link');
+    const sections = Array.from(sidebarLinks)
+      .map(link => document.querySelector(link.getAttribute('href')))
+      .filter(Boolean);
+
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter(entry => entry.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+      if (visible.length) {
+        sidebarLinks.forEach(link => link.classList.remove('active'));
+        const activeLink = document.querySelector('.sidebar-link[href="#' + visible[0].target.id + '"]');
+        if (activeLink) activeLink.classList.add('active');
+      }
+    }, {
+      rootMargin: '-25% 0px -65% 0px',
+      threshold: 0
+    });
+
+    sections.forEach(section => observer.observe(section));
+  </script>
+
+</body>
+
+</html>
