@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Guide complet et accessible de l'énergie cinétique en mécanique classique : masse, vitesse, énergie et puissance, avec formules et exemples.">
+  <title>L'énergie cinétique simplement | Guide complet m, v, E, P</title>
+
+  <style>
+    /* CSS autonome : remplacement de Tailwind CSS */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+      color: #52606d;
+      background:
+        radial-gradient(circle at 15% 0%, rgba(33, 150, 243, .10), transparent 30rem),
+        radial-gradient(circle at 85% 10%, rgba(0, 212, 255, .08), transparent 25rem),
+        #f6f9fc;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: inherit;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      margin: 0;
+    }
+
+    h1,
+    h2,
+    h3,
+    p,
+    ul {
+      margin-top: 0;
+    }
+
+    ul {
+      padding-left: 1.5rem;
+    }
+
+    code,
+    pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    pre {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      margin: 0;
+    }
+
+    .mx-auto {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .max-w-7xl {
+      max-width: 80rem;
+    }
+
+    .max-w-4xl {
+      max-width: 56rem;
+    }
+
+    .max-w-3xl {
+      max-width: 48rem;
+    }
+
+    .min-w-0 {
+      min-width: 0;
+    }
+
+    .min-w-full {
+      min-width: 100%;
+    }
+
+    .flex {
+      display: flex;
+    }
+
+    .inline-flex {
+      display: inline-flex;
+    }
+
+    .grid {
+      display: grid;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .block {
+      display: block;
+    }
+
+    .items-center {
+      align-items: center;
+    }
+
+    .items-start {
+      align-items: flex-start;
+    }
+
+    .justify-between {
+      justify-content: space-between;
+    }
+
+    .justify-center {
+      justify-content: center;
+    }
+
+    .flex-wrap {
+      flex-wrap: wrap;
+    }
+
+    .flex-col {
+      flex-direction: column;
+    }
+
+    .gap-2 {
+      gap: .5rem;
+    }
+
+    .gap-3 {
+      gap: .75rem;
+    }
+
+    .gap-4 {
+      gap: 1rem;
+    }
+
+    .gap-5 {
+      gap: 1.25rem;
+    }
+
+    .gap-6 {
+      gap: 1.5rem;
+    }
+
+    .gap-10 {
+      gap: 2.5rem;
+    }
+
+    .grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid-cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .space-y-3> :not([hidden])~ :not([hidden]) {
+      margin-top: .75rem;
+    }
+
+    .space-y-5> :not([hidden])~ :not([hidden]) {
+      margin-top: 1.25rem;
+    }
+
+    .space-y-14> :not([hidden])~ :not([hidden]) {
+      margin-top: 3.5rem;
+    }
+
+    .mt-2 {
+      margin-top: .5rem;
+    }
+
+    .mt-3 {
+      margin-top: .75rem;
+    }
+
+    .mt-4 {
+      margin-top: 1rem;
+    }
+
+    .mt-5 {
+      margin-top: 1.25rem;
+    }
+
+    .mt-7 {
+      margin-top: 1.75rem;
+    }
+
+    .mt-9 {
+      margin-top: 2.25rem;
+    }
+
+    .mb-3 {
+      margin-bottom: .75rem;
+    }
+
+    .mb-6 {
+      margin-bottom: 1.5rem;
+    }
+
+    .p-3 {
+      padding: .75rem;
+    }
+
+    .p-4 {
+      padding: 1rem;
+    }
+
+    .p-5 {
+      padding: 1.25rem;
+    }
+
+    .p-6 {
+      padding: 1.5rem;
+    }
+
+    .p-8 {
+      padding: 2rem;
+    }
+
+    .px-2 {
+      padding-left: .5rem;
+      padding-right: .5rem;
+    }
+
+    .px-3 {
+      padding-left: .75rem;
+      padding-right: .75rem;
+    }
+
+    .px-4 {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    .px-5 {
+      padding-left: 1.25rem;
+      padding-right: 1.25rem;
+    }
+
+    .px-6 {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+
+    .py-2 {
+      padding-top: .5rem;
+      padding-bottom: .5rem;
+    }
+
+    .py-3 {
+      padding-top: .75rem;
+      padding-bottom: .75rem;
+    }
+
+    .py-4 {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+
+    .py-10 {
+      padding-top: 2.5rem;
+      padding-bottom: 2.5rem;
+    }
+
+    .py-12 {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+
+    .py-20 {
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+    }
+
+    .w-9 {
+      width: 2.25rem;
+    }
+
+    .h-9 {
+      height: 2.25rem;
+    }
+
+    .text-left {
+      text-align: left;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .text-white {
+      color: #fff;
+    }
+
+    .text-ink {
+      color: #0a2540;
+    }
+
+    .text-slate-300 {
+      color: #cbd5e1;
+    }
+
+    .text-slate-400 {
+      color: #94a3b8;
+    }
+
+    .text-slate-500 {
+      color: #64748b;
+    }
+
+    .text-slate-700 {
+      color: #52606d;
+    }
+
+    .text-blue-700 {
+      color: #1565c0;
+    }
+
+    .text-red-800 {
+      color: #991b1b;
+    }
+
+    .text-amber-900 {
+      color: #78350f;
+    }
+
+    .text-cyanx {
+      color: #00d4ff;
+    }
+
+    .text-blue {
+      color: #2196f3;
+    }
+
+    .text-xs {
+      font-size: .75rem;
+      line-height: 1rem;
+    }
+
+    .text-sm {
+      font-size: .875rem;
+      line-height: 1.25rem;
+    }
+
+    .text-lg {
+      font-size: 1.125rem;
+      line-height: 1.75rem;
+    }
+
+    .text-xl {
+      font-size: 1.25rem;
+      line-height: 1.75rem;
+    }
+
+    .text-3xl {
+      font-size: 1.875rem;
+      line-height: 2.25rem;
+    }
+
+    .text-5xl {
+      font-size: 3rem;
+      line-height: 1;
+    }
+
+    .font-bold {
+      font-weight: 700;
+    }
+
+    .font-semibold {
+      font-weight: 600;
+    }
+
+    .font-black {
+      font-weight: 900;
+    }
+
+    .uppercase {
+      text-transform: uppercase;
+    }
+
+    .tracking-tight {
+      letter-spacing: -.025em;
+    }
+
+    .tracking-wider {
+      letter-spacing: .05em;
+    }
+
+    .tracking-widest {
+      letter-spacing: .1em;
+    }
+
+    .leading-6 {
+      line-height: 1.5rem;
+    }
+
+    .leading-7 {
+      line-height: 1.75rem;
+    }
+
+    .leading-8 {
+      line-height: 2rem;
+    }
+
+    .rounded-lg {
+      border-radius: .5rem;
+    }
+
+    .rounded-xl {
+      border-radius: .75rem;
+    }
+
+    .rounded-2xl {
+      border-radius: 1rem;
+    }
+
+    .rounded-3xl {
+      border-radius: 1.5rem;
+    }
+
+    .rounded-full {
+      border-radius: 9999px;
+    }
+
+    .border {
+      border-width: 1px;
+      border-style: solid;
+    }
+
+    .border-b {
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
+    }
+
+    .border-t {
+      border-top-width: 1px;
+      border-top-style: solid;
+    }
+
+    .border-slate-200 {
+      border-color: #e2e8f0;
+    }
+
+    .border-slate-200\/70 {
+      border-color: rgba(226, 232, 240, .7);
+    }
+
+    .border-blue-100 {
+      border-color: #bbdefb;
+    }
+
+    .border-amber-200 {
+      border-color: #fde68a;
+    }
+
+    .bg-white {
+      background-color: #fff;
+    }
+
+    .bg-white\/85 {
+      background-color: rgba(255, 255, 255, .85);
+    }
+
+    .bg-blue-50 {
+      background-color: #e3f2fd;
+    }
+
+    .bg-slate-50 {
+      background-color: #f8fafc;
+    }
+
+    .bg-red-50 {
+      background-color: #fef2f2;
+    }
+
+    .bg-amber-50 {
+      background-color: #fffbeb;
+    }
+
+    .bg-ink {
+      background-color: #0a2540;
+    }
+
+    .bg-blue {
+      background-color: #2196f3;
+    }
+
+    .shadow-sm {
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .05);
+    }
+
+    .shadow-glow {
+      box-shadow: 0 20px 60px rgba(33, 150, 243, .20);
+    }
+
+    .overflow-hidden {
+      overflow: hidden;
+    }
+
+    .overflow-x-auto {
+      overflow-x: auto;
+    }
+
+    .sticky {
+      position: sticky;
+    }
+
+    .top-24 {
+      top: 6rem;
+    }
+
+    .top-0 {
+      top: 0;
+    }
+
+    .z-50 {
+      z-index: 50;
+    }
+
+    .backdrop-blur-xl {
+      backdrop-filter: blur(24px);
+    }
+
+    .backdrop-blur-xl {
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .place-items-center {
+      place-items: center;
+    }
+
+    .opacity-90:hover {
+      opacity: .9;
+    }
+
+    .hover\:text-blue:hover {
+      color: #2196f3;
+    }
+
+    .hover\:border-blue:hover {
+      border-color: #2196f3;
+    }
+
+    .divide-y> :not([hidden])~ :not([hidden]) {
+      border-top-width: 1px;
+      border-top-style: solid;
+    }
+
+    .divide-slate-100> :not([hidden])~ :not([hidden]) {
+      border-color: #f1f5f9;
+    }
+
+    header.sticky {
+      position: sticky;
+    }
+
+    table {
+      border-collapse: collapse;
+    }
+
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(33, 150, 243, .045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(33, 150, 243, .045) 1px, transparent 1px);
+      background-size: 36px 36px;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, .78);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(33, 150, 243, .10);
+    }
+
+    .formula-card {
+      border: 1px solid #e6ebf1;
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(50, 50, 93, .06);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .formula-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 45px rgba(50, 50, 93, .10);
+    }
+
+    .formula {
+      font-family: 'Courier New', Courier, monospace;
+      background: #0a2540;
+      color: #d9ecff;
+      border-radius: 10px;
+      padding: .6rem 1rem;
+      display: inline-block;
+      margin: .3rem 0;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .unit {
+      font-weight: bold;
+      color: #1565c0;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      padding: .28rem .65rem;
+      border-radius: 999px;
+      font-size: .72rem;
+      font-weight: 700;
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+
+    .sidebar-link {
+      display: block;
+      padding: .55rem .7rem;
+      border-radius: .6rem;
+      color: #52606d;
+      font-size: .9rem;
+    }
+
+    .sidebar-link:hover {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+
+    .sidebar-link.active {
+      background: #e3f2fd;
+      color: #1565c0;
+      font-weight: 700;
+    }
+
+    body.dark {
+      background:
+        radial-gradient(circle at 15% 0%, rgba(33, 150, 243, .12), transparent 30rem),
+        radial-gradient(circle at 85% 10%, rgba(0, 212, 255, .08), transparent 25rem),
+        #020617 !important;
+      color: #e2e8f0 !important;
+    }
+
+    body.dark .bg-white,
+    body.dark .bg-white\/85 {
+      background-color: #0f172a !important;
+    }
+
+    body.dark .bg-blue-50 {
+      background-color: #0d2440 !important;
+    }
+
+    body.dark .bg-slate-50 {
+      background-color: #1e293b !important;
+    }
+
+    body.dark .divide-slate-100> :not([hidden])~ :not([hidden]) {
+      border-color: #334155 !important;
+    }
+
+    body.dark .text-slate-400,
+    body.dark .text-slate-500 {
+      color: #94a3b8 !important;
+    }
+
+    body.dark .bg-red-50 {
+      background-color: #450a0a !important;
+    }
+
+    body.dark .text-red-800 {
+      color: #fecaca !important;
+    }
+
+    body.dark .bg-amber-50 {
+      background-color: #451a03 !important;
+    }
+
+    body.dark .text-amber-900 {
+      color: #fde68a !important;
+    }
+
+    body.dark .text-ink {
+      color: #f8fafc !important;
+    }
+
+    body.dark .text-slate-700 {
+      color: #cbd5e1 !important;
+    }
+
+    body.dark .text-slate-300 {
+      color: #cbd5e1 !important;
+    }
+
+    body.dark .text-blue-700 {
+      color: #90caf9 !important;
+    }
+
+    body.dark .unit {
+      color: #90caf9 !important;
+    }
+
+    body.dark .border-slate-200,
+    body.dark .border-slate-200\/70 {
+      border-color: #334155 !important;
+    }
+
+    body.dark .border-blue-100 {
+      border-color: #0d47a1 !important;
+    }
+
+    body.dark .formula-card {
+      background: #0f172a !important;
+      border-color: #334155 !important;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, .25);
+    }
+
+    body.dark .sidebar-link {
+      color: #cbd5e1 !important;
+    }
+
+    body.dark .sidebar-link:hover {
+      background: #1e293b !important;
+      color: #bbdefb !important;
+    }
+
+    body.dark .sidebar-link.active {
+      background: #0d47a1 !important;
+      color: #e3f2fd !important;
+    }
+
+    body.dark .grid-bg {
+      background-image:
+        linear-gradient(rgba(33, 150, 243, .08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(33, 150, 243, .08) 1px, transparent 1px);
+    }
+
+    body.dark .glass {
+      background: rgba(15, 23, 42, .82) !important;
+      border-color: rgba(148, 163, 184, .18) !important;
+    }
+
+    body.dark footer {
+      background-color: #020617 !important;
+      border-color: #334155 !important;
+    }
+
+    body.dark button {
+      background-color: #0f172a !important;
+      border-color: #475569 !important;
+      color: #e2e8f0 !important;
+    }
+
+    body.dark button:hover {
+      background-color: #1e293b !important;
+      border-color: #2196f3 !important;
+      color: #bbdefb !important;
+    }
+
+    @media (min-width:768px) {
+      .md\:flex {
+        display: flex;
+      }
+
+      .md\:grid-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .md\:grid-cols-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .md\:text-xl {
+        font-size: 1.25rem;
+        line-height: 1.75rem;
+      }
+
+      .md\:text-7xl {
+        font-size: 4.5rem;
+        line-height: 1;
+      }
+
+      .md\:py-28 {
+        padding-top: 7rem;
+        padding-bottom: 7rem;
+      }
+
+      .md\:p-12 {
+        padding: 3rem;
+      }
+    }
+
+    @media (min-width:1024px) {
+      .lg\:block {
+        display: block;
+      }
+
+      .lg\:grid-cols-\[240px_minmax\(0\2c 1fr\)\] {
+        grid-template-columns: 240px minmax(0, 1fr);
+      }
+    }
+  </style>
+</head>
+
+<body class="text-slate-700">
+
+  <header class="sticky top-0 z-50 border-b border-slate-200/70 bg-white/85 backdrop-blur-xl">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
+      <a href="index.html" class="flex items-center gap-3 font-black text-ink">
+        <span class="grid h-9 w-9 place-items-center rounded-xl bg-blue text-white shadow-glow">E</span>
+        <span>Énergie cinétique simplement</span>
+      </a>
+      <!-- <nav class="hidden gap-6 text-sm font-semibold md:flex">
+        <a href="#commencer" class="hover:text-blue">Commencer</a>
+        <a href="#masse" class="hover:text-blue">Masse</a>
+        <a href="#vitesse" class="hover:text-blue">Vitesse</a>
+        <a href="#energie" class="hover:text-blue">Énergie</a>
+        <a href="#puissance" class="hover:text-blue">Puissance</a>
+      </nav> -->
+      <button onclick="toggleTheme()"
+        class="rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold hover:border-blue hover:text-blue">Mode
+        nuit</button>
+    </div>
+  </header>
+
+  <section class="grid-bg overflow-hidden">
+    <div class="mx-auto max-w-7xl px-5 py-20 md:py-28">
+      <div class="max-w-4xl">
+        <div
+          class="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-4 py-2 text-sm font-bold text-blue-700">
+          Guide pratique · Mécanique classique
+        </div>
+        <h1 class="max-w-4xl text-5xl font-black tracking-tight text-ink md:text-7xl">
+          Comprendre l'<span class="text-blue-700">énergie cinétique</span> sans se perdre dans les formules.
+        </h1>
+        <p class="mt-7 max-w-3xl text-lg leading-8 md:text-xl">
+          Chaque grandeur de la mécanique classique est expliquée avec sa définition, son unité et les formules pour
+          la calculer à partir des autres. Cette page couvre la masse, la vitesse, l'énergie cinétique et son lien
+          avec la puissance, avec l'idée essentielle à retenir sur l'effet de la vitesse au carré.
+        </p>
+        <div class="mt-9 flex flex-wrap gap-3">
+          <a href="#commencer"
+            class="rounded-xl bg-blue px-6 py-3 font-bold text-white shadow-glow hover:opacity-90">Commencer le
+            cours</a>
+          <a href="#energie"
+            class="rounded-xl border border-slate-200 bg-white px-6 py-3 font-bold text-ink hover:border-blue">Voir
+            les formules</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="mx-auto max-w-7xl px-5 py-12">
+    <div class="grid gap-10 lg:grid-cols-[240px_minmax(0,1fr)]">
+
+      <aside class="hidden lg:block">
+        <div class="sticky top-24 glass rounded-2xl p-4 shadow-sm">
+          <p class="mb-3 px-2 text-xs font-black uppercase tracking-widest text-slate-400">Sommaire</p>
+          <a class="sidebar-link" href="#commencer">01. Comprendre l'énergie cinétique</a>
+          <a class="sidebar-link" href="#masse">02. Masse (m)</a>
+          <a class="sidebar-link" href="#vitesse">03. Vitesse (v)</a>
+          <a class="sidebar-link" href="#energie">04. Énergie cinétique (E)</a>
+          <a class="sidebar-link" href="#puissance">05. Lien avec le temps (Puissance)</a>
+        </div>
+      </aside>
+
+      <div class="min-w-0 space-y-14">
+
+        <section id="commencer">
+          <div class="mb-6">
+            <span class="tag">01 · Les bases</span>
+            <h2 class="mt-4 text-3xl font-black text-ink">L'énergie cinétique, c'est quoi exactement ?</h2>
+            <p class="mt-3 leading-7">L'énergie cinétique relie trois grandeurs : la <strong>masse</strong>, la
+              <strong>vitesse</strong> et l'<strong>énergie</strong> liée au mouvement. À partir de deux d'entre
+              elles, on peut toujours calculer la troisième, et la <strong>puissance</strong> se déduit ensuite en
+              ajoutant le temps.
+            </p>
+          </div>
+
+          <div class="grid gap-5 md:grid-cols-2">
+            <div class="formula-card p-6">
+              <h3 class="font-black text-ink">Les 4 grandeurs de ce cours</h3>
+              <ul class="mt-4 space-y-3 text-sm leading-6">
+                <li><strong>m</strong> : masse, en <span class="unit">kilogramme (kg)</span>.</li>
+                <li><strong>v</strong> : vitesse, en <span class="unit">mètre par seconde (m/s)</span>.</li>
+                <li><strong>E</strong> : énergie cinétique, en <span class="unit">Joule (J)</span>.</li>
+                <li><strong>P</strong> : puissance, en <span class="unit">Watt (W)</span>.</li>
+              </ul>
+            </div>
+            <div class="formula-card p-6">
+              <h3 class="font-black text-ink">La formule de base à retenir</h3>
+              <p class="mt-4 leading-6">Toutes les autres formules de ce cours se retrouvent à partir de cette seule
+                relation :</p>
+              <div class="mt-4">
+                <span class="formula">E = ½ × m × v²</span>
+              </div>
+              <p class="mt-3 text-sm">Énergie cinétique = la moitié de la masse multipliée par le carré de la
+                vitesse.</p>
+            </div>
+          </div>
+
+          <div class="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm leading-6 text-amber-900">
+            <strong>Important :</strong> la vitesse intervient <strong>au carré</strong> dans la formule. Une petite
+            augmentation de vitesse provoque donc une forte augmentation d'énergie : doubler la vitesse quadruple
+            l'énergie cinétique.
+          </div>
+        </section>
+
+        <section id="masse">
+          <div class="mb-6">
+            <span class="tag">02 · m</span>
+            <h2 class="mt-4 text-3xl font-black text-ink">Masse (m)</h2>
+            <p class="mt-3 leading-7">La masse représente la quantité de matière et l'inertie d'un objet. Elle
+              indique à quel point un objet résiste au changement de mouvement.</p>
+            <p class="mt-2">Unité : <span class="unit">kilogramme (kg)</span></p>
+          </div>
+
+          <article class="formula-card p-6">
+            <h3 class="text-xl font-black text-ink">Relation avec l'énergie et la vitesse</h3>
+            <ul class="mt-4 space-y-3 text-sm leading-6">
+              <li><span class="formula">m = 2E / v²</span></li>
+            </ul>
+          </article>
+        </section>
+
+        <section id="vitesse">
+          <div class="mb-6">
+            <span class="tag">03 · v</span>
+            <h2 class="mt-4 text-3xl font-black text-ink">Vitesse (v)</h2>
+            <p class="mt-3 leading-7">La vitesse mesure la rapidité du mouvement. En mécanique, elle a un effet
+              majeur car elle intervient au carré.</p>
+            <p class="mt-2">Unité : <span class="unit">mètre par seconde (m/s)</span></p>
+          </div>
+
+          <article class="formula-card p-6">
+            <h3 class="text-xl font-black text-ink">Relation avec l'énergie et la masse</h3>
+            <ul class="mt-4 space-y-3 text-sm leading-6">
+              <li><span class="formula">v = √(2E / m)</span></li>
+            </ul>
+          </article>
+        </section>
+
+        <section id="energie">
+          <div class="mb-6">
+            <span class="tag">04 · E</span>
+            <h2 class="mt-4 text-3xl font-black text-ink">Énergie cinétique (E)</h2>
+            <p class="mt-3 leading-7">L'énergie cinétique est l'énergie liée au mouvement. Elle dépend directement
+              de la masse et surtout de la vitesse.</p>
+            <p class="mt-2">Unité : <span class="unit">Joule (J)</span></p>
+          </div>
+
+          <article class="formula-card p-6">
+            <h3 class="text-xl font-black text-ink">Formule fondamentale</h3>
+            <ul class="mt-4 space-y-3 text-sm leading-6">
+              <li><span class="formula">E = ½ × m × v²</span></li>
+            </ul>
+            <p class="mt-4 rounded-lg bg-slate-50 p-3 text-sm">
+              Le carré de la vitesse signifie qu'une petite augmentation de vitesse provoque une forte augmentation
+              d'énergie.
+            </p>
+          </article>
+        </section>
+
+        <section id="puissance">
+          <div class="mb-6">
+            <span class="tag">05 · Lien avec le temps</span>
+            <h2 class="mt-4 text-3xl font-black text-ink">Puissance (P)</h2>
+            <p class="mt-3 leading-7">Si une énergie est transmise sur une durée donnée, on peut définir la
+              puissance mécanique.</p>
+            <p class="mt-2">Unité : <span class="unit">Watt (W)</span></p>
+          </div>
+
+          <article class="formula-card p-6">
+            <h3 class="text-xl font-black text-ink">Formule</h3>
+            <ul class="mt-4 space-y-3 text-sm leading-6">
+              <li><span class="formula">P = E / t</span></li>
+            </ul>
+          </article>
+        </section>
+
+        <section class="rounded-3xl bg-ink p-8 text-white md:p-12">
+          <span class="text-sm font-bold text-cyanx">Peu de grandeurs, une relation clé</span>
+          <h2 class="mt-3 text-3xl font-black">Le bon objectif n'est pas de mémoriser chaque variante.</h2>
+          <p class="mt-4 max-w-3xl leading-7 text-slate-300">
+            Toute cette page repose sur une seule relation : <strong>E = ½ × m × v²</strong>. Une fois cette
+            relation comprise, retrouver la masse, la vitesse ou la puissance devient un simple exercice de
+            substitution.
+          </p>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="border-t border-slate-200 bg-white">
+    <div class="mx-auto max-w-7xl px-5 py-10 text-sm text-slate-500">
+      <strong class="text-ink">Énergie cinétique simplement</strong> · Mécanique classique — relations directes
+      entre masse, vitesse et énergie.
+    </div>
+  </footer>
+
+  <script>
+    function applyTheme(dark) {
+      document.body.classList.toggle('dark', dark);
+      const button = document.querySelector('button[onclick="toggleTheme()"]');
+      if (button) {
+        button.textContent = dark ? 'Mode jour' : 'Mode nuit';
+      }
+      localStorage.setItem('cinetique-theme', dark ? 'dark' : 'light');
+    }
+
+    function toggleTheme() {
+      applyTheme(!document.body.classList.contains('dark'));
+    }
+
+    const savedTheme = localStorage.getItem('cinetique-theme');
+    if (savedTheme === 'dark') {
+      applyTheme(true);
+    }
+
+    // Met en évidence automatiquement la section actuellement consultée
+    const sidebarLinks = document.querySelectorAll('.sidebar-link');
+    const sections = Array.from(sidebarLinks)
+      .map(link => document.querySelector(link.getAttribute('href')))
+      .filter(Boolean);
+
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter(entry => entry.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+      if (visible.length) {
+        sidebarLinks.forEach(link => link.classList.remove('active'));
+        const activeLink = document.querySelector('.sidebar-link[href="#' + visible[0].target.id + '"]');
+        if (activeLink) activeLink.classList.add('active');
+      }
+    }, {
+      rootMargin: '-25% 0px -65% 0px',
+      threshold: 0
+    });
+
+    sections.forEach(section => observer.observe(section));
+  </script>
+
+</body>
+
+</html>

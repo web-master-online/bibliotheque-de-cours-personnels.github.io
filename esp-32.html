@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Guide complet et accessible des broches GPIO d'un microcontrôleur : GND, 3V3, VP/VN, GPIO, RX/TX, avec explications et bonnes pratiques.">
+  <title>GPIO simplement | Guide complet des broches du microcontrôleur</title>
+
+  <style>
+    /* CSS autonome : remplacement de Tailwind CSS */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+      color: #52606d;
+      background:
+        radial-gradient(circle at 15% 0%, rgba(33, 150, 243, .10), transparent 30rem),
+        radial-gradient(circle at 85% 10%, rgba(0, 212, 255, .08), transparent 25rem),
+        #f6f9fc;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: inherit;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      margin: 0;
+    }
+
+    h1,
+    h2,
+    h3,
+    p,
+    ul {
+      margin-top: 0;
+    }
+
+    ul {
+      padding-left: 1.5rem;
+    }
+
+    code,
+    pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    pre {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      margin: 0;
+    }
+
+    .mx-auto {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .max-w-7xl {
+      max-width: 80rem;
+    }
+
+    .max-w-4xl {
+      max-width: 56rem;
+    }
+
+    .max-w-3xl {
+      max-width: 48rem;
+    }
+
+    .min-w-0 {
+      min-width: 0;
+    }
+
+    .min-w-full {
+      min-width: 100%;
+    }
+
+    .flex {
+      display: flex;
+    }
+
+    .inline-flex {
+      display: inline-flex;
+    }
+
+    .grid {
+      display: grid;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .block {
+      display: block;
+    }
+
+    .items-center {
+      align-items: center;
+    }
+
+    .items-start {
+      align-items: flex-start;
+    }
+
+    .justify-between {
+      justify-content: space-between;
+    }
+
+    .justify-center {
+      justify-content: center;
+    }
+
+    .flex-wrap {
+      flex-wrap: wrap;
+    }
+
+    .flex-col {
+      flex-direction: column;
+    }
+
+    .gap-2 {
+      gap: .5rem;
+    }
+
+    .gap-3 {
+      gap: .75rem;
+    }
+
+    .gap-4 {
+      gap: 1rem;
+    }
+
+    .gap-5 {
+      gap: 1.25rem;
+    }
+
+    .gap-6 {
+      gap: 1.5rem;
+    }
+
+    .gap-10 {
+      gap: 2.5rem;
+    }
+
+    .grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid-cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .space-y-3> :not([hidden])~ :not([hidden]) {
+      margin-top: .75rem;
+    }
+
+    .space-y-5> :not([hidden])~ :not([hidden]) {
+      margin-top: 1.25rem;
+    }
+
+    .space-y-14> :not([hidden])~ :not([hidden]) {
+      margin-top: 3.5rem;
+    }
+
+    .mt-2 {
+      margin-top: .5rem;
+    }
+
+    .mt-3 {
+      margin-top: .75rem;
+    }
+
+    .mt-4 {
+      margin-top: 1rem;
+    }
+
+    .mt-5 {
+      margin-top: 1.25rem;
+    }
+
+    .mt-7 {
+      margin-top: 1.75rem;
+    }
+
+    .mt-9 {
+      margin-top: 2.25rem;
+    }
+
+    .mb-3 {
+      margin-bottom: .75rem;
+    }
+
+    .mb-6 {
+      margin-bottom: 1.5rem;
+    }
+
+    .p-3 {
+      padding: .75rem;
+    }
+
+    .p-4 {
+      padding: 1rem;
+    }
+
+    .p-5 {
+      padding: 1.25rem;
+    }
+
+    .p-6 {
+      padding: 1.5rem;
+    }
+
+    .p-8 {
+      padding: 2rem;
+    }
+
+    .px-2 {
+      padding-left: .5rem;
+      padding-right: .5rem;
+    }
+
+    .px-3 {
+      padding-left: .75rem;
+      padding-right: .75rem;
+    }
+
+    .px-4 {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    .px-5 {
+      padding-left: 1.25rem;
+      padding-right: 1.25rem;
+    }
+
+    .px-6 {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+
+    .py-2 {
+      padding-top: .5rem;
+      padding-bottom: .5rem;
+    }
+
+    .py-3 {
+      padding-top: .75rem;
+      padding-bottom: .75rem;
+    }
+
+    .py-4 {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+
+    .py-10 {
+      padding-top: 2.5rem;
+      padding-bottom: 2.5rem;
+    }
+
+    .py-12 {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+
+    .py-20 {
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+    }
+
+    .w-9 {
+      width: 2.25rem;
+    }
+
+    .h-9 {
+      height: 2.25rem;
+    }
+
+    .text-left {
+      text-align: left;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .text-white {
+      color: #fff;
+    }
+
+    .text-ink {
+      color: #0a2540;
+    }
+
+    .text-slate-300 {
+      color: #cbd5e1;
+    }
+
+    .text-slate-400 {
+      color: #94a3b8;
+    }
+
+    .text-slate-500 {
+      color: #64748b;
+    }
+
+    .text-slate-700 {
+      color: #52606d;
+    }
+
+    .text-blue-700 {
+      color: #1565c0;
+    }
+
+    .text-red-800 {
+      color: #991b1b;
+    }
+
+    .text-amber-900 {
+      color: #78350f;
+    }
+
+    .text-cyanx {
+      color: #00d4ff;
+    }
+
+    .text-blue {
+      color: #2196f3;
+    }
+
+    .text-xs {
+      font-size: .75rem;
+      line-height: 1rem;
+    }
+
+    .text-sm {
+      font-size: .875rem;
+      line-height: 1.25rem;
+    }
+
+    .text-lg {
+      font-size: 1.125rem;
+      line-height: 1.75rem;
+    }
+
+    .text-xl {
+      font-size: 1.25rem;
+      line-height: 1.75rem;
+    }
+
+    .text-3xl {
+      font-size: 1.875rem;
+      line-height: 2.25rem;
+    }
+
+    .text-5xl {
+      font-size: 3rem;
+      line-height: 1;
+    }
+
+    .font-bold {
+      font-weight: 700;
+    }
+
+    .font-semibold {
+      font-weight: 600;
+    }
+
+    .font-black {
+      font-weight: 900;
+    }
+
+    .uppercase {
+      text-transform: uppercase;
+    }
+
+    .tracking-tight {
+      letter-spacing: -.025em;
+    }
+
+    .tracking-wider {
+      letter-spacing: .05em;
+    }
+
+    .tracking-widest {
+      letter-spacing: .1em;
+    }
+
+    .leading-6 {
+      line-height: 1.5rem;
+    }
+
+    .leading-7 {
+      line-height: 1.75rem;
+    }
+
+    .leading-8 {
+      line-height: 2rem;
+    }
+
+    .rounded-lg {
+      border-radius: .5rem;
+    }
+
+    .rounded-xl {
+      border-radius: .75rem;
+    }
+
+    .rounded-2xl {
+      border-radius: 1rem;
+    }
+
+    .rounded-3xl {
+      border-radius: 1.5rem;
+    }
+
+    .rounded-full {
+      border-radius: 9999px;
+    }
+
+    .border {
+      border-width: 1px;
+      border-style: solid;
+    }
+
+    .border-b {
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
+    }
+
+    .border-t {
+      border-top-width: 1px;
+      border-top-style: solid;
+    }
+
+    .border-slate-200 {
+      border-color: #e2e8f0;
+    }
+
+    .border-slate-200\/70 {
+      border-color: rgba(226, 232, 240, .7);
+    }
+
+    .border-blue-100 {
+      border-color: #bbdefb;
+    }
+
+    .border-amber-200 {
+      border-color: #fde68a;
+    }
+
+    .bg-white {
+      background-color: #fff;
+    }
+
+    .bg-white\/85 {
+      background-color: rgba(255, 255, 255, .85);
+    }
+
+    .bg-blue-50 {
+      background-color: #e3f2fd;
+    }
+
+    .bg-slate-50 {
+      background-color: #f8fafc;
+    }
+
+    .bg-red-50 {
+      background-color: #fef2f2;
+    }
+
+    .bg-amber-50 {
+      background-color: #fffbeb;
+    }
+
+    .bg-ink {
+      background-color: #0a2540;
+    }
+
+    .bg-blue {
+      background-color: #2196f3;
+    }
+
+    .shadow-sm {
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .05);
+    }
+
+    .shadow-glow {
+      box-shadow: 0 20px 60px rgba(33, 150, 243, .20);
+    }
+
+    .overflow-hidden {
+      overflow: hidden;
+    }
+
+    .overflow-x-auto {
+      overflow-x: auto;
+    }
+
+    .sticky {
+      position: sticky;
+    }
+
+    .top-24 {
+      top: 6rem;
+    }
+
+    .top-0 {
+      top: 0;
+    }
+
+    .z-50 {
+      z-index: 50;
+    }
+
+    .backdrop-blur-xl {
+      backdrop-filter: blur(24px);
+    }
+
+    .backdrop-blur-xl {
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .place-items-center {
+      place-items: center;
+    }
+
+    .opacity-90:hover {
+      opacity: .9;
+    }
+
+    .hover\:text-blue:hover {
+      color: #2196f3;
+    }
+
+    .hover\:border-blue:hover {
+      border-color: #2196f3;
+    }
+
+    .divide-y> :not([hidden])~ :not([hidden]) {
+      border-top-width: 1px;
+      border-top-style: solid;
+    }
+
+    .divide-slate-100> :not([hidden])~ :not([hidden]) {
+      border-color: #f1f5f9;
+    }
+
+    header.sticky {
+      position: sticky;
+    }
+
+    table {
+      border-collapse: collapse;
+    }
+
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(33, 150, 243, .045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(33, 150, 243, .045) 1px, transparent 1px);
+      background-size: 36px 36px;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, .78);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(33, 150, 243, .10);
+    }
+
+    .pin-card {
+      border: 1px solid #e6ebf1;
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(50, 50, 93, .06);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .pin-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 45px rgba(50, 50, 93, .10);
+    }
+
+    .constant {
+      font-family: 'Courier New', Courier, monospace;
+      background: #0a2540;
+      color: #d9ecff;
+      border-radius: 10px;
+      padding: .35rem .75rem;
+      display: inline-block;
+      margin: .2rem 0;
+      font-size: .95rem;
+      font-weight: 700;
+    }
+
+    .unit {
+      font-weight: bold;
+      color: #1565c0;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      padding: .28rem .65rem;
+      border-radius: 999px;
+      font-size: .72rem;
+      font-weight: 700;
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+
+    .sidebar-link {
+      display: block;
+      padding: .55rem .7rem;
+      border-radius: .6rem;
+      color: #52606d;
+      font-size: .9rem;
+    }
+
+    .sidebar-link:hover {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+
+    .sidebar-link.active {
+      background: #e3f2fd;
+      color: #1565c0;
+      font-weight: 700;
+    }
+
+    body.dark {
+      background:
+        radial-gradient(circle at 15% 0%, rgba(33, 150, 243, .12), transparent 30rem),
+        radial-gradient(circle at 85% 10%, rgba(0, 212, 255, .08), transparent 25rem),
+        #020617 !important;
+      color: #e2e8f0 !important;
+    }
+
+    body.dark .bg-white,
+    body.dark .bg-white\/85 {
+      background-color: #0f172a !important;
+    }
+
+    body.dark .bg-blue-50 {
+      background-color: #0d2440 !important;
+    }
+
+    body.dark .bg-slate-50 {
+      background-color: #1e293b !important;
+    }
+
+    body.dark .divide-slate-100> :not([hidden])~ :not([hidden]) {
+      border-color: #334155 !important;
+    }
+
+    body.dark .text-slate-400,
+    body.dark .text-slate-500 {
+      color: #94a3b8 !important;
+    }
+
+    body.dark .bg-red-50 {
+      background-color: #450a0a !important;
+    }
+
+    body.dark .text-red-800 {
+      color: #fecaca !important;
+    }
+
+    body.dark .bg-amber-50 {
+      background-color: #451a03 !important;
+    }
+
+    body.dark .text-amber-900 {
+      color: #fde68a !important;
+    }
+
+    body.dark .text-ink {
+      color: #f8fafc !important;
+    }
+
+    body.dark .text-slate-700 {
+      color: #cbd5e1 !important;
+    }
+
+    body.dark .text-slate-300 {
+      color: #cbd5e1 !important;
+    }
+
+    body.dark .text-blue-700 {
+      color: #90caf9 !important;
+    }
+
+    body.dark .unit {
+      color: #90caf9 !important;
+    }
+
+    body.dark .border-slate-200,
+    body.dark .border-slate-200\/70 {
+      border-color: #334155 !important;
+    }
+
+    body.dark .border-blue-100 {
+      border-color: #0d47a1 !important;
+    }
+
+    body.dark .pin-card {
+      background: #0f172a !important;
+      border-color: #334155 !important;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, .25);
+    }
+
+    body.dark .sidebar-link {
+      color: #cbd5e1 !important;
+    }
+
+    body.dark .sidebar-link:hover {
+      background: #1e293b !important;
+      color: #bbdefb !important;
+    }
+
+    body.dark .sidebar-link.active {
+      background: #0d47a1 !important;
+      color: #e3f2fd !important;
+    }
+
+    body.dark .grid-bg {
+      background-image:
+        linear-gradient(rgba(33, 150, 243, .08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(33, 150, 243, .08) 1px, transparent 1px);
+    }
+
+    body.dark .glass {
+      background: rgba(15, 23, 42, .82) !important;
+      border-color: rgba(148, 163, 184, .18) !important;
+    }
+
+    body.dark footer {
+      background-color: #020617 !important;
+      border-color: #334155 !important;
+    }
+
+    body.dark button {
+      background-color: #0f172a !important;
+      border-color: #475569 !important;
+      color: #e2e8f0 !important;
+    }
+
+    body.dark button:hover {
+      background-color: #1e293b !important;
+      border-color: #2196f3 !important;
+      color: #bbdefb !important;
+    }
+
+    @media (min-width:768px) {
+      .md\:flex {
+        display: flex;
+      }
+
+      .md\:grid-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .md\:grid-cols-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .md\:text-xl {
+        font-size: 1.25rem;
+        line-height: 1.75rem;
+      }
+
+      .md\:text-7xl {
+        font-size: 4.5rem;
+        line-height: 1;
+      }
+
+      .md\:py-28 {
+        padding-top: 7rem;
+        padding-bottom: 7rem;
+      }
+
+      .md\:p-12 {
+        padding: 3rem;
+      }
+    }
+
+    @media (min-width:1024px) {
+      .lg\:block {
+        display: block;
+      }
+
+      .lg\:grid-cols-\[240px_minmax\(0\2c 1fr\)\] {
+        grid-template-columns: 240px minmax(0, 1fr);
+      }
+    }
+  </style>
+</head>
+
+<body class="text-slate-700">
+
+  <header class="sticky top-0 z-50 border-b border-slate-200/70 bg-white/85 backdrop-blur-xl">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
+      <a href="index.html" class="flex items-center gap-3 font-black text-ink">
+        <span class="grid h-9 w-9 place-items-center rounded-xl bg-blue text-white shadow-glow">IO</span>
+        <span>GPIO simplement</span>
+      </a>
+      <!-- <nav class="hidden gap-6 text-sm font-semibold md:flex">
+        <a href="#commencer" class="hover:text-blue">Commencer</a>
+        <a href="#gpio" class="hover:text-blue">GPIO</a>
+        <a href="#uart" class="hover:text-blue">RX / TX</a>
+        <a href="#notes" class="hover:text-blue">Bonnes pratiques</a>
+      </nav> -->
+      <button onclick="toggleTheme()"
+        class="rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold hover:border-blue hover:text-blue">Mode
+        nuit</button>
+    </div>
+  </header>
+
+  <section class="grid-bg overflow-hidden">
+    <div class="mx-auto max-w-7xl px-5 py-20 md:py-28">
+      <div class="max-w-4xl">
+        <div
+          class="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-4 py-2 text-sm font-bold text-blue-700">
+          Guide pratique · Électronique et microcontrôleurs
+        </div>
+        <h1 class="max-w-4xl text-5xl font-black tracking-tight text-ink md:text-7xl">
+          Comprendre les <span class="text-blue-700">broches GPIO</span> sans se perdre dans le datasheet.
+        </h1>
+        <p class="mt-7 max-w-3xl text-lg leading-8 md:text-xl">
+          Chaque broche importante d'un microcontrôleur est expliquée avec son rôle, son unité et l'idée à retenir.
+          Cette page couvre la masse, l'alimentation, les entrées analogiques, les GPIO polyvalentes et la
+          communication série, avec les bonnes pratiques qui évitent de griller un composant.
+        </p>
+        <div class="mt-9 flex flex-wrap gap-3">
+          <a href="#commencer"
+            class="rounded-xl bg-blue px-6 py-3 font-bold text-white shadow-glow hover:opacity-90">Commencer le
+            cours</a>
+          <a href="#gpio"
+            class="rounded-xl border border-slate-200 bg-white px-6 py-3 font-bold text-ink hover:border-blue">Voir
+            les broches</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="mx-auto max-w-7xl px-5 py-12">
+    <div class="grid gap-10 lg:grid-cols-[240px_minmax(0,1fr)]">
+
+      <aside class="hidden lg:block">
+        <div class="sticky top-24 glass rounded-2xl p-4 shadow-sm">
+          <p class="mb-3 px-2 text-xs font-black uppercase tracking-widest text-slate-400">Sommaire</p>
+          <a class="sidebar-link" href="#commencer">01. Comprendre les broches</a>
+          <a class="sidebar-link" href="#gnd">02. GND (la masse)</a>
+          <a class="sidebar-link" href="#3v3">03. 3V3</a>
+          <a class="sidebar-link" href="#vpvn">04. VP / VN</a>
+          <a class="sidebar-link" href="#gpio">05. GPIO</a>
+          <a class="sidebar-link" href="#uart">06. RX / TX</a>
+          <a class="sidebar-link" href="#notes">07. Notes générales</a>
+        </div>
+      </aside>
+
+      <div class="min-w-0 space-y-14">
+
+        <section id="commencer">
+          <div class="mb-6">
+            <span class="tag">01 · Les bases</span>
+            <h2 class="mt-4 text-3xl font-black text-ink">Une broche, c'est quoi exactement ?</h2>
+            <p class="mt-3 leading-7">Une broche (ou <strong>pin</strong> en anglais) est un point de contact physique
+              sur un microcontrôleur. Certaines servent à l'alimentation, d'autres à mesurer une tension, et
+              d'autres encore sont polyvalentes et programmables.</p>
+          </div>
+
+          <div class="grid gap-5 md:grid-cols-2">
+            <div class="pin-card p-6">
+              <h3 class="font-black text-ink">Les grandes familles de broches</h3>
+              <ul class="mt-4 space-y-3 text-sm leading-6">
+                <li><strong>GND</strong> : la masse, référence commune du circuit.</li>
+                <li><strong>3V3</strong> : alimentation à 3,3 volts.</li>
+                <li><strong>VP / VN</strong> : mesure d'une tension analogique.</li>
+                <li><strong>GPIO</strong> : entrée/sortie numérique programmable.</li>
+                <li><strong>RX / TX</strong> : communication série (UART).</li>
+              </ul>
+            </div>
+            <div class="pin-card p-6">
+              <h3 class="font-black text-ink">La règle d'or à retenir</h3>
+              <p class="mt-4 leading-6">Toutes les broches partagent une même référence : le <strong>GND</strong>.
+                Sans masse commune entre les modules connectés, aucune mesure ni aucun signal n'est fiable.</p>
+              <div class="mt-4">
+                <span class="constant">GND commun obligatoire</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm leading-6 text-amber-900">
+            <strong>Important :</strong> le nombre et le nom exact des broches dépendent du modèle de
+            microcontrôleur. Cette page rassemble le socle commun que l'on retrouve, sous une forme ou une autre, sur
+            la plupart des cartes de développement.
+          </div>
+        </section>
+
+        <section id="gnd">
+          <div class="mb-6">
+            <span class="tag">02 · Masse</span>
+            <h2 class="mt-4 text-3xl font-black text-ink">GND (la masse)</h2>
+            <p class="mt-3 leading-7">La broche <strong>GND</strong> représente la masse du circuit. On peut la
+              comparer à la terre, car c'est le point de référence pour toutes les tensions et le retour du
+              courant : une masse <strong>n'est pas reliée à la terre physique</strong> mais agit comme cette
+              dernière.</p>
+            <p class="mt-2">Unité : <span class="unit">Volt (V)</span></p>
+          </div>
+
+          <article class="pin-card p-6">
+            <h3 class="text-xl font-black text-ink">À retenir</h3>
+            <p class="mt-3 text-sm leading-6">Le GND doit toujours être commun entre tous les modules connectés,
+              sinon les mesures et les signaux échangés n'ont plus de référence fiable.</p>
+          </article>
+        </section>
+
+        <section id="3v3">
+          <div class="mb-6">
+            <span class="tag">03 · Alimentation</span>
+            <h2 class="mt-4 text-3xl font-black text-ink">3V3</h2>
+            <p class="mt-3 leading-7">La broche 3V3 fournit une tension de 3,3 volts. Elle sert à alimenter certains
+              modules ou capteurs.</p>
+            <p class="mt-2">Unité : <span class="unit">Volt (V)</span></p>
+          </div>
+
+          <article class="pin-card p-6">
+            <h3 class="text-xl font-black text-ink">À retenir</h3>
+            <p class="mt-3 text-sm leading-6">Vérifie toujours la tension d'alimentation attendue par le module que
+              tu connectes : brancher un composant prévu pour 5 V sur une sortie 3V3 (ou l'inverse) peut l'endommager
+              ou l'empêcher de fonctionner.</p>
+          </article>
+        </section>
+
+        <section id="vpvn">
+          <div class="mb-6">
+            <span class="tag">04 · Mesure</span>
+            <h2 class="mt-4 text-3xl font-black text-ink">VP / VN</h2>
+            <p class="mt-3 leading-7">Les broches <strong>VP</strong> et <strong>VN</strong> servent à mesurer une
+              tension électrique. Le microcontrôleur regarde combien de volts arrivent sur ces broches et transforme
+              cette information en une valeur utilisable par le programme.</p>
+            <p class="mt-2">Unité : <span class="unit">Volt (V)</span></p>
+          </div>
+
+          <article class="pin-card p-6">
+            <h3 class="text-xl font-black text-ink">À quoi ça sert</h3>
+            <p class="mt-3 text-sm leading-6">On les utilise par exemple pour lire un potentiomètre, un capteur ou
+              toute tension qui peut varier. Ces broches <strong>ne fournissent pas de courant</strong> et ne
+              servent pas à alimenter un composant.</p>
+            <p class="mt-3 rounded-lg bg-slate-50 p-3 text-sm">
+              <strong>Un potentiomètre :</strong> c'est un bouton que tu tournes (ou un curseur que tu fais glisser)
+              pour faire varier une valeur.
+            </p>
+          </article>
+        </section>
+
+        <section id="gpio">
+          <div class="mb-6">
+            <span class="tag">05 · Polyvalent</span>
+            <h2 class="mt-4 text-3xl font-black text-ink">GPIO (General Purpose Input/Output)</h2>
+            <p class="mt-3 leading-7">Les GPIO sont des broches programmables pouvant servir d'entrée ou de sortie
+              numérique.</p>
+          </div>
+
+          <article class="pin-card p-6">
+            <h3 class="text-xl font-black text-ink">Fonctions possibles</h3>
+            <ul class="mt-4 space-y-3 text-sm leading-6">
+              <li><span class="constant">Input</span> : lecture d'un signal externe (0 ou 1 logique)</li>
+              <li><span class="constant">Output</span> : envoi d'un signal 0 ou 1 logique vers un composant</li>
+              <li><span class="constant">PWM</span> : modulation de largeur d'impulsion, pour contrôler moteur ou LED
+              </li>
+              <li><span class="constant">I2C / SPI</span> : communication série avec d'autres modules</li>
+            </ul>
+          </article>
+        </section>
+
+        <section id="uart">
+          <div class="mb-6">
+            <span class="tag">06 · Série</span>
+            <h2 class="mt-4 text-3xl font-black text-ink">RX / TX</h2>
+            <p class="mt-3 leading-7">Ces broches sont utilisées pour la communication série (UART).</p>
+          </div>
+
+          <article class="pin-card p-6">
+            <h3 class="text-xl font-black text-ink">Rôle de chaque broche</h3>
+            <ul class="mt-4 space-y-3 text-sm leading-6">
+              <li><span class="constant">TX</span> : transmission de données depuis le microcontrôleur</li>
+              <li><span class="constant">RX</span> : réception de données vers le microcontrôleur</li>
+              <li>Unité : <span class="unit">Volt (V)</span> logique (0 ou 3,3/5 selon le système)</li>
+            </ul>
+          </article>
+        </section>
+
+        <section id="notes">
+          <div class="mb-6">
+            <span class="tag">07 · Bonnes pratiques</span>
+            <h2 class="mt-4 text-3xl font-black text-ink">Notes générales</h2>
+          </div>
+
+          <article class="pin-card p-6">
+            <ul class="space-y-3 text-sm leading-6">
+              <li>Respecter toujours la tension maximale des GPIO pour éviter de les griller.</li>
+              <li>Le GND doit toujours être commun entre tous les modules connectés.</li>
+              <li>Les broches analogiques (VP/VN) sont sensibles au bruit, utiliser des filtres si nécessaire.</li>
+            </ul>
+          </article>
+        </section>
+
+        <section class="rounded-3xl bg-ink p-8 text-white md:p-12">
+          <span class="text-sm font-bold text-cyanx">Peu de broches, beaucoup de possibilités</span>
+          <h2 class="mt-3 text-3xl font-black">Le bon objectif n'est pas de mémoriser chaque broche.</h2>
+          <p class="mt-4 max-w-3xl leading-7 text-slate-300">
+            Il faut comprendre le rôle de chaque famille : alimenter, référencer, mesurer, échanger. Une fois ces
+            rôles clairs, s'adapter à la disposition exacte d'une nouvelle carte devient beaucoup plus simple.
+          </p>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="border-t border-slate-200 bg-white">
+    <div class="mx-auto max-w-7xl px-5 py-10 text-sm text-slate-500">
+      <strong class="text-ink">GPIO simplement</strong> · Toutes les informations sont basées sur la documentation
+      des microcontrôleurs et la norme des GPIO.
+    </div>
+  </footer>
+
+  <script>
+    function applyTheme(dark) {
+      document.body.classList.toggle('dark', dark);
+      const button = document.querySelector('button[onclick="toggleTheme()"]');
+      if (button) {
+        button.textContent = dark ? 'Mode jour' : 'Mode nuit';
+      }
+      localStorage.setItem('gpio-theme', dark ? 'dark' : 'light');
+    }
+
+    function toggleTheme() {
+      applyTheme(!document.body.classList.contains('dark'));
+    }
+
+    const savedTheme = localStorage.getItem('gpio-theme');
+    if (savedTheme === 'dark') {
+      applyTheme(true);
+    }
+
+    // Met en évidence automatiquement la section actuellement consultée
+    const sidebarLinks = document.querySelectorAll('.sidebar-link');
+    const sections = Array.from(sidebarLinks)
+      .map(link => document.querySelector(link.getAttribute('href')))
+      .filter(Boolean);
+
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter(entry => entry.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+      if (visible.length) {
+        sidebarLinks.forEach(link => link.classList.remove('active'));
+        const activeLink = document.querySelector('.sidebar-link[href="#' + visible[0].target.id + '"]');
+        if (activeLink) activeLink.classList.add('active');
+      }
+    }, {
+      rootMargin: '-25% 0px -65% 0px',
+      threshold: 0
+    });
+
+    sections.forEach(section => observer.observe(section));
+  </script>
+
+</body>
+
+</html>

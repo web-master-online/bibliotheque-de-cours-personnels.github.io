@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Page d'accueil regroupant les cours : SQL, électronique, microcontrôleurs et physique.">
+  <title>Mes cours | Accueil</title>
+
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+      color: #52606d;
+      background:
+        radial-gradient(circle at 15% 0%, rgba(99, 91, 255, .10), transparent 30rem),
+        radial-gradient(circle at 85% 10%, rgba(0, 212, 255, .08), transparent 25rem),
+        #f6f9fc;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: inherit;
+    }
+
+    button {
+      font: inherit;
+      margin: 0;
+    }
+
+    h1,
+    h2,
+    h3,
+    p,
+    ul {
+      margin-top: 0;
+    }
+
+    .mx-auto {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .max-w-7xl {
+      max-width: 80rem;
+    }
+
+    .max-w-4xl {
+      max-width: 56rem;
+    }
+
+    .max-w-3xl {
+      max-width: 48rem;
+    }
+
+    .flex {
+      display: flex;
+    }
+
+    .inline-flex {
+      display: inline-flex;
+    }
+
+    .grid {
+      display: grid;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .items-center {
+      align-items: center;
+    }
+
+    .items-start {
+      align-items: flex-start;
+    }
+
+    .justify-between {
+      justify-content: space-between;
+    }
+
+    .flex-wrap {
+      flex-wrap: wrap;
+    }
+
+    .gap-2 {
+      gap: .5rem;
+    }
+
+    .gap-3 {
+      gap: .75rem;
+    }
+
+    .gap-4 {
+      gap: 1rem;
+    }
+
+    .gap-6 {
+      gap: 1.5rem;
+    }
+
+    .grid-cols-1 {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+
+    .grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .mt-2 {
+      margin-top: .5rem;
+    }
+
+    .mt-3 {
+      margin-top: .75rem;
+    }
+
+    .mt-4 {
+      margin-top: 1rem;
+    }
+
+    .mt-5 {
+      margin-top: 1.25rem;
+    }
+
+    .mt-7 {
+      margin-top: 1.75rem;
+    }
+
+    .mt-9 {
+      margin-top: 2.25rem;
+    }
+
+    .mt-16 {
+      margin-top: 4rem;
+    }
+
+    .mb-3 {
+      margin-bottom: .75rem;
+    }
+
+    .mb-6 {
+      margin-bottom: 1.5rem;
+    }
+
+    .mb-10 {
+      margin-bottom: 2.5rem;
+    }
+
+    .p-4 {
+      padding: 1rem;
+    }
+
+    .p-6 {
+      padding: 1.5rem;
+    }
+
+    .p-8 {
+      padding: 2rem;
+    }
+
+    .px-3 {
+      padding-left: .75rem;
+      padding-right: .75rem;
+    }
+
+    .px-4 {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    .px-5 {
+      padding-left: 1.25rem;
+      padding-right: 1.25rem;
+    }
+
+    .px-6 {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+
+    .py-2 {
+      padding-top: .5rem;
+      padding-bottom: .5rem;
+    }
+
+    .py-3 {
+      padding-top: .75rem;
+      padding-bottom: .75rem;
+    }
+
+    .py-4 {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+
+    .py-10 {
+      padding-top: 2.5rem;
+      padding-bottom: 2.5rem;
+    }
+
+    .py-20 {
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+    }
+
+    .w-9 {
+      width: 2.25rem;
+    }
+
+    .h-9 {
+      height: 2.25rem;
+    }
+
+    .w-2 {
+      width: .5rem;
+    }
+
+    .h-2 {
+      height: .5rem;
+    }
+
+    .text-white {
+      color: #fff;
+    }
+
+    .text-ink {
+      color: #0a2540;
+    }
+
+    .text-slate-400 {
+      color: #94a3b8;
+    }
+
+    .text-slate-500 {
+      color: #64748b;
+    }
+
+    .text-slate-700 {
+      color: #52606d;
+    }
+
+    .text-xs {
+      font-size: .75rem;
+      line-height: 1rem;
+    }
+
+    .text-sm {
+      font-size: .875rem;
+      line-height: 1.25rem;
+    }
+
+    .text-lg {
+      font-size: 1.125rem;
+      line-height: 1.75rem;
+    }
+
+    .text-xl {
+      font-size: 1.25rem;
+      line-height: 1.75rem;
+    }
+
+    .text-5xl {
+      font-size: 3rem;
+      line-height: 1;
+    }
+
+    .font-bold {
+      font-weight: 700;
+    }
+
+    .font-semibold {
+      font-weight: 600;
+    }
+
+    .font-black {
+      font-weight: 900;
+    }
+
+    .uppercase {
+      text-transform: uppercase;
+    }
+
+    .tracking-tight {
+      letter-spacing: -.025em;
+    }
+
+    .tracking-wider {
+      letter-spacing: .05em;
+    }
+
+    .tracking-widest {
+      letter-spacing: .1em;
+    }
+
+    .leading-7 {
+      line-height: 1.75rem;
+    }
+
+    .leading-8 {
+      line-height: 2rem;
+    }
+
+    .rounded-lg {
+      border-radius: .5rem;
+    }
+
+    .rounded-xl {
+      border-radius: .75rem;
+    }
+
+    .rounded-2xl {
+      border-radius: 1rem;
+    }
+
+    .rounded-3xl {
+      border-radius: 1.5rem;
+    }
+
+    .rounded-full {
+      border-radius: 9999px;
+    }
+
+    .border {
+      border-width: 1px;
+      border-style: solid;
+    }
+
+    .border-b {
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
+    }
+
+    .border-t {
+      border-top-width: 1px;
+      border-top-style: solid;
+    }
+
+    .border-slate-200 {
+      border-color: #e2e8f0;
+    }
+
+    .border-slate-200\/70 {
+      border-color: rgba(226, 232, 240, .7);
+    }
+
+    .bg-white {
+      background-color: #fff;
+    }
+
+    .bg-white\/85 {
+      background-color: rgba(255, 255, 255, .85);
+    }
+
+    .bg-slate-50 {
+      background-color: #f8fafc;
+    }
+
+    .bg-ink {
+      background-color: #0a2540;
+    }
+
+    .shadow-sm {
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .05);
+    }
+
+    .overflow-hidden {
+      overflow: hidden;
+    }
+
+    .sticky {
+      position: sticky;
+    }
+
+    .top-0 {
+      top: 0;
+    }
+
+    .z-50 {
+      z-index: 50;
+    }
+
+    .backdrop-blur-xl {
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+    }
+
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(99, 91, 255, .045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99, 91, 255, .045) 1px, transparent 1px);
+      background-size: 36px 36px;
+    }
+
+    .course-card {
+      border: 1px solid #e6ebf1;
+      background: #fff;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(50, 50, 93, .06);
+      transition: transform .2s ease, box-shadow .2s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .course-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 45px rgba(50, 50, 93, .12);
+    }
+
+    .course-top {
+      height: 6px;
+      width: 100%;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      align-self: flex-start;
+      width: fit-content;
+      gap: .4rem;
+      padding: .3rem .7rem;
+      border-radius: 999px;
+      font-size: .72rem;
+      font-weight: 700;
+    }
+
+    .badge-dot {
+      border-radius: 9999px;
+      flex-shrink: 0;
+    }
+
+    .open-link {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      font-size: .85rem;
+      font-weight: 700;
+    }
+
+    .open-link svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Thèmes de couleur par matière */
+    .theme-purple .badge {
+      background: #eef2ff;
+      color: #4338ca;
+    }
+
+    .theme-purple .badge-dot {
+      background: #635bff;
+    }
+
+    .theme-purple .course-top {
+      background: #635bff;
+    }
+
+    .theme-purple .open-link {
+      color: #4338ca;
+    }
+
+    .theme-green .badge {
+      background: #eef7ee;
+      color: #2e7d32;
+    }
+
+    .theme-green .badge-dot {
+      background: #4caf50;
+    }
+
+    .theme-green .course-top {
+      background: #4caf50;
+    }
+
+    .theme-green .open-link {
+      color: #2e7d32;
+    }
+
+    .theme-blue .badge {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+
+    .theme-blue .badge-dot {
+      background: #2196f3;
+    }
+
+    .theme-blue .course-top {
+      background: #2196f3;
+    }
+
+    .theme-blue .open-link {
+      color: #1565c0;
+    }
+
+    .theme-amber .badge {
+      background: #fff7e6;
+      color: #b45309;
+    }
+
+    .theme-amber .badge-dot {
+      background: #f59e0b;
+    }
+
+    .theme-amber .course-top {
+      background: #f59e0b;
+    }
+
+    .theme-amber .open-link {
+      color: #b45309;
+    }
+
+    .theme-rose .badge {
+      background: #ffe4e9;
+      color: #be123c;
+    }
+
+    .theme-rose .badge-dot {
+      background: #f43f5e;
+    }
+
+    .theme-rose .course-top {
+      background: #f43f5e;
+    }
+
+    .theme-rose .open-link {
+      color: #be123c;
+    }
+
+    .theme-teal .badge {
+      background: #e6fbf8;
+      color: #0f766e;
+    }
+
+    .theme-teal .badge-dot {
+      background: #0d9488;
+    }
+
+    .theme-teal .course-top {
+      background: #0d9488;
+    }
+
+    .theme-teal .open-link {
+      color: #0f766e;
+    }
+
+    body.dark {
+      background:
+        radial-gradient(circle at 15% 0%, rgba(99, 91, 255, .12), transparent 30rem),
+        radial-gradient(circle at 85% 10%, rgba(0, 212, 255, .08), transparent 25rem),
+        #020617 !important;
+      color: #e2e8f0 !important;
+    }
+
+    body.dark .bg-white,
+    body.dark .bg-white\/85 {
+      background-color: #0f172a !important;
+    }
+
+    body.dark .bg-slate-50 {
+      background-color: #1e293b !important;
+    }
+
+    body.dark .text-slate-400,
+    body.dark .text-slate-500 {
+      color: #94a3b8 !important;
+    }
+
+    body.dark .text-ink {
+      color: #f8fafc !important;
+    }
+
+    body.dark .text-slate-700 {
+      color: #cbd5e1 !important;
+    }
+
+    body.dark .border-slate-200,
+    body.dark .border-slate-200\/70 {
+      border-color: #334155 !important;
+    }
+
+    body.dark .course-card {
+      background: #0f172a !important;
+      border-color: #334155 !important;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, .25);
+    }
+
+    body.dark footer {
+      background-color: #020617 !important;
+      border-color: #334155 !important;
+    }
+
+    body.dark button {
+      background-color: #0f172a !important;
+      border-color: #475569 !important;
+      color: #e2e8f0 !important;
+    }
+
+    body.dark button:hover {
+      background-color: #1e293b !important;
+    }
+
+    body.dark .theme-purple .badge {
+      background: #1e1b4b !important;
+      color: #c4b5fd !important;
+    }
+
+    body.dark .theme-green .badge {
+      background: #0f2a17 !important;
+      color: #86efac !important;
+    }
+
+    body.dark .theme-blue .badge {
+      background: #0d2440 !important;
+      color: #90caf9 !important;
+    }
+
+    body.dark .theme-amber .badge {
+      background: #3a2a06 !important;
+      color: #fbbf24 !important;
+    }
+
+    body.dark .theme-rose .badge {
+      background: #4c0519 !important;
+      color: #fda4af !important;
+    }
+
+    body.dark .theme-teal .badge {
+      background: #042f2c !important;
+      color: #5eead4 !important;
+    }
+
+    @media (min-width:768px) {
+      .md\:flex {
+        display: flex;
+      }
+
+      .md\:grid-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .md\:text-7xl {
+        font-size: 4.5rem;
+        line-height: 1;
+      }
+
+      .md\:text-xl {
+        font-size: 1.25rem;
+        line-height: 1.75rem;
+      }
+
+      .md\:py-28 {
+        padding-top: 7rem;
+        padding-bottom: 7rem;
+      }
+    }
+  </style>
+</head>
+
+<body class="text-slate-700">
+
+  <header class="sticky top-0 z-50 border-b border-slate-200/70 bg-white/85 backdrop-blur-xl">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
+      <a href="#" class="flex items-center gap-3 font-black text-ink">
+        <span class="grid h-9 w-9 place-items-center rounded-xl bg-ink text-white"
+          style="display:grid; place-items:center;">✺</span>
+        <span>Mes cours</span>
+      </a>
+      <button onclick="toggleTheme()" class="rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold">Mode
+        nuit</button>
+    </div>
+  </header>
+
+  <section class="grid-bg overflow-hidden">
+    <div class="mx-auto max-w-7xl px-5 py-20 md:py-28">
+      <div class="max-w-4xl">
+        <div
+          class="mb-6 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-ink">
+          Bibliothèque de cours personnels
+        </div>
+        <h1 class="max-w-4xl text-5xl font-black tracking-tight text-ink md:text-7xl">
+          Retrouve tous tes <span style="color:#635bff;">cours</span> au même endroit.
+        </h1>
+        <p class="mt-7 max-w-3xl text-lg leading-8 md:text-xl">
+          Bases de données, électronique, microcontrôleurs, physique : chaque thème a sa couleur et son badge pour
+          le repérer d'un coup d'œil. Clique sur une carte pour ouvrir le cours complet.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <main class="mx-auto max-w-7xl px-5 py-10">
+
+    <div class="grid gap-6 md:grid-cols-2">
+
+      <!-- SQL -->
+      <a href="sql.html" class="course-card theme-purple">
+        <div class="course-top"></div>
+        <div class="p-6" style="flex:1; display:flex; flex-direction:column;">
+          <span class="badge"><span class="w-2 h-2 badge-dot"></span>Base de données</span>
+          <h2 class="mt-4 text-xl font-black text-ink">Guide des requêtes SQL</h2>
+          <p class="mt-2 text-sm leading-7" style="flex:1;">
+            SELECT, INSERT, UPDATE, DELETE, JOIN, transactions, CTE, fonctions fenêtre… le guide complet pour lire,
+            filtrer et modifier des données relationnelles, avec des exemples PHP + PDO.
+          </p>
+          <span class="mt-5 open-link">
+            Ouvrir le cours
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </span>
+        </div>
+      </a>
+
+      <!-- Loi d'Ohm -->
+      <a href="loi-ohm.html" class="course-card theme-green">
+        <div class="course-top"></div>
+        <div class="p-6" style="flex:1; display:flex; flex-direction:column;">
+          <span class="badge"><span class="w-2 h-2 badge-dot"></span>Électronique</span>
+          <h2 class="mt-4 text-xl font-black text-ink">Les lois d'Ohm</h2>
+          <p class="mt-2 text-sm leading-7" style="flex:1;">
+            Résistance, tension, intensité, puissance et énergie : toutes les formules électriques essentielles,
+            reliées entre elles par deux relations à connaître par cœur.
+          </p>
+          <span class="mt-5 open-link">
+            Ouvrir le cours
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </span>
+        </div>
+      </a>
+
+      <!-- GPIO / ESP32 -->
+      <a href="esp-32.html" class="course-card theme-blue">
+        <div class="course-top"></div>
+        <div class="p-6" style="flex:1; display:flex; flex-direction:column;">
+          <span class="badge"><span class="w-2 h-2 badge-dot"></span>Microcontrôleur</span>
+          <h2 class="mt-4 text-xl font-black text-ink">Guide ESP32 (GPIO)</h2>
+          <p class="mt-2 text-sm leading-7" style="flex:1;">
+            GND, 3V3, VP/VN, GPIO, RX/TX : le rôle de chaque broche d'un microcontrôleur type ESP32, avec les
+            bonnes pratiques pour ne pas griller un composant.
+          </p>
+          <span class="mt-5 open-link">
+            Ouvrir le cours
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </span>
+        </div>
+      </a>
+
+      <!-- Énergie cinétique -->
+      <a href="energie-cinetique.html" class="course-card theme-amber">
+        <div class="course-top"></div>
+        <div class="p-6" style="flex:1; display:flex; flex-direction:column;">
+          <span class="badge"><span class="w-2 h-2 badge-dot"></span>Physique</span>
+          <h2 class="mt-4 text-xl font-black text-ink">L'énergie cinétique</h2>
+          <p class="mt-2 text-sm leading-7" style="flex:1;">
+            Masse, vitesse, énergie et puissance en mécanique classique. Une seule formule à retenir :
+            E = ½ × m × v², et le reste s'en déduit.
+          </p>
+          <span class="mt-5 open-link">
+            Ouvrir le cours
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </span>
+        </div>
+      </a>
+
+      <!-- XML Android -->
+      <a href="xml.html" class="course-card theme-rose">
+        <div class="course-top"></div>
+        <div class="p-6" style="flex:1; display:flex; flex-direction:column;">
+          <span class="badge"><span class="w-2 h-2 badge-dot"></span>Développement mobile</span>
+          <h2 class="mt-4 text-xl font-black text-ink">Guide XML Android</h2>
+          <p class="mt-2 text-sm leading-7" style="flex:1;">
+            Conteneurs, widgets, structure d'interface et règles importantes pour décrire un écran Android en XML,
+            avec un exemple d'interface complète.
+          </p>
+          <span class="mt-5 open-link">
+            Ouvrir le cours
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </span>
+        </div>
+      </a>
+
+      <!-- Kotlin -->
+      <a href="kotlin.html" class="course-card theme-teal">
+        <div class="course-top"></div>
+        <div class="p-6" style="flex:1; display:flex; flex-direction:column;">
+          <span class="badge"><span class="w-2 h-2 badge-dot"></span>Programmation</span>
+          <h2 class="mt-4 text-xl font-black text-ink">Guide Kotlin</h2>
+          <p class="mt-2 text-sm leading-7" style="flex:1;">
+            Variables, constantes, fonctions, classes et les fonctions intégrées les plus utiles pour commencer à
+            écrire du Kotlin, avec un exemple pour chaque notion.
+          </p>
+          <span class="mt-5 open-link">
+            Ouvrir le cours
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </span>
+        </div>
+      </a>
+
+    </div>
+
+    <section class="mt-16 rounded-3xl bg-ink p-8 text-white md:p-12">
+      <span class="text-sm font-bold" style="color:#00d4ff;">Un badge, un thème, une couleur</span>
+      <h2 class="mt-3 text-2xl font-black">Repère tes cours d'un coup d'œil.</h2>
+      <p class="mt-4 max-w-3xl leading-7" style="color:#cbd5e1;">
+        Violet pour les bases de données, vert pour l'électronique, bleu pour les microcontrôleurs, orange pour
+        la physique, rose pour le développement mobile et bleu-vert pour la programmation. Ajoute une nouvelle
+        carte avec une nouvelle couleur à chaque fois qu'un nouveau thème apparaît dans tes cours.
+      </p>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-slate-200 bg-white">
+    <div class="mx-auto max-w-7xl px-5 py-10 text-sm text-slate-500">
+      <strong class="text-ink">Mes cours</strong> · Page d'accueil de la bibliothèque de cours personnels.
+    </div>
+  </footer>
+
+  <script>
+    function applyTheme(dark) {
+      document.body.classList.toggle('dark', dark);
+      const button = document.querySelector('button[onclick="toggleTheme()"]');
+      if (button) { button.textContent = dark ? 'Mode jour' : 'Mode nuit'; }
+      localStorage.setItem('accueil-theme', dark ? 'dark' : 'light');
+    }
+    function toggleTheme() { applyTheme(!document.body.classList.contains('dark')); }
+    const savedTheme = localStorage.getItem('accueil-theme');
+    if (savedTheme === 'dark') { applyTheme(true); }
+  </script>
+
+</body>
+
+</html>
