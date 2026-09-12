@@ -560,6 +560,23 @@
       color: #0f766e;
     }
 
+    .theme-cyan .badge {
+      background: #ecfeff;
+      color: #0e7490;
+    }
+
+    .theme-cyan .badge-dot {
+      background: #06b6d4;
+    }
+
+    .theme-cyan .course-top {
+      background: #06b6d4;
+    }
+
+    .theme-cyan .open-link {
+      color: #0e7490;
+    }
+
     body.dark {
       background:
         radial-gradient(circle at 15% 0%, rgba(99, 91, 255, .12), transparent 30rem),
@@ -646,6 +663,11 @@
       color: #5eead4 !important;
     }
 
+    body.dark .theme-cyan .badge {
+      background: #083344 !important;
+      color: #67e8f9 !important;
+    }
+
     @media (min-width:768px) {
       .md\:flex {
         display: flex;
@@ -714,7 +736,7 @@
         <div class="course-top"></div>
         <div class="p-6" style="flex:1; display:flex; flex-direction:column;">
           <span class="badge"><span class="w-2 h-2 badge-dot"></span>Base de données</span>
-          <h2 class="mt-4 text-xl font-black text-ink">Guide des requêtes SQL</h2>
+          <h2 class="mt-4 text-xl font-black text-ink">Guide SQL</h2>
           <p class="mt-2 text-sm leading-7" style="flex:1;">
             SELECT, INSERT, UPDATE, DELETE, JOIN, transactions, CTE, fonctions fenêtre… le guide complet pour lire,
             filtrer et modifier des données relationnelles, avec des exemples PHP + PDO.
@@ -730,7 +752,7 @@
       </a>
 
       <!-- Loi d'Ohm -->
-      <a href="loi-ohm.html" class="course-card theme-green">
+      <a href="lois_ohm.html" class="course-card theme-green">
         <div class="course-top"></div>
         <div class="p-6" style="flex:1; display:flex; flex-direction:column;">
           <span class="badge"><span class="w-2 h-2 badge-dot"></span>Électronique</span>
@@ -750,11 +772,11 @@
       </a>
 
       <!-- GPIO / ESP32 -->
-      <a href="esp-32.html" class="course-card theme-blue">
+      <a href="gpio_esp32.html" class="course-card theme-blue">
         <div class="course-top"></div>
         <div class="p-6" style="flex:1; display:flex; flex-direction:column;">
           <span class="badge"><span class="w-2 h-2 badge-dot"></span>Microcontrôleur</span>
-          <h2 class="mt-4 text-xl font-black text-ink">Guide ESP32 (GPIO)</h2>
+          <h2 class="mt-4 text-xl font-black text-ink">Guide GPIO</h2>
           <p class="mt-2 text-sm leading-7" style="flex:1;">
             GND, 3V3, VP/VN, GPIO, RX/TX : le rôle de chaque broche d'un microcontrôleur type ESP32, avec les
             bonnes pratiques pour ne pas griller un composant.
@@ -770,7 +792,7 @@
       </a>
 
       <!-- Énergie cinétique -->
-      <a href="energie-cinetique.html" class="course-card theme-amber">
+      <a href="energie_cinetique.html" class="course-card theme-amber">
         <div class="course-top"></div>
         <div class="p-6" style="flex:1; display:flex; flex-direction:column;">
           <span class="badge"><span class="w-2 h-2 badge-dot"></span>Physique</span>
@@ -790,7 +812,7 @@
       </a>
 
       <!-- XML Android -->
-      <a href="xml.html" class="course-card theme-rose">
+      <a href="xml_android.html" class="course-card theme-rose">
         <div class="course-top"></div>
         <div class="p-6" style="flex:1; display:flex; flex-direction:column;">
           <span class="badge"><span class="w-2 h-2 badge-dot"></span>Développement mobile</span>
@@ -829,6 +851,26 @@
         </div>
       </a>
 
+      <!-- Variables d'environnement -->
+      <a href="variables-environnement.html" class="course-card theme-cyan">
+        <div class="course-top"></div>
+        <div class="p-6" style="flex:1; display:flex; flex-direction:column;">
+          <span class="badge"><span class="w-2 h-2 badge-dot"></span>Système / Windows</span>
+          <h2 class="mt-4 text-xl font-black text-ink">Guide Variables d'environnement</h2>
+          <p class="mt-2 text-sm leading-7" style="flex:1;">
+            Ajouter PHP au PATH sur Windows, vérifier avec <code>php -v</code>, lancer un script avec
+            <code>php fichier.php</code> et un serveur de dev avec <code>php -S localhost:8000</code>.
+          </p>
+          <span class="mt-5 open-link">
+            Ouvrir le cours
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </span>
+        </div>
+      </a>
+
     </div>
 
     <section class="mt-16 rounded-3xl bg-ink p-8 text-white md:p-12">
@@ -836,8 +878,9 @@
       <h2 class="mt-3 text-2xl font-black">Repère tes cours d'un coup d'œil.</h2>
       <p class="mt-4 max-w-3xl leading-7" style="color:#cbd5e1;">
         Violet pour les bases de données, vert pour l'électronique, bleu pour les microcontrôleurs, orange pour
-        la physique, rose pour le développement mobile et bleu-vert pour la programmation. Ajoute une nouvelle
-        carte avec une nouvelle couleur à chaque fois qu'un nouveau thème apparaît dans tes cours.
+        la physique, rose pour le développement mobile, bleu-vert pour la programmation et cyan pour les guides
+        système. Ajoute une nouvelle carte avec une nouvelle couleur à chaque fois qu'un nouveau thème apparaît
+        dans tes cours.
       </p>
     </section>
 
