@@ -478,10 +478,29 @@ body.dark button:hover { background-color:#1e293b !important; border-color:#e879
 
             <article class="net-card p-6">
               <h3 class="text-xl font-black text-ink">Option 2 : téléchargement manuel</h3>
-              <p class="mt-2 text-sm leading-6">Télécharge l'exécutable Windows 64 bits depuis la page de
-                téléchargement de Cloudflare (ou les releases du dépôt GitHub <code>cloudflare/cloudflared</code>),
-                renomme-le si besoin en <code>cloudflared.exe</code> et range-le dans un dossier fixe, par exemple :
-              </p>
+              <p class="mt-2 text-sm leading-6">Pour un Windows 64 bits (le cas de presque tous les PC), télécharge
+                directement l'exécutable ici :</p>
+              <div class="mt-3 code">
+                <pre><a href="https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-windows-amd64.exe" target="_blank" rel="noopener" style="text-decoration:underline;">https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-windows-amd64.exe</a></pre>
+              </div>
+              <div class="mt-4 grid gap-3 text-sm leading-6 md:grid-cols-2">
+                <div class="rounded-xl bg-slate-50 p-4">
+                  <strong>Pages officielles</strong>
+                  <ul class="mt-2 space-y-2">
+                    <li><a href="https://developers.cloudflare.com/tunnel/downloads/" target="_blank" rel="noopener" style="text-decoration:underline;">Page de téléchargement Cloudflare</a></li>
+                    <li><a href="https://github.com/cloudflare/cloudflared/releases" target="_blank" rel="noopener" style="text-decoration:underline;">Toutes les versions sur GitHub</a></li>
+                  </ul>
+                </div>
+                <div class="rounded-xl bg-slate-50 p-4">
+                  <strong>Autres fichiers Windows</strong>
+                  <ul class="mt-2 space-y-2">
+                    <li><code>cloudflared-windows-amd64.msi</code> : installeur 64 bits</li>
+                    <li><code>cloudflared-windows-386.exe</code> / <code>.msi</code> : version 32 bits</li>
+                  </ul>
+                </div>
+              </div>
+              <p class="mt-4 text-sm leading-6">Le fichier téléchargé s'appelle <code>cloudflared-windows-amd64.exe</code> :
+                renomme-le en <code>cloudflared.exe</code> et range-le dans un dossier fixe, par exemple :</p>
               <div class="mt-3 code">
                 <pre>C:\software\serveurs\Cloudflare\cloudflared.exe</pre>
               </div>
