@@ -259,6 +259,24 @@ table { border-collapse:collapse; }
   border:1px solid #fae8ff;
 }
 .flow-arrow { color:#c026d3; font-weight:900; }
+.shot {
+  margin:1rem 0 0;
+}
+.shot img {
+  display:block;
+  width:100%;
+  max-width:100%;
+  height:auto;
+  border-radius:14px;
+  border:1px solid #e6ebf1;
+  box-shadow:0 8px 30px rgba(50,50,93,.10);
+}
+.shot figcaption {
+  margin-top:.6rem;
+  font-size:.8rem;
+  line-height:1.25rem;
+  color:#64748b;
+}
 
 body.dark {
   background:
@@ -287,6 +305,7 @@ body.dark .flow-box { background:#3b0a45 !important; color:#f0abfc !important; b
 body.dark .border-slate-200,
 body.dark .border-slate-200\/70 { border-color:#334155 !important; }
 body.dark .border-fuchsia-100 { border-color:#701a75 !important; }
+body.dark .shot img { border-color:#334155 !important; box-shadow:0 8px 30px rgba(0,0,0,.35); }
 body.dark .net-card {
   background:#0f172a !important;
   border-color:#334155 !important;
@@ -573,6 +592,14 @@ C:\Users\toi&gt; cloudflared --version</pre>
                   <pre>Your quick Tunnel has been created!
 https://quelque-chose.trycloudflare.com</pre>
                 </div>
+                <figure class="shot">
+                  <img src="https://websitemaker.fr/public/img/cmdcloudflared.png"
+                    alt="Terminal Windows après la commande cloudflared tunnel --url http://localhost:80, avec l'URL trycloudflare.com entourée en rouge"
+                    width="734" height="383" loading="lazy">
+                  <figcaption>Ce que tu vois dans le terminal après la commande. L'adresse entourée en rouge
+                    (<code>https://….trycloudflare.com</code>) est celle à copier : elle sera différente pour toi
+                    à chaque lancement.</figcaption>
+                </figure>
                 <p class="mt-3 text-sm leading-6">Les exemples du genre <code>xxxxx.trycloudflare.com</code> ne
                   sont que des illustrations : utilise l'URL <strong>exacte</strong> de ton terminal. Le nom est une
                   suite de mots aléatoires placée juste avant <code>.trycloudflare.com</code>.</p>
