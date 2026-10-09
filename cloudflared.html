@@ -339,6 +339,11 @@ body.dark button:hover { background-color:#1e293b !important; border-color:#e879
   .md\:py-28 { padding-top:7rem; padding-bottom:7rem; }
   .md\:p-12 { padding:3rem; }
 }
+/* À partir de 1080px, le sommaire latéral remplace les liens de la barre de navigation */
+@media (min-width:1080px) {
+  .nav-links { display:none !important; }
+}
+
 @media (min-width:1024px) {
   .lg\:block { display:block; }
   .lg\:grid-cols-\[240px_minmax\(0\2c 1fr\)\] {
@@ -357,7 +362,7 @@ body.dark button:hover { background-color:#1e293b !important; border-color:#e879
         <span class="grid h-9 w-9 place-items-center rounded-xl bg-fuchsia text-white shadow-glow">CF</span>
         <span>Guide Cloudflared</span>
       </a>
-      <nav class="hidden gap-6 text-sm font-semibold md:flex">
+      <nav class="nav-links hidden gap-6 text-sm font-semibold md:flex">
         <a href="#commencer" class="hover:text-fuchsia">Le problème</a>
         <a href="#installer" class="hover:text-fuchsia">Installer</a>
         <a href="#quick" class="hover:text-fuchsia">Quick Tunnel</a>
