@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Guide Langage C pour débutant : un jeu complet dans la console Windows expliqué fonction par fonction (tableaux, boucle de jeu, clavier, collisions).">
+  <title>Guide Langage C | Un jeu dans la console, expliqué pas à pas</title>
+
+  <style>
+
+/* CSS autonome : remplacement de Tailwind CSS */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.5;
+  color: #52606d;
+  background:
+    radial-gradient(circle at 15% 0%, rgba(13,148,136,.10), transparent 30rem),
+    radial-gradient(circle at 85% 10%, rgba(0,212,255,.08), transparent 25rem),
+    #f6f9fc;
+}
+a { color: inherit; text-decoration: inherit; }
+button, input, textarea, select { font: inherit; }
+button { margin: 0; }
+h1,h2,h3,p,ul,ol { margin-top: 0; }
+ul, ol { padding-left: 1.5rem; }
+code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+pre { white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; }
+
+.mx-auto { margin-left:auto; margin-right:auto; }
+.max-w-7xl { max-width:80rem; }
+.max-w-4xl { max-width:56rem; }
+.max-w-3xl { max-width:48rem; }
+.min-w-0 { min-width:0; }
+.min-w-full { min-width:100%; }
+
+.flex { display:flex; }
+.inline-flex { display:inline-flex; }
+.grid { display:grid; }
+.hidden { display:none; }
+.block { display:block; }
+.items-center { align-items:center; }
+.items-start { align-items:flex-start; }
+.justify-between { justify-content:space-between; }
+.justify-center { justify-content:center; }
+.flex-wrap { flex-wrap:wrap; }
+.flex-col { flex-direction:column; }
+.gap-2 { gap:.5rem; }
+.gap-3 { gap:.75rem; }
+.gap-4 { gap:1rem; }
+.gap-5 { gap:1.25rem; }
+.gap-6 { gap:1.5rem; }
+.gap-10 { gap:2.5rem; }
+
+.grid-cols-2 { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.grid-cols-3 { grid-template-columns:repeat(3,minmax(0,1fr)); }
+
+.space-y-3 > :not([hidden]) ~ :not([hidden]) { margin-top:.75rem; }
+.space-y-5 > :not([hidden]) ~ :not([hidden]) { margin-top:1.25rem; }
+.space-y-14 > :not([hidden]) ~ :not([hidden]) { margin-top:3.5rem; }
+
+.mt-2 { margin-top:.5rem; }
+.mt-3 { margin-top:.75rem; }
+.mt-4 { margin-top:1rem; }
+.mt-5 { margin-top:1.25rem; }
+.mt-7 { margin-top:1.75rem; }
+.mt-9 { margin-top:2.25rem; }
+.mb-3 { margin-bottom:.75rem; }
+.mb-6 { margin-bottom:1.5rem; }
+
+.p-3 { padding:.75rem; }
+.p-4 { padding:1rem; }
+.p-5 { padding:1.25rem; }
+.p-6 { padding:1.5rem; }
+.p-8 { padding:2rem; }
+.px-2 { padding-left:.5rem; padding-right:.5rem; }
+.px-3 { padding-left:.75rem; padding-right:.75rem; }
+.px-4 { padding-left:1rem; padding-right:1rem; }
+.px-5 { padding-left:1.25rem; padding-right:1.25rem; }
+.px-6 { padding-left:1.5rem; padding-right:1.5rem; }
+.py-2 { padding-top:.5rem; padding-bottom:.5rem; }
+.py-3 { padding-top:.75rem; padding-bottom:.75rem; }
+.py-4 { padding-top:1rem; padding-bottom:1rem; }
+.py-10 { padding-top:2.5rem; padding-bottom:2.5rem; }
+.py-12 { padding-top:3rem; padding-bottom:3rem; }
+.py-20 { padding-top:5rem; padding-bottom:5rem; }
+
+.w-9 { width:2.25rem; }
+.h-9 { height:2.25rem; }
+
+.text-left { text-align:left; }
+.text-center { text-align:center; }
+.text-white { color:#fff; }
+.text-ink { color:#0a2540; }
+.text-slate-300 { color:#cbd5e1; }
+.text-slate-400 { color:#94a3b8; }
+.text-slate-500 { color:#64748b; }
+.text-slate-700 { color:#52606d; }
+.text-teal-700 { color:#0f766e; }
+.text-red-800 { color:#991b1b; }
+.text-amber-900 { color:#78350f; }
+.text-cyanx { color:#00d4ff; }
+.text-teal { color:#0d9488; }
+
+.text-xs { font-size:.75rem; line-height:1rem; }
+.text-sm { font-size:.875rem; line-height:1.25rem; }
+.text-lg { font-size:1.125rem; line-height:1.75rem; }
+.text-xl { font-size:1.25rem; line-height:1.75rem; }
+.text-3xl { font-size:1.875rem; line-height:2.25rem; }
+.text-5xl { font-size:3rem; line-height:1; }
+
+.font-bold { font-weight:700; }
+.font-semibold { font-weight:600; }
+.font-black { font-weight:900; }
+.uppercase { text-transform:uppercase; }
+.tracking-tight { letter-spacing:-.025em; }
+.tracking-wider { letter-spacing:.05em; }
+.tracking-widest { letter-spacing:.1em; }
+.leading-6 { line-height:1.5rem; }
+.leading-7 { line-height:1.75rem; }
+.leading-8 { line-height:2rem; }
+
+.rounded-lg { border-radius:.5rem; }
+.rounded-xl { border-radius:.75rem; }
+.rounded-2xl { border-radius:1rem; }
+.rounded-3xl { border-radius:1.5rem; }
+.rounded-full { border-radius:9999px; }
+
+.border { border-width:1px; border-style:solid; }
+.border-b { border-bottom-width:1px; border-bottom-style:solid; }
+.border-t { border-top-width:1px; border-top-style:solid; }
+.border-slate-200 { border-color:#e2e8f0; }
+.border-slate-200\/70 { border-color:rgba(226,232,240,.7); }
+.border-teal-100 { border-color:#ccfbf1; }
+.border-amber-200 { border-color:#fde68a; }
+.bg-white { background-color:#fff; }
+.bg-white\/85 { background-color:rgba(255,255,255,.85); }
+.bg-teal-50 { background-color:#f0fdfa; }
+.bg-slate-50 { background-color:#f8fafc; }
+.bg-red-50 { background-color:#fef2f2; }
+.bg-amber-50 { background-color:#fffbeb; }
+.bg-ink { background-color:#0a2540; }
+.bg-teal { background-color:#0d9488; }
+
+.shadow-sm { box-shadow:0 1px 2px 0 rgba(0,0,0,.05); }
+.shadow-glow { box-shadow:0 20px 60px rgba(13,148,136,.20); }
+.overflow-hidden { overflow:hidden; }
+.overflow-x-auto { overflow-x:auto; }
+.sticky { position:sticky; }
+.top-24 { top:6rem; }
+.top-0 { top:0; }
+.z-50 { z-index:50; }
+.backdrop-blur-xl { backdrop-filter:blur(24px); }
+.backdrop-blur-xl { -webkit-backdrop-filter:blur(24px); }
+
+.place-items-center { place-items:center; }
+.opacity-90:hover { opacity:.9; }
+.hover\:text-teal:hover { color:#0d9488; }
+.hover\:border-teal:hover { border-color:#0d9488; }
+
+.divide-y > :not([hidden]) ~ :not([hidden]) { border-top-width:1px; border-top-style:solid; }
+.divide-slate-100 > :not([hidden]) ~ :not([hidden]) { border-color:#f1f5f9; }
+
+header.sticky { position:sticky; }
+table { border-collapse:collapse; }
+
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(13,148,136,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(13,148,136,.045) 1px, transparent 1px);
+  background-size:36px 36px;
+}
+.glass {
+  background:rgba(255,255,255,.78);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border:1px solid rgba(13,148,136,.10);
+}
+.c-card {
+  border:1px solid #e6ebf1;
+  background:#fff;
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:0 8px 30px rgba(50,50,93,.06);
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.c-card:hover {
+  transform:translateY(-2px);
+  box-shadow:0 16px 45px rgba(50,50,93,.10);
+}
+.code {
+  background:#0a2540;
+  color:#ccfbf1;
+  border-radius:14px;
+  padding:1rem;
+  font-size:.84rem;
+  line-height:1.65;
+  overflow-x:auto;
+}
+.constant {
+  font-family: 'Courier New', Courier, monospace;
+  background: #f0fdfa;
+  color: #0f766e;
+  border-radius: 8px;
+  padding: .15rem .45rem;
+  font-size: .88rem;
+  font-weight: 700;
+}
+.tag {
+  display:inline-flex;
+  align-items:center;
+  gap:.35rem;
+  padding:.28rem .65rem;
+  border-radius:999px;
+  font-size:.72rem;
+  font-weight:700;
+  background:#f0fdfa;
+  color:#0f766e;
+}
+.sidebar-link {
+  display:block;
+  padding:.55rem .7rem;
+  border-radius:.6rem;
+  color:#52606d;
+  font-size:.9rem;
+}
+.sidebar-link:hover { background:#f0fdfa; color:#0f766e; }
+.sidebar-link.active { background:#f0fdfa; color:#0f766e; font-weight:700; }
+.step-num {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:2.25rem;
+  height:2.25rem;
+  min-width:2.25rem;
+  border-radius:9999px;
+  background:#0d9488;
+  color:#fff;
+  font-weight:900;
+  font-size:.95rem;
+}
+.flow {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:.6rem;
+}
+.flow-box {
+  padding:.55rem .9rem;
+  border-radius:.75rem;
+  background:#f0fdfa;
+  color:#0f766e;
+  font-weight:700;
+  font-size:.85rem;
+  border:1px solid #ccfbf1;
+}
+.flow-arrow { color:#0d9488; font-weight:900; }
+
+body.dark {
+  background:
+    radial-gradient(circle at 15% 0%, rgba(13,148,136,.12), transparent 30rem),
+    radial-gradient(circle at 85% 10%, rgba(0,212,255,.08), transparent 25rem),
+    #020617 !important;
+  color:#e2e8f0 !important;
+}
+body.dark .bg-white,
+body.dark .bg-white\/85 { background-color:#0f172a !important; }
+body.dark .bg-teal-50 { background-color:#042f2c !important; }
+body.dark .bg-slate-50 { background-color:#1e293b !important; }
+body.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) { border-color:#334155 !important; }
+body.dark .text-slate-400,
+body.dark .text-slate-500 { color:#94a3b8 !important; }
+body.dark .bg-red-50 { background-color:#450a0a !important; }
+body.dark .text-red-800 { color:#fecaca !important; }
+body.dark .bg-amber-50 { background-color:#451a03 !important; }
+body.dark .text-amber-900 { color:#fde68a !important; }
+body.dark .text-ink { color:#f8fafc !important; }
+body.dark .text-slate-700 { color:#cbd5e1 !important; }
+body.dark .text-slate-300 { color:#cbd5e1 !important; }
+body.dark .text-teal-700 { color:#5eead4 !important; }
+body.dark .constant { background:#042f2c !important; color:#5eead4 !important; }
+body.dark .flow-box { background:#042f2c !important; color:#5eead4 !important; border-color:#115e59 !important; }
+body.dark .border-slate-200,
+body.dark .border-slate-200\/70 { border-color:#334155 !important; }
+body.dark .border-teal-100 { border-color:#115e59 !important; }
+body.dark .c-card {
+  background:#0f172a !important;
+  border-color:#334155 !important;
+  box-shadow:0 8px 30px rgba(0,0,0,.25);
+}
+body.dark .sidebar-link { color:#cbd5e1 !important; }
+body.dark .sidebar-link:hover { background:#1e293b !important; color:#99f6e4 !important; }
+body.dark .sidebar-link.active { background:#115e59 !important; color:#99f6e4 !important; }
+body.dark .grid-bg {
+  background-image:
+    linear-gradient(rgba(13,148,136,.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(13,148,136,.08) 1px, transparent 1px);
+}
+body.dark .glass {
+  background:rgba(15,23,42,.82) !important;
+  border-color:rgba(148,163,184,.18) !important;
+}
+body.dark footer {
+  background-color:#020617 !important;
+  border-color:#334155 !important;
+}
+body.dark button { background-color:#0f172a !important; border-color:#475569 !important; color:#e2e8f0 !important; }
+body.dark button:hover { background-color:#1e293b !important; border-color:#2dd4bf !important; color:#99f6e4 !important; }
+
+@media (min-width:768px) {
+  .md\:flex { display:flex; }
+  .md\:grid-cols-2 { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .md\:grid-cols-3 { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .md\:text-xl { font-size:1.25rem; line-height:1.75rem; }
+  .md\:text-7xl { font-size:4.5rem; line-height:1; }
+  .md\:py-28 { padding-top:7rem; padding-bottom:7rem; }
+  .md\:p-12 { padding:3rem; }
+}
+/* À partir de 1080px, le sommaire latéral remplace les liens de la barre de navigation */
+@media (min-width:1080px) {
+  .nav-links { display:none !important; }
+}
+
+@media (min-width:1024px) {
+  .lg\:block { display:block; }
+  .lg\:grid-cols-\[240px_minmax\(0\2c 1fr\)\] {
+    grid-template-columns:240px minmax(0,1fr);
+  }
+}
+
+  
+/* Coloration du code C */
+.code .kw { color:#5eead4; font-weight:700; }
+.code .str { color:#fde68a; }
+.code .hd { color:#fde68a; }
+.code .cm { color:#93a4b7; font-style:italic; }
+.code .num { color:#fdba74; }
+.code .pp { color:#c4b5fd; }
+details > summary { cursor:pointer; font-weight:900; font-size:1.1rem; color:#0a2540; }
+body.dark details > summary { color:#f8fafc; }
+.copy-btn {
+  padding:.45rem .8rem;
+  border-radius:.6rem;
+  border:1px solid #e2e8f0;
+  background:#fff;
+  font-size:.8rem;
+  font-weight:700;
+  cursor:pointer;
+}
+.copy-btn:hover { border-color:#0d9488; color:#0f766e; }
+</style>
+</head>
+
+<body class="text-slate-700">
+
+  <header class="sticky top-0 z-50 border-b border-slate-200/70 bg-white/85 backdrop-blur-xl">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
+      <a href="#" class="flex items-center gap-3 font-black text-ink">
+        <span class="grid h-9 w-9 place-items-center rounded-xl bg-teal text-white shadow-glow">C</span>
+        <span>Guide Langage C</span>
+      </a>
+      <nav class="nav-links hidden gap-6 text-sm font-semibold md:flex">
+        <a href="#apercu" class="hover:text-teal">Le projet</a>
+        <a href="#plan" class="hover:text-teal">Le plan</a>
+        <a href="#boucle" class="hover:text-teal">La boucle</a>
+        <a href="#complet" class="hover:text-teal">Code complet</a>
+      </nav>
+      <button onclick="toggleTheme()"
+        class="rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold hover:border-teal hover:text-teal">Mode
+        nuit</button>
+    </div>
+  </header>
+
+  <section class="grid-bg overflow-hidden">
+    <div class="mx-auto max-w-7xl px-5 py-20 md:py-28">
+      <div class="max-w-4xl">
+        <div
+          class="mb-6 inline-flex items-center gap-2 rounded-full border border-teal-100 bg-teal-50 px-4 py-2 text-sm font-bold text-teal-700">
+          Guide pratique · Langage C pour débutant
+        </div>
+        <h1 class="max-w-4xl text-5xl font-black tracking-tight text-ink md:text-7xl">
+          Comprendre un <span class="text-teal-700">jeu en C</span> fonction par fonction.
+        </h1>
+        <p class="mt-7 max-w-3xl text-lg leading-8 md:text-xl">
+          Un petit jeu dans la console Windows : tu diriges un <code>#</code> et tu évites les <code>X</code> qui
+          descendent. Ce guide explique chaque fonction et chaque ligne du code, dans l'ordre, comme si tu n'avais
+          jamais programmé.
+        </p>
+        <div class="mt-9 flex flex-wrap gap-3">
+          <a href="#apercu"
+            class="rounded-xl bg-teal px-6 py-3 font-bold text-white shadow-glow hover:opacity-90">Commencer le
+            guide</a>
+          <a href="#complet"
+            class="rounded-xl border border-slate-200 bg-white px-6 py-3 font-bold text-ink hover:border-teal">Voir
+            le code complet</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="mx-auto max-w-7xl px-5 py-12">
+    <div class="grid gap-10 lg:grid-cols-[240px_minmax(0,1fr)]">
+
+      <aside class="hidden lg:block">
+        <div class="sticky top-24 glass rounded-2xl p-4 shadow-sm">
+          <p class="mb-3 px-2 text-xs font-black uppercase tracking-widest text-slate-400">Sommaire</p>
+          <a class="sidebar-link" href="#apercu">01. Le projet</a>
+          <a class="sidebar-link" href="#compiler">02. Compiler et lancer</a>
+          <a class="sidebar-link" href="#plan">03. Le plan du programme</a>
+          <a class="sidebar-link" href="#bases">04. #include et constantes</a>
+          <a class="sidebar-link" href="#carte">05. La carte</a>
+          <a class="sidebar-link" href="#ecran">06. Fonctions de la console</a>
+          <a class="sidebar-link" href="#lignes">07. Fabriquer la piste</a>
+          <a class="sidebar-link" href="#defiler">08. defiler()</a>
+          <a class="sidebar-link" href="#dessiner">09. dessiner()</a>
+          <a class="sidebar-link" href="#main">10. main() : variables</a>
+          <a class="sidebar-link" href="#boucle">11. La boucle de jeu</a>
+          <a class="sidebar-link" href="#fin">12. Fin de partie</a>
+          <a class="sidebar-link" href="#plus">13. Aller plus loin</a>
+          <a class="sidebar-link" href="#complet">14. Code complet</a>
+        </div>
+      </aside>
+
+      <div class="min-w-0 space-y-14">
+
+<section id="apercu"><div class="mb-6"><span class="tag">01 · Le projet</span><h2 class="mt-4 text-3xl font-black text-ink">Ce qu'on va construire</h2><p class="mt-3 leading-7">On va lire ensemble un petit jeu écrit en <strong>langage C</strong>, qui tourne dans la console Windows (l'invite de commandes). Tu diriges un <span class="constant">#</span> qui doit éviter des <span class="constant">X</span> qui descendent le long de la piste.</p></div><div class="space-y-5"><div class="grid gap-5 md:grid-cols-2"><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Ce que fait le jeu</h3><ul class="mt-4 space-y-3 text-sm leading-6"><li>Tu déplaces le <span class="constant">#</span> vers la <strong>gauche</strong> ou la <strong>droite</strong> avec les flèches du clavier.</li><li>Des obstacles <span class="constant">X</span> descendent depuis le haut de l'écran.</li><li>Si un <span class="constant">X</span> touche ton <span class="constant">#</span>, c'est <strong>perdu</strong>.</li><li>Le <strong>score</strong> monte avec le temps, et le jeu devient de plus en plus difficile.</li><li><strong>Échap</strong> quitte la partie.</li></ul></article><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">À quoi ressemble l'écran</h3><div class="mt-4 code"><pre>|                            |
+|   XX           X           |
+|                            |
+|                            |
+|                     XX     |
+|                            |
+|                            |
+|        X                   |
+|                            |
+|             #              |
+Score : 42
+Fleches gauche/droite, Echap pour quitter</pre></div><p class="mt-3 text-sm leading-6">Le vrai jeu affiche 25 lignes ; ici seulement 10 pour l'exemple. Le <span class="constant">#</span> est tout en bas, les <span class="constant">X</span> descendent vers lui.</p></article></div><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Ce que tu vas apprendre</h3><ul class="mt-4 space-y-3 text-sm leading-6"><li>Les <strong>variables</strong> et les types (<span class="constant">int</span>, <span class="constant">char</span>).</li><li>Les <strong>tableaux à deux dimensions</strong> (la piste est une grille).</li><li>Les <strong>fonctions</strong> : découper un programme en petites tâches.</li><li>Les <strong>boucles</strong> (<span class="constant">for</span>, <span class="constant">while</span>) et les <strong>conditions</strong> (<span class="constant">if</span>).</li><li>Les <strong>nombres aléatoires</strong> (placer les obstacles au hasard).</li><li>La <strong>lecture du clavier en direct</strong>, sans bloquer le jeu.</li></ul></article><div class="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm leading-6 text-amber-900"><strong>Pas besoin de savoir programmer.</strong> Chaque mot est expliqué. Garde le <a href="#complet" style="text-decoration:underline;">code complet</a> (dernière section) sous la main pour suivre.</div></div></section>
+
+<section id="compiler"><div class="mb-6"><span class="tag">02 · Préparer</span><h2 class="mt-4 text-3xl font-black text-ink">Compiler et lancer le jeu</h2><p class="mt-3 leading-7">Un programme en C s'écrit dans un fichier texte. Un <strong>compilateur</strong> le transforme ensuite en programme exécutable (un fichier <span class="constant">.exe</span> sous Windows).</p></div><div class="space-y-5"><article class="c-card p-6 flex gap-4 items-start"><span class="step-num">1</span><div class="min-w-0"><h3 class="text-lg font-black text-ink">Enregistrer le code</h3><p class="mt-3 text-sm leading-6">Copie le <a href="#complet" style="text-decoration:underline;">code complet</a> dans un fichier nommé <span class="constant">jeu.c</span>.</p></div></article><article class="c-card p-6 flex gap-4 items-start"><span class="step-num">2</span><div class="min-w-0"><h3 class="text-lg font-black text-ink">Avoir un compilateur</h3><p class="mt-3 text-sm leading-6">Il t'en faut un : par exemple <strong>GCC</strong> (via MinGW-w64 ou MSYS2), ou un environnement comme Code::Blocks ou Visual Studio. Pour vérifier que GCC est installé, tape <span class="constant">gcc --version</span> dans un terminal : une version doit s'afficher.</p><p class="mt-3 text-sm leading-6">Si la commande n'est pas reconnue, ajoute le dossier de GCC au <span class="constant">PATH</span> de Windows : voir le <a href="variables_environnement.html" style="text-decoration:underline;">guide Variables d'environnement</a>.</p></div></article><article class="c-card p-6 flex gap-4 items-start"><span class="step-num">3</span><div class="min-w-0"><h3 class="text-lg font-black text-ink">Compiler puis lancer</h3><div class="mt-4 code"><pre>gcc jeu.c -o jeu.exe
+jeu.exe</pre></div><p class="mt-3 text-sm leading-6"><span class="constant">gcc jeu.c -o jeu.exe</span> signifie « compile <span class="constant">jeu.c</span> et crée le programme <span class="constant">jeu.exe</span> ». Ensuite, <span class="constant">jeu.exe</span> lance le jeu.</p></div></article><div class="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm leading-6 text-amber-900"><strong>Windows uniquement :</strong> ce code utilise <span class="constant">conio.h</span> et <span class="constant">windows.h</span>, qui n'existent que sous Windows. Sous Linux ou macOS, la compilation s'arrête avec une erreur du type « conio.h: No such file or directory ».</div></div></section>
+
+<section id="plan"><div class="mb-6"><span class="tag">03 · Vue d'ensemble</span><h2 class="mt-4 text-3xl font-black text-ink">Le plan du programme</h2><p class="mt-3 leading-7">Avant d'entrer dans le détail, voici comment le jeu est organisé.</p></div><div class="space-y-5"><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Le principe : une boucle qui tourne en continu</h3><p class="mt-3 text-sm leading-6">Un jeu vidéo, même très simple, répète sans arrêt les mêmes étapes, environ <strong>50 fois par seconde</strong>. Chaque passage s'appelle une <strong>frame</strong> (une image).</p><div class="flow mt-4"><span class="flow-box">1. Lire le clavier</span><span class="flow-arrow">→</span><span class="flow-box">2. Mettre à jour le jeu</span><span class="flow-arrow">→</span><span class="flow-box">3. Tester la collision</span><span class="flow-arrow">→</span><span class="flow-box">4. Dessiner l'écran</span><span class="flow-arrow">→</span><span class="flow-box">5. Faire une pause</span><span class="flow-arrow">→</span><span class="flow-box">↻ On recommence</span></div><p class="mt-4 rounded-lg bg-slate-50 p-3 text-sm leading-6">C'est cette boucle qui fait vivre le jeu : même si tu n'appuies sur aucune touche, la piste continue d'avancer.</p></article><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Les fonctions du programme</h3><p class="mt-3 text-sm leading-6">Le code est découpé en <strong>fonctions</strong> : chacune fait une seule petite tâche.</p><div class="mt-4 overflow-x-auto rounded-xl border border-slate-200"><table class="min-w-full text-left text-sm"><thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500"><tr><th class="px-4 py-3">Fonction</th><th class="px-4 py-3">Son rôle</th></tr></thead><tbody class="divide-y divide-slate-100"><tr><td class="px-4 py-3"><span class="constant">allerA</span></td><td class="px-4 py-3">Déplacer le curseur à un endroit précis de la console</td></tr><tr><td class="px-4 py-3"><span class="constant">cacherCurseur</span></td><td class="px-4 py-3">Cacher le petit curseur clignotant</td></tr><tr><td class="px-4 py-3"><span class="constant">creerLigne</span></td><td class="px-4 py-3">Fabriquer une ligne de la piste (bords + obstacles au hasard)</td></tr><tr><td class="px-4 py-3"><span class="constant">initialiserCarte</span></td><td class="px-4 py-3">Préparer la piste de départ (vide)</td></tr><tr><td class="px-4 py-3"><span class="constant">defiler</span></td><td class="px-4 py-3">Faire avancer la piste d'une ligne</td></tr><tr><td class="px-4 py-3"><span class="constant">dessiner</span></td><td class="px-4 py-3">Afficher la piste, le joueur et le score</td></tr><tr><td class="px-4 py-3"><span class="constant">main</span></td><td class="px-4 py-3">Le point de départ du programme : contient la boucle de jeu</td></tr></tbody></table></div></article><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Anatomie d'une fonction</h3><div class="mt-4 code"><pre><span class="kw">void</span> allerA(<span class="kw">int</span> x, <span class="kw">int</span> y)
+{
+    <span class="cm">/* ... instructions ... */</span>
+}</pre></div><ul class="mt-4 space-y-3 text-sm leading-6"><li><span class="constant">void</span> : ce que la fonction <strong>renvoie</strong>. Ici « rien » : elle fait son travail sans rendre de résultat.</li><li><span class="constant">allerA</span> : le <strong>nom</strong> de la fonction.</li><li><span class="constant">(int x, int y)</span> : les <strong>paramètres</strong>, c'est-à-dire les valeurs qu'on lui donne pour travailler (ici deux nombres entiers).</li><li><span class="constant">{ ... }</span> : le <strong>corps</strong>, les instructions exécutées quand on appelle la fonction.</li></ul><p class="mt-3 text-sm leading-6">Pour utiliser une fonction, on l'<strong>appelle</strong> par son nom : <span class="constant">allerA(0, 0);</span>.</p><p class="mt-4 rounded-lg bg-slate-50 p-3 text-sm leading-6">Le compilateur lit le fichier <strong>de haut en bas</strong>. Une fonction doit donc être écrite <strong>avant</strong> l'endroit où on s'en sert. C'est pour cela que <span class="constant">main</span>, qui utilise toutes les autres, est tout en bas.</p></article></div></section>
+
+<section id="bases"><div class="mb-6"><span class="tag">04 · Les bases</span><h2 class="mt-4 text-3xl font-black text-ink">Les #include et les constantes</h2><p class="mt-3 leading-7">Le début du fichier prépare le terrain : les outils dont on a besoin, puis les valeurs fixes du jeu.</p></div><div class="space-y-5"><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Les <span class="constant">#include</span> : les boîtes à outils</h3><div class="mt-4 code"><pre><span class="pp">#include</span> <span class="hd">&lt;stdio.h&gt;</span>
+<span class="pp">#include</span> <span class="hd">&lt;stdlib.h&gt;</span>
+<span class="pp">#include</span> <span class="hd">&lt;string.h&gt;</span>
+<span class="pp">#include</span> <span class="hd">&lt;time.h&gt;</span>
+<span class="pp">#include</span> <span class="hd">&lt;conio.h&gt;</span>    <span class="cm">/* _getch() et _kbhit() */</span>
+<span class="pp">#include</span> <span class="hd">&lt;windows.h&gt;</span>  <span class="cm">/* curseur et Sleep() */</span></pre></div><p class="mt-3 text-sm leading-6">Une ligne <span class="constant">#include</span> dit au compilateur : « va chercher cette boîte à outils, j'ai besoin de ses fonctions ».</p><div class="mt-4 overflow-x-auto rounded-xl border border-slate-200"><table class="min-w-full text-left text-sm"><thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500"><tr><th class="px-4 py-3">Fichier</th><th class="px-4 py-3">Ce qu'il apporte</th><th class="px-4 py-3">Utilisé pour</th></tr></thead><tbody class="divide-y divide-slate-100"><tr><td class="px-4 py-3"><span class="constant">stdio.h</span></td><td class="px-4 py-3"><span class="constant">printf</span>, <span class="constant">fputs</span></td><td class="px-4 py-3">Afficher du texte</td></tr><tr><td class="px-4 py-3"><span class="constant">stdlib.h</span></td><td class="px-4 py-3"><span class="constant">rand</span>, <span class="constant">srand</span>, <span class="constant">system</span></td><td class="px-4 py-3">Nombres aléatoires et commande <span class="constant">cls</span></td></tr><tr><td class="px-4 py-3"><span class="constant">string.h</span></td><td class="px-4 py-3"><span class="constant">memcpy</span></td><td class="px-4 py-3">Copier des morceaux de mémoire</td></tr><tr><td class="px-4 py-3"><span class="constant">time.h</span></td><td class="px-4 py-3"><span class="constant">time</span></td><td class="px-4 py-3">Lire l'heure (pour initialiser le hasard)</td></tr><tr><td class="px-4 py-3"><span class="constant">conio.h</span></td><td class="px-4 py-3"><span class="constant">_getch</span>, <span class="constant">_kbhit</span></td><td class="px-4 py-3">Lire le clavier en direct</td></tr><tr><td class="px-4 py-3"><span class="constant">windows.h</span></td><td class="px-4 py-3"><span class="constant">Sleep</span>, curseur de la console</td><td class="px-4 py-3">Fonctions propres à Windows</td></tr></tbody></table></div><p class="mt-4 rounded-lg bg-slate-50 p-3 text-sm leading-6">Tout ce qui est écrit entre <span class="constant">/* ... */</span> est un <strong>commentaire</strong> : le compilateur l'ignore, il est là pour les humains.</p></article><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Les constantes avec <span class="constant">#define</span></h3><div class="mt-4 code"><pre><span class="pp">#define</span> LARGEUR   <span class="num">30</span>
+<span class="pp">#define</span> HAUTEUR   <span class="num">25</span>
+<span class="pp">#define</span> BORD      <span class="str">'|'</span>
+<span class="pp">#define</span> VIDE      <span class="str">' '</span>
+<span class="pp">#define</span> OBSTACLE  <span class="str">'X'</span>
+<span class="pp">#define</span> JOUEUR    <span class="str">'#'</span></pre></div><p class="mt-3 text-sm leading-6"><span class="constant">#define NOM valeur</span> donne un <strong>nom</strong> à une valeur. Avant de compiler, Windows remplace partout le nom par la valeur. Il n'y a ni <span class="constant">=</span> ni <span class="constant">;</span> sur ces lignes.</p><div class="mt-4 overflow-x-auto rounded-xl border border-slate-200"><table class="min-w-full text-left text-sm"><thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500"><tr><th class="px-4 py-3">Nom</th><th class="px-4 py-3">Valeur</th><th class="px-4 py-3">Signification</th></tr></thead><tbody class="divide-y divide-slate-100"><tr><td class="px-4 py-3"><span class="constant">LARGEUR</span></td><td class="px-4 py-3"><span class="constant">30</span></td><td class="px-4 py-3">Nombre de colonnes de la piste, bords compris</td></tr><tr><td class="px-4 py-3"><span class="constant">HAUTEUR</span></td><td class="px-4 py-3"><span class="constant">25</span></td><td class="px-4 py-3">Nombre de lignes de la piste</td></tr><tr><td class="px-4 py-3"><span class="constant">BORD</span></td><td class="px-4 py-3"><span class="constant">'|'</span></td><td class="px-4 py-3">Le caractère des murs</td></tr><tr><td class="px-4 py-3"><span class="constant">VIDE</span></td><td class="px-4 py-3"><span class="constant">' '</span></td><td class="px-4 py-3">Une case libre (un espace)</td></tr><tr><td class="px-4 py-3"><span class="constant">OBSTACLE</span></td><td class="px-4 py-3"><span class="constant">'X'</span></td><td class="px-4 py-3">Un obstacle</td></tr><tr><td class="px-4 py-3"><span class="constant">JOUEUR</span></td><td class="px-4 py-3"><span class="constant">'#'</span></td><td class="px-4 py-3">Le joueur</td></tr></tbody></table></div><p class="mt-4 rounded-lg bg-slate-50 p-3 text-sm leading-6">Pourquoi des constantes ? Pour lire <span class="constant">== OBSTACLE</span> plutôt qu'un mystérieux <span class="constant">== 'X'</span>, et pour pouvoir tout modifier à <strong>un seul endroit</strong>.</p><p class="mt-4 rounded-lg bg-slate-50 p-3 text-sm leading-6">Les apostrophes <span class="constant">'X'</span> désignent <strong>un seul caractère</strong>. Les guillemets <span class="constant">"texte"</span> désignent un <strong>texte</strong>.</p></article></div></section>
+
+<section id="carte"><div class="mb-6"><span class="tag">05 · Les données</span><h2 class="mt-4 text-3xl font-black text-ink">La carte : un tableau à deux dimensions</h2><p class="mt-3 leading-7">Toute la piste est stockée dans une seule variable : un tableau en forme de grille.</p></div><div class="space-y-5"><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">La déclaration</h3><div class="mt-4 code"><pre><span class="cm">/* La carte : carte[y][x], la ligne 0 est en haut de l'écran.
+   Le joueur n'est PAS stocké dedans : il est dessiné par-dessus. */</span>
+<span class="kw">char</span> carte[HAUTEUR][LARGEUR];</pre></div><p class="mt-3 text-sm leading-6">Lis-la ainsi : « une variable nommée <span class="constant">carte</span>, qui contient <span class="constant">HAUTEUR</span> lignes de <span class="constant">LARGEUR</span> caractères ».</p><ul class="mt-4 space-y-3 text-sm leading-6"><li><span class="constant">char</span> : un type de variable qui contient <strong>un caractère</strong>.</li><li>Un <strong>tableau</strong> est une rangée de cases numérotées. À <strong>deux dimensions</strong>, c'est une grille.</li><li>On lit une case avec <span class="constant">carte[y][x]</span> : <strong>d'abord la ligne (y), puis la colonne (x)</strong>.</li><li>La numérotation commence à <strong>0</strong> : les lignes vont de 0 à 24 et les colonnes de 0 à 29. La ligne 0 est <strong>en haut</strong>, et <span class="constant">y</span> augmente en descendant.</li><li>C'est une variable <strong>globale</strong> : elle est déclarée en dehors de toute fonction, donc toutes les fonctions peuvent la lire et la modifier.</li></ul><div class="mt-4 code"><pre>        x=0   x=1   x=2   ...  x=28  x=29
+y=0      |     .     .    ...    .     |
+y=1      |     .     X    ...    .     |
+ ...
+y=24     |     .     .    ...    .     |</pre></div><p class="mt-3 text-sm leading-6">Les points représentent des cases vides.</p></article><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Le joueur n'est pas dans la carte</h3><p class="mt-3 text-sm leading-6">Le commentaire le dit : le joueur <strong>n'est pas stocké</strong> dans <span class="constant">carte</span>, il est dessiné <strong>par-dessus</strong> au moment de l'affichage.</p><ul class="mt-4 space-y-3 text-sm leading-6"><li>Quand le joueur bouge, il n'y a <strong>rien à effacer</strong> dans la carte.</li><li>La case sous le joueur contient toujours ce qu'il y a vraiment sur la piste. Si c'est un <span class="constant">X</span>, on sait qu'il y a <strong>collision</strong>.</li></ul></article></div></section>
+
+<section id="ecran"><div class="mb-6"><span class="tag">06 · L'écran</span><h2 class="mt-4 text-3xl font-black text-ink">Les fonctions de la console : allerA et cacherCurseur</h2><p class="mt-3 leading-7">Ces deux petites fonctions préparent l'écran. Elles utilisent des outils fournis par Windows.</p></div><div class="space-y-5"><article class="c-card p-6 "><h3 class="text-xl font-black text-ink"><span class="constant">allerA()</span> : se placer à un endroit de l'écran</h3><div class="mt-4 code"><pre><span class="kw">void</span> allerA(<span class="kw">int</span> x, <span class="kw">int</span> y)
+{
+    <span class="kw">COORD</span> pos;
+    pos.X = (<span class="kw">SHORT</span>)x;
+    pos.Y = (<span class="kw">SHORT</span>)y;
+    SetConsoleCursorPosition(GetStdHandle(<span class="kw">STD_OUTPUT_HANDLE</span>), pos);
+}</pre></div><p class="mt-3 text-sm leading-6">Quand on utilise <span class="constant">printf</span>, le texte s'écrit à la suite du précédent et la console défile vers le bas. Dans un jeu, on veut au contraire <strong>redessiner toujours au même endroit</strong>. <span class="constant">allerA</span> place le <strong>curseur</strong> (l'endroit où le prochain texte s'écrira) à la colonne <span class="constant">x</span> et à la ligne <span class="constant">y</span>.</p><ul class="mt-4 space-y-3 text-sm leading-6"><li><span class="constant">COORD pos;</span> : crée une variable <span class="constant">pos</span> de type <span class="constant">COORD</span>, un type Windows qui regroupe <strong>deux nombres</strong>, <span class="constant">X</span> et <span class="constant">Y</span> (on parle de *structure*).</li><li><span class="constant">pos.X = (SHORT)x;</span> : on range <span class="constant">x</span> dans <span class="constant">pos.X</span>. Le <span class="constant">(SHORT)</span> <strong>convertit</strong> le nombre entier <span class="constant">int</span> dans le type attendu par Windows.</li><li><span class="constant">GetStdHandle(STD_OUTPUT_HANDLE)</span> : récupère l'accès à la <strong>sortie de la console</strong>, c'est-à-dire l'écran.</li><li><span class="constant">SetConsoleCursorPosition(..., pos)</span> : déplace le curseur aux coordonnées <span class="constant">pos</span>.</li></ul><p class="mt-4 rounded-lg bg-slate-50 p-3 text-sm leading-6">Dans la console, le coin en haut à gauche est la position <span class="constant">(0, 0)</span>.</p></article><article class="c-card p-6 "><h3 class="text-xl font-black text-ink"><span class="constant">cacherCurseur()</span> : masquer le curseur clignotant</h3><div class="mt-4 code"><pre><span class="kw">void</span> cacherCurseur(<span class="kw">void</span>)
+{
+    <span class="kw">CONSOLE_CURSOR_INFO</span> info;
+    info.dwSize = <span class="num">1</span>;
+    info.bVisible = <span class="kw">FALSE</span>;
+    SetConsoleCursorInfo(GetStdHandle(<span class="kw">STD_OUTPUT_HANDLE</span>), &amp;info);
+}</pre></div><ul class="mt-4 space-y-3 text-sm leading-6"><li><span class="constant">void</span> entre parenthèses : cette fonction ne prend <strong>aucun paramètre</strong>.</li><li><span class="constant">CONSOLE_CURSOR_INFO info;</span> : une structure qui décrit l'aspect du curseur.</li><li><span class="constant">info.dwSize = 1;</span> : l'épaisseur du curseur, en pourcentage de la case. Windows exige une valeur entre 1 et 100, même quand on cache le curseur.</li><li><span class="constant">info.bVisible = FALSE;</span> : le curseur devient invisible.</li><li><span class="constant">SetConsoleCursorInfo(..., &amp;info)</span> : applique ces réglages à la console.</li></ul><p class="mt-4 rounded-lg bg-slate-50 p-3 text-sm leading-6">Sans cette fonction, le curseur clignoterait en sautant partout à chaque redessin de l'écran.</p></article></div></section>
+
+<section id="lignes"><div class="mb-6"><span class="tag">07 · La piste</span><h2 class="mt-4 text-3xl font-black text-ink">Fabriquer la piste : creerLigne et initialiserCarte</h2><p class="mt-3 leading-7">Ces deux fonctions construisent les lignes de la piste.</p></div><div class="space-y-5"><article class="c-card p-6 "><h3 class="text-xl font-black text-ink"><span class="constant">creerLigne()</span> : fabriquer une ligne</h3><div class="mt-4 code"><pre><span class="cm">/* Fabrique une ligne : des bords à gauche et à droite, du vide au milieu,
+   et éventuellement des obstacles placés au hasard */</span>
+<span class="kw">void</span> creerLigne(<span class="kw">int</span> y, <span class="kw">int</span> avecObstacles, <span class="kw">int</span> densite)
+{
+    <span class="kw">int</span> x;
+
+    carte[y][<span class="num">0</span>] = BORD;
+    carte[y][LARGEUR - <span class="num">1</span>] = BORD;
+
+    <span class="kw">for</span> (x = <span class="num">1</span>; x &lt; LARGEUR - <span class="num">1</span>; x++) {
+        carte[y][x] = VIDE;
+    }
+
+    <span class="kw">if</span> (avecObstacles) {
+        <span class="kw">for</span> (x = <span class="num">1</span>; x &lt; LARGEUR - <span class="num">1</span>; x++) {
+            <span class="cm">/* densite = chance en % qu'une case devienne un obstacle */</span>
+            <span class="kw">if</span> (rand() % <span class="num">100</span> &lt; densite) {
+                carte[y][x] = OBSTACLE;
+            }
+        }
+    }
+}</pre></div><p class="mt-3 text-sm leading-6">Elle reçoit trois paramètres : <span class="constant">y</span> (quelle ligne fabriquer), <span class="constant">avecObstacles</span> (1 si on veut des obstacles, 0 sinon) et <span class="constant">densite</span> (le pourcentage de chance d'obstacle par case).</p><ol class="mt-4 space-y-3 text-sm leading-6"><li><span class="constant">int x;</span> : un compteur, déclaré au début de la fonction (c'est le style du C classique).</li><li>On pose les <strong>bords</strong> : <span class="constant">carte[y][0]</span> est la première case (colonne 0) et <span class="constant">carte[y][LARGEUR - 1]</span> la dernière (colonne 29).</li><li>La boucle <span class="constant">for (x = 1; x &lt; LARGEUR - 1; x++)</span> se lit : « pars de <span class="constant">x = 1</span>, continue <strong>tant que</strong> <span class="constant">x &lt; 29</span>, et après chaque tour fais <span class="constant">x++</span> (ajoute 1) ». Elle parcourt donc toutes les cases <strong>entre</strong> les bords, qu'on remplit avec <span class="constant">VIDE</span>.</li><li><span class="constant">if (avecObstacles)</span> : en C, <strong>0 veut dire faux</strong> et toute autre valeur veut dire vrai.</li><li><span class="constant">rand() % 100 &lt; densite</span> : <span class="constant">rand()</span> donne un grand nombre aléatoire ; <span class="constant">% 100</span> en garde le <strong>reste de la division par 100</strong>, donc un nombre entre 0 et 99. Si ce nombre est plus petit que <span class="constant">densite</span> (par exemple 10), la case devient un obstacle : c'est <strong>10 chances sur 100</strong>, soit 10 %.</li></ol><p class="mt-4 rounded-lg bg-slate-50 p-3 text-sm leading-6">Chaque case est tirée au sort <strong>séparément</strong> : avec 10 %, une ligne de 28 cases contient en moyenne environ 3 obstacles.</p></article><article class="c-card p-6 "><h3 class="text-xl font-black text-ink"><span class="constant">initialiserCarte()</span> : la piste de départ</h3><div class="mt-4 code"><pre><span class="cm">/* Au départ : une piste vide pour laisser le temps au joueur */</span>
+<span class="kw">void</span> initialiserCarte(<span class="kw">void</span>)
+{
+    <span class="kw">int</span> y;
+
+    <span class="kw">for</span> (y = <span class="num">0</span>; y &lt; HAUTEUR; y++) {
+        creerLigne(y, <span class="num">0</span>, <span class="num">0</span>);
+    }
+}</pre></div><p class="mt-3 text-sm leading-6">Au lancement du jeu, on remplit les 25 lignes avec <span class="constant">creerLigne(y, 0, 0)</span> : des bords, du vide, <strong>aucun obstacle</strong>. Le joueur a ainsi un peu de temps avant les premiers dangers.</p><p class="mt-3 text-sm leading-6"><span class="constant">for (y = 0; y &lt; HAUTEUR; y++)</span> parcourt les lignes de 0 à 24.</p></article></div></section>
+
+<section id="defiler"><div class="mb-6"><span class="tag">08 · Le défilement</span><h2 class="mt-4 text-3xl font-black text-ink">defiler() : faire avancer la piste</h2><p class="mt-3 leading-7">C'est la fonction la plus importante du jeu : c'est elle qui donne l'impression que la piste avance.</p></div><div class="space-y-5"><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Le code</h3><div class="mt-4 code"><pre><span class="cm">/* LE DÉFILEMENT : chaque ligne prend la place de celle du dessous.
+   On part du BAS vers le HAUT, sinon on écraserait les lignes
+   avant de les avoir copiées. La ligne du bas disparaît,
+   et on crée une nouvelle ligne tout en haut. */</span>
+<span class="kw">void</span> defiler(<span class="kw">int</span> avecObstacles, <span class="kw">int</span> densite)
+{
+    <span class="kw">int</span> y;
+
+    <span class="kw">for</span> (y = HAUTEUR - <span class="num">1</span>; y &gt; <span class="num">0</span>; y--) {
+        memcpy(carte[y], carte[y - <span class="num">1</span>], LARGEUR);
+    }
+    creerLigne(<span class="num">0</span>, avecObstacles, densite);
+}</pre></div></article><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">L'idée</h3><p class="mt-3 text-sm leading-6">Pour faire avancer la piste, on <strong>décale toutes les lignes d'un cran vers le bas</strong>, la dernière ligne <strong>disparaît</strong>, et on <strong>fabrique une nouvelle ligne tout en haut</strong>. Exemple avec 4 lignes :</p><div class="mt-4 grid gap-4 md:grid-cols-2"><div><p class="text-sm font-bold text-ink">Avant</p><div class="mt-4 code"><pre>ligne 0 : A
+ligne 1 : B
+ligne 2 : C
+ligne 3 : D</pre></div></div><div><p class="text-sm font-bold text-ink">Après</p><div class="mt-4 code"><pre>ligne 0 : NOUVELLE
+ligne 1 : A
+ligne 2 : B
+ligne 3 : C   (D a disparu)</pre></div></div></div><p class="mt-4 rounded-lg bg-slate-50 p-3 text-sm leading-6">Comme la piste descend vers le joueur (placé en bas), on a l'impression qu'il <strong>avance</strong>.</p></article><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Ligne par ligne</h3><ul class="mt-4 space-y-3 text-sm leading-6"><li><span class="constant">for (y = HAUTEUR - 1; y &gt; 0; y--)</span> : on démarre tout en bas (ligne 24) et on <strong>remonte</strong> : <span class="constant">y--</span> retire 1 à chaque tour, et on s'arrête avant la ligne 0.</li><li><span class="constant">memcpy(carte[y], carte[y - 1], LARGEUR);</span> : <span class="constant">memcpy(destination, source, taille)</span> <strong>copie</strong> <span class="constant">taille</span> octets. Ici, la ligne <span class="constant">y</span> reçoit une copie de la ligne <span class="constant">y - 1</span>, celle du dessus. <span class="constant">carte[y]</span> seul désigne toute la ligne, et <span class="constant">LARGEUR</span> caractères = une ligne complète.</li><li><span class="constant">creerLigne(0, avecObstacles, densite);</span> : on fabrique la nouvelle ligne du haut. Les deux paramètres sont simplement transmis à <span class="constant">creerLigne</span>.</li></ul></article><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Pourquoi du bas vers le haut ?</h3><p class="mt-3 text-sm leading-6">Si on copiait du haut vers le bas, on écraserait les lignes avant de les avoir copiées :</p><div class="mt-4 code"><pre>Mauvais ordre (de haut en bas)
+ligne 1 = ligne 0   -&gt;  la ligne 1 devient A  (B est perdue)
+ligne 2 = ligne 1   -&gt;  la ligne 2 devient A  (on recopie ce qu'on vient d'écraser)
+ligne 3 = ligne 2   -&gt;  la ligne 3 devient A
+
+Résultat : toutes les lignes deviennent des copies de A</pre></div><p class="mt-3 text-sm leading-6">En partant du bas, chaque ligne est copiée <strong>avant</strong> d'être remplacée :</p><div class="mt-4 overflow-x-auto rounded-xl border border-slate-200"><table class="min-w-full text-left text-sm"><thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500"><tr><th class="px-4 py-3">y</th><th class="px-4 py-3">Opération</th><th class="px-4 py-3">Effet</th></tr></thead><tbody class="divide-y divide-slate-100"><tr><td class="px-4 py-3">3</td><td class="px-4 py-3">ligne 3 ← ligne 2</td><td class="px-4 py-3">D disparaît, C descend</td></tr><tr><td class="px-4 py-3">2</td><td class="px-4 py-3">ligne 2 ← ligne 1</td><td class="px-4 py-3">B descend</td></tr><tr><td class="px-4 py-3">1</td><td class="px-4 py-3">ligne 1 ← ligne 0</td><td class="px-4 py-3">A descend</td></tr><tr><td class="px-4 py-3">—</td><td class="px-4 py-3"><span class="constant">creerLigne(0, ...)</span></td><td class="px-4 py-3">Une nouvelle ligne apparaît en haut</td></tr></tbody></table></div></article></div></section>
+
+<section id="dessiner"><div class="mb-6"><span class="tag">09 · L'affichage</span><h2 class="mt-4 text-3xl font-black text-ink">dessiner() : afficher le jeu</h2><p class="mt-3 leading-7">Cette fonction affiche toute la piste, le joueur, le score et les instructions.</p></div><div class="space-y-5"><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Le code</h3><div class="mt-4 code"><pre><span class="cm">/* Redessine tout l'écran sans l'effacer (on revient juste en haut à gauche),
+   ce qui évite le clignotement */</span>
+<span class="kw">void</span> dessiner(<span class="kw">int</span> joueurX, <span class="kw">int</span> joueurY, <span class="kw">int</span> score)
+{
+    <span class="kw">char</span> ligne[LARGEUR + <span class="num">2</span>];
+    <span class="kw">int</span> y;
+
+    allerA(<span class="num">0</span>, <span class="num">0</span>);
+    <span class="kw">for</span> (y = <span class="num">0</span>; y &lt; HAUTEUR; y++) {
+        memcpy(ligne, carte[y], LARGEUR);
+        <span class="kw">if</span> (y == joueurY) {
+            ligne[joueurX] = JOUEUR;
+        }
+        ligne[LARGEUR] = <span class="str">'\n'</span>;
+        ligne[LARGEUR + <span class="num">1</span>] = <span class="str">'\0'</span>;
+        fputs(ligne, <span class="kw">stdout</span>);
+    }
+    printf(<span class="str">"Score : %d     \n"</span>, score);
+    printf(<span class="str">"Fleches gauche/droite, Echap pour quitter"</span>);
+}</pre></div></article><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Pas à pas</h3><ol class="mt-4 space-y-3 text-sm leading-6"><li><span class="constant">allerA(0, 0);</span> : on revient en <strong>haut à gauche</strong> de l'écran et on réécrit <strong>par-dessus</strong> l'image précédente. Effacer tout l'écran à chaque frame le ferait clignoter ; réécrire au même endroit évite ce défaut.</li><li><span class="constant">char ligne[LARGEUR + 2];</span> : un tableau temporaire de 32 cases : les 30 caractères de la ligne, plus un retour à la ligne <span class="constant">\n</span> et un marqueur de fin <span class="constant">\0</span>.</li><li><span class="constant">for (y = 0; y &lt; HAUTEUR; y++)</span> : on traite les 25 lignes une par une.</li><li><span class="constant">memcpy(ligne, carte[y], LARGEUR);</span> : on <strong>copie</strong> la ligne de la carte dans le tableau temporaire.</li><li><span class="constant">if (y == joueurY) { ligne[joueurX] = JOUEUR; }</span> : si c'est la ligne du joueur, on pose le <span class="constant">#</span> <strong>dans la copie</strong>, jamais dans la carte elle-même.</li><li><span class="constant">ligne[LARGEUR] = '\n'; ligne[LARGEUR + 1] = '\0';</span> : on ajoute le retour à la ligne, puis le <span class="constant">\0</span>. En C, un texte est un tableau de caractères qui <strong>se termine par <span class="constant">\0</span></strong> : sans lui, <span class="constant">fputs</span> ne saurait pas où s'arrêter.</li><li><span class="constant">fputs(ligne, stdout);</span> : affiche le texte à l'écran (<span class="constant">stdout</span> = la sortie standard). Contrairement à <span class="constant">puts</span>, <span class="constant">fputs</span> n'ajoute pas de retour à la ligne, d'où le <span class="constant">\n</span> ajouté à la main.</li><li><span class="constant">printf("Score : %d     \n", score);</span> : <span class="constant">%d</span> est remplacé par la valeur de <span class="constant">score</span>. Les espaces à la fin effacent d'éventuels restes de l'image précédente.</li><li>Le dernier <span class="constant">printf</span> affiche les instructions, sans retour à la ligne : au prochain tour, <span class="constant">allerA(0, 0)</span> nous ramène en haut de toute façon.</li></ol><p class="mt-4 rounded-lg bg-slate-50 p-3 text-sm leading-6"><span class="constant">joueurX</span>, <span class="constant">joueurY</span> et <span class="constant">score</span> sont des <strong>paramètres</strong> : les variables de <span class="constant">main</span> sont <strong>locales</strong> (les autres fonctions ne les voient pas), il faut donc les transmettre. <span class="constant">carte</span>, elle, est globale et reste visible partout.</p></article></div></section>
+
+<section id="main"><div class="mb-6"><span class="tag">10 · Le programme principal</span><h2 class="mt-4 text-3xl font-black text-ink">main() : les variables et le démarrage</h2><p class="mt-3 leading-7"><span class="constant">main</span> est le <strong>point de départ</strong> : c'est la première fonction exécutée quand le programme se lance.</p></div><div class="space-y-5"><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Les variables</h3><div class="mt-4 code"><pre><span class="kw">int</span> joueurX = LARGEUR / <span class="num">2</span>;
+<span class="kw">int</span> joueurY = HAUTEUR - <span class="num">2</span>;
+<span class="kw">int</span> score = <span class="num">0</span>;
+<span class="kw">int</span> frame = <span class="num">0</span>;
+<span class="kw">int</span> vitesse = <span class="num">8</span>;     <span class="cm">/* la map défile toutes les "vitesse" frames */</span>
+<span class="kw">int</span> densite = <span class="num">10</span>;    <span class="cm">/* % de chance d'obstacle par case */</span>
+<span class="kw">int</span> enJeu = <span class="num">1</span>;
+<span class="kw">int</span> perdu = <span class="num">0</span>;
+<span class="kw">int</span> touche;
+<span class="kw">int</span> avecObstacles;</pre></div><div class="mt-4 overflow-x-auto rounded-xl border border-slate-200"><table class="min-w-full text-left text-sm"><thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500"><tr><th class="px-4 py-3">Variable</th><th class="px-4 py-3">Valeur de départ</th><th class="px-4 py-3">Rôle</th></tr></thead><tbody class="divide-y divide-slate-100"><tr><td class="px-4 py-3"><span class="constant">joueurX</span></td><td class="px-4 py-3"><span class="constant">LARGEUR / 2</span>, soit 15</td><td class="px-4 py-3">Colonne du joueur : au milieu de la piste</td></tr><tr><td class="px-4 py-3"><span class="constant">joueurY</span></td><td class="px-4 py-3"><span class="constant">HAUTEUR - 2</span>, soit 23</td><td class="px-4 py-3">Ligne du joueur : l'avant-dernière, pour garder une ligne sous lui</td></tr><tr><td class="px-4 py-3"><span class="constant">score</span></td><td class="px-4 py-3"><span class="constant">0</span></td><td class="px-4 py-3">Les points</td></tr><tr><td class="px-4 py-3"><span class="constant">frame</span></td><td class="px-4 py-3"><span class="constant">0</span></td><td class="px-4 py-3">Compte les tours de boucle</td></tr><tr><td class="px-4 py-3"><span class="constant">vitesse</span></td><td class="px-4 py-3"><span class="constant">8</span></td><td class="px-4 py-3">La piste avance tous les 8 tours : <strong>plus le nombre est petit, plus ça va vite</strong></td></tr><tr><td class="px-4 py-3"><span class="constant">densite</span></td><td class="px-4 py-3"><span class="constant">10</span></td><td class="px-4 py-3">Pourcentage de chance d'obstacle par case</td></tr><tr><td class="px-4 py-3"><span class="constant">enJeu</span></td><td class="px-4 py-3"><span class="constant">1</span></td><td class="px-4 py-3">1 = la partie continue, 0 = on s'arrête</td></tr><tr><td class="px-4 py-3"><span class="constant">perdu</span></td><td class="px-4 py-3"><span class="constant">0</span></td><td class="px-4 py-3">Passe à 1 si le joueur touche un obstacle</td></tr><tr><td class="px-4 py-3"><span class="constant">touche</span></td><td class="px-4 py-3">—</td><td class="px-4 py-3">Le code de la touche lue au clavier</td></tr><tr><td class="px-4 py-3"><span class="constant">avecObstacles</span></td><td class="px-4 py-3">—</td><td class="px-4 py-3">1 ou 0 : la prochaine ligne contient-elle des obstacles ?</td></tr></tbody></table></div><p class="mt-4 rounded-lg bg-slate-50 p-3 text-sm leading-6"><span class="constant">int</span> = nombre entier. <span class="constant">LARGEUR / 2</span> est une <strong>division entière</strong> : 30 / 2 = 15. Les variables <span class="constant">enJeu</span> et <span class="constant">perdu</span> servent de <strong>drapeaux</strong> : 1 veut dire « oui », 0 veut dire « non ».</p></article><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Le démarrage</h3><div class="mt-4 code"><pre>srand((<span class="kw">unsigned</span>)time(<span class="kw">NULL</span>));
+system(<span class="str">"cls"</span>);
+cacherCurseur();
+initialiserCarte();</pre></div><ul class="mt-4 space-y-3 text-sm leading-6"><li><span class="constant">srand((unsigned)time(NULL));</span> : <strong>initialise le hasard</strong>. <span class="constant">time(NULL)</span> donne le nombre de secondes écoulées depuis 1970, un nombre différent à chaque lancement. Sans cette ligne, <span class="constant">rand()</span> produirait la <strong>même suite</strong> à chaque partie : les obstacles seraient toujours aux mêmes endroits.</li><li><span class="constant">system("cls");</span> : efface la console. On ne le fait qu'<strong>une fois</strong>, au départ.</li><li><span class="constant">cacherCurseur();</span> : masque le curseur clignotant.</li><li><span class="constant">initialiserCarte();</span> : prépare la piste vide.</li></ul></article></div></section>
+
+<section id="boucle"><div class="mb-6"><span class="tag">11 · Le cœur du jeu</span><h2 class="mt-4 text-3xl font-black text-ink">La boucle de jeu, étape par étape</h2><p class="mt-3 leading-7">Tout se passe dans une boucle <span class="constant">while</span>. Elle répète ses instructions <strong>tant que</strong> <span class="constant">enJeu</span> vaut 1.</p></div><div class="space-y-5"><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Le squelette</h3><div class="mt-4 code"><pre><span class="kw">while</span> (enJeu) {
+    <span class="cm">/* 1) ENTREES */</span>
+    <span class="cm">/* 2) MISE A JOUR */</span>
+    <span class="cm">/* 3) COLLISION */</span>
+    <span class="cm">/* 4) AFFICHAGE */</span>
+    <span class="cm">/* 5) PAUSE */</span>
+}</pre></div><p class="mt-3 text-sm leading-6">Chaque tour de boucle est une frame. L'ordre est important : on lit d'abord ce que veut le joueur, on fait évoluer le jeu, on vérifie le résultat, on affiche, puis on attend.</p></article><article class="c-card p-6 flex gap-4 items-start"><span class="step-num">1</span><div class="min-w-0"><h3 class="text-lg font-black text-ink">Les entrées : lire le clavier</h3><div class="mt-4 code"><pre><span class="cm">/* 1) ENTRÉES : _kbhit() dit s'il y a une touche en attente,
+      sans bloquer. S'il n'y en a pas, on continue quand même. */</span>
+<span class="kw">while</span> (_kbhit()) {
+    touche = _getch();
+    <span class="kw">if</span> (touche == <span class="num">27</span>) {
+        enJeu = <span class="num">0</span>;
+    } <span class="kw">else</span> <span class="kw">if</span> (touche == <span class="num">0</span> || touche == <span class="num">224</span>) {
+        touche = _getch();
+        <span class="cm">/* Les bords bloquent, comme les murs du premier jeu */</span>
+        <span class="kw">if</span> (touche == <span class="num">75</span> &amp;&amp; carte[joueurY][joueurX - <span class="num">1</span>] != BORD) {
+            joueurX--;
+        }
+        <span class="kw">if</span> (touche == <span class="num">77</span> &amp;&amp; carte[joueurY][joueurX + <span class="num">1</span>] != BORD) {
+            joueurX++;
+        }
+    }
+}</pre></div><ul class="mt-4 space-y-3 text-sm leading-6"><li><span class="constant">_kbhit()</span> répond à la question : « y a-t-il une touche en attente ? ». Il <strong>ne bloque pas</strong> : s'il n'y en a pas, le jeu continue. C'est ce qui fait tourner le jeu tout seul. Avec <span class="constant">scanf</span>, le programme resterait figé en attendant que tu appuies.</li><li><span class="constant">_getch()</span> lit la touche <strong>sans l'afficher</strong> et sans attendre la touche Entrée. On ne l'appelle que quand <span class="constant">_kbhit()</span> a confirmé qu'une touche attend.</li><li><span class="constant">while (_kbhit())</span> (et non un simple <span class="constant">if</span>) vide toutes les touches en attente d'un coup.</li><li><span class="constant">touche == 27</span> : le code de la touche <strong>Échap</strong>. On met <span class="constant">enJeu</span> à 0 : la boucle s'arrêtera.</li><li>Les <strong>flèches</strong> envoient <strong>deux codes</strong> : d'abord <span class="constant">0</span> ou <span class="constant">224</span> (« une touche spéciale arrive »), puis le vrai code. D'où le deuxième <span class="constant">_getch()</span>. <span class="constant">||</span> veut dire « ou ».</li><li><span class="constant">75</span> = flèche gauche, <span class="constant">77</span> = flèche droite. <span class="constant">&amp;&amp;</span> veut dire « et » : on avance <strong>si</strong> c'est la bonne touche <strong>et</strong> que la case voisine n'est pas un <span class="constant">BORD</span>.</li><li><span class="constant">joueurX--</span> retire 1 à <span class="constant">joueurX</span> (c'est la même chose que <span class="constant">joueurX = joueurX - 1</span>) ; <span class="constant">joueurX++</span> ajoute 1.</li></ul><p class="mt-4 rounded-lg bg-slate-50 p-3 text-sm leading-6">Les obstacles ne bloquent <strong>pas</strong> le déplacement : tu peux marcher dedans. C'est l'étape 3 qui te fera perdre.</p></div></article><article class="c-card p-6 flex gap-4 items-start"><span class="step-num">2</span><div class="min-w-0"><h3 class="text-lg font-black text-ink">La mise à jour : faire évoluer le jeu</h3><div class="mt-4 code"><pre><span class="cm">/* 2) MISE À JOUR : la map n'avance pas à chaque frame,
+      seulement toutes les "vitesse" frames */</span>
+frame++;
+<span class="kw">if</span> (frame % vitesse == <span class="num">0</span>) {
+    score++;
+
+    <span class="cm">/* Des obstacles une ligne sur trois, pour laisser des passages */</span>
+    <span class="kw">if</span> (score % <span class="num">3</span> == <span class="num">0</span>) {
+        avecObstacles = <span class="num">1</span>;
+    } <span class="kw">else</span> {
+        avecObstacles = <span class="num">0</span>;
+    }
+    defiler(avecObstacles, densite);
+
+    <span class="cm">/* Ça devient plus dur avec le temps */</span>
+    <span class="kw">if</span> (score % <span class="num">100</span> == <span class="num">0</span> &amp;&amp; vitesse &gt; <span class="num">2</span>) {
+        vitesse--;
+    }
+    <span class="kw">if</span> (score % <span class="num">150</span> == <span class="num">0</span> &amp;&amp; densite &lt; <span class="num">30</span>) {
+        densite = densite + <span class="num">3</span>;
+    }
+}</pre></div><ul class="mt-4 space-y-3 text-sm leading-6"><li><span class="constant">frame++</span> : un tour de plus.</li><li><span class="constant">frame % vitesse == 0</span> : <span class="constant">%</span> donne le <strong>reste d'une division</strong>. Avec <span class="constant">vitesse = 8</span>, c'est vrai aux tours 8, 16, 24… La piste n'avance donc qu'<strong>une fois sur 8</strong>, alors que le clavier est lu à <strong>chaque</strong> tour : le joueur réagit instantanément.</li><li><span class="constant">score++</span> : le score compte le nombre d'avancées de la piste.</li><li><span class="constant">score % 3 == 0</span> : une ligne sur trois contient des obstacles (<span class="constant">avecObstacles = 1</span>). Les deux autres sont vides, ce qui <strong>laisse des passages</strong>.</li><li><span class="constant">defiler(avecObstacles, densite)</span> : on fait avancer la piste.</li><li>Tous les 100 points, <span class="constant">vitesse</span> baisse de 1 (la piste accélère) jusqu'à un minimum de 2. Tous les 150 points, <span class="constant">densite</span> monte de 3 (plus d'obstacles) tant qu'elle est <strong>inférieure à 30</strong>, donc elle s'arrête à 31 %.</li></ul><p class="mt-4 rounded-lg bg-slate-50 p-3 text-sm leading-6">Les premiers obstacles apparaissent en haut quand le score atteint 3, puis descendent jusqu'à la ligne du joueur : il a environ 3 à 4 secondes de calme au début.</p></div></article><article class="c-card p-6 flex gap-4 items-start"><span class="step-num">3</span><div class="min-w-0"><h3 class="text-lg font-black text-ink">La collision : tester si on a perdu</h3><div class="mt-4 code"><pre><span class="cm">/* 3) COLLISION : un obstacle ne bloque pas, il fait perdre */</span>
+<span class="kw">if</span> (carte[joueurY][joueurX] == OBSTACLE) {
+    perdu = <span class="num">1</span>;
+    enJeu = <span class="num">0</span>;
+}</pre></div><p class="mt-3 text-sm leading-6">Comme le joueur n'est pas stocké dans <span class="constant">carte</span>, la case <span class="constant">carte[joueurY][joueurX]</span> contient ce qu'il y a <strong>sous</strong> lui. Si c'est un <span class="constant">OBSTACLE</span>, on met <span class="constant">perdu</span> à 1 et <span class="constant">enJeu</span> à 0 : la boucle s'arrête.</p><p class="mt-3 text-sm leading-6">Ce test est fait <strong>à chaque tour</strong>, donc il détecte aussi bien un <span class="constant">X</span> sur lequel tu marches qu'un <span class="constant">X</span> que la piste amène sur ta ligne.</p></div></article><article class="c-card p-6 flex gap-4 items-start"><span class="step-num">4</span><div class="min-w-0"><h3 class="text-lg font-black text-ink">L'affichage</h3><div class="mt-4 code"><pre><span class="cm">/* 4) AFFICHAGE */</span>
+dessiner(joueurX, joueurY, score);</pre></div><p class="mt-3 text-sm leading-6">On appelle <span class="constant">dessiner</span> en lui donnant la position du joueur et le score.</p></div></article><article class="c-card p-6 flex gap-4 items-start"><span class="step-num">5</span><div class="min-w-0"><h3 class="text-lg font-black text-ink">La pause</h3><div class="mt-4 code"><pre><span class="cm">/* 5) PAUSE : environ 50 frames par seconde */</span>
+Sleep(<span class="num">20</span>);</pre></div><p class="mt-3 text-sm leading-6"><span class="constant">Sleep(20)</span> met le programme en pause pendant <strong>20 millisecondes</strong>. 1000 ms ÷ 20 ms = environ <strong>50 frames par seconde</strong>. Sans cette pause, la boucle tournerait des milliers de fois par seconde : le processeur serait saturé et le jeu bien trop rapide. Avec <span class="constant">vitesse = 8</span>, la piste avance environ 6 fois par seconde ; avec <span class="constant">vitesse = 2</span>, environ 25 fois.</p></div></article></div></section>
+
+<section id="fin"><div class="mb-6"><span class="tag">12 · La fin</span><h2 class="mt-4 text-3xl font-black text-ink">Après la boucle : la fin de partie</h2><p class="mt-3 leading-7">Quand <span class="constant">enJeu</span> passe à 0, la boucle se termine et le programme exécute la fin de <span class="constant">main</span>.</p></div><div class="space-y-5"><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Le code</h3><div class="mt-4 code"><pre>allerA(<span class="num">0</span>, HAUTEUR + <span class="num">3</span>);
+<span class="kw">if</span> (perdu) {
+    printf(<span class="str">"PERDU ! Score final : %d\n"</span>, score);
+    printf(<span class="str">"Appuie sur une touche pour quitter..."</span>);
+    Sleep(<span class="num">800</span>);
+    <span class="kw">while</span> (_kbhit()) {
+        _getch();   <span class="cm">/* on vide les touches restées en attente */</span>
+    }
+    _getch();
+}
+printf(<span class="str">"\n"</span>);
+<span class="kw">return</span> <span class="num">0</span>;</pre></div><ul class="mt-4 space-y-3 text-sm leading-6"><li><span class="constant">allerA(0, HAUTEUR + 3);</span> : on se place <strong>sous l'affichage</strong> (25 lignes de piste, plus le score, plus les instructions), en laissant une ligne vide.</li><li><span class="constant">if (perdu)</span> : le message n'apparaît que si on a perdu. Si tu as quitté avec Échap, on passe directement à la fin.</li><li><span class="constant">Sleep(800);</span> : une pause de 0,8 seconde, pour que tu aies le temps de voir ce qui s'est passé même si tu étais en train de marteler les flèches.</li><li><span class="constant">while (_kbhit()) { _getch(); }</span> : on <strong>vide</strong> les touches restées en attente, sinon l'une d'elles fermerait le message instantanément.</li><li><span class="constant">_getch();</span> : cette fois on <strong>attend vraiment</strong> une touche, pour que la fenêtre ne se ferme pas toute seule.</li><li><span class="constant">return 0;</span> : termine <span class="constant">main</span> et le programme. Le <span class="constant">0</span> signifie « tout s'est bien passé ».</li></ul></article></div></section>
+
+<section id="plus"><div class="mb-6"><span class="tag">13 · À toi de jouer</span><h2 class="mt-4 text-3xl font-black text-ink">Aller plus loin et problèmes fréquents</h2></div><div class="space-y-5"><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Défis pour t'entraîner</h3><ol class="mt-4 space-y-3 text-sm leading-6"><li>Change <span class="constant">LARGEUR</span> et <span class="constant">HAUTEUR</span> : le jeu s'adapte tout seul.</li><li>Change les caractères : par exemple <span class="constant">#define JOUEUR '@'</span>.</li><li>Rends le jeu plus facile ou plus difficile en modifiant <span class="constant">vitesse</span> et <span class="constant">densite</span> au départ.</li><li>Ajoute un <strong>meilleur score</strong> : une variable <span class="constant">meilleurScore</span>, comparée au score à la fin de la partie.</li><li>Autorise le déplacement <strong>vers le haut et le bas</strong> : les flèches haut et bas ont pour codes <span class="constant">72</span> et <span class="constant">80</span>. Attention à ne pas sortir de la piste !</li><li>Ajoute un <strong>bonus</strong> (par exemple un <span class="constant">+</span>) qui donne des points quand on le touche.</li></ol></article><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Problèmes fréquents</h3><ul class="mt-4 space-y-3 text-sm leading-6"><li><strong><span class="constant">gcc</span> n'est pas reconnu</strong> : le dossier de GCC n'est pas dans le <span class="constant">PATH</span> (voir le <a href="variables_environnement.html" style="text-decoration:underline;">guide Variables d'environnement</a>).</li><li><strong><span class="constant">conio.h: No such file or directory</span></strong> : tu n'es pas sous Windows. Ce code ne fonctionne que sous Windows.</li><li><strong>L'écran clignote</strong> : vérifie que <span class="constant">dessiner</span> commence par <span class="constant">allerA(0, 0)</span> et n'efface pas tout l'écran avec <span class="constant">system("cls")</span>.</li><li><strong>Les obstacles sont toujours les mêmes</strong> : la ligne <span class="constant">srand(...)</span> est absente ou a été supprimée.</li><li><strong>Le jeu est trop rapide ou trop lent</strong> : joue sur <span class="constant">Sleep(20)</span> et sur <span class="constant">vitesse</span>.</li><li><strong>Les flèches ne répondent pas</strong> : vérifie le test <span class="constant">touche == 0 || touche == 224</span> et les codes <span class="constant">75</span> et <span class="constant">77</span>.</li></ul></article></div></section>
+
+<section id="complet"><div class="mb-6"><span class="tag">14 · Le code complet</span><h2 class="mt-4 text-3xl font-black text-ink">Le code complet du jeu</h2><p class="mt-3 leading-7">Voici l'ensemble du programme, prêt à être copié dans <span class="constant">jeu.c</span>.</p></div><details class="c-card p-6"><summary>Afficher le code complet</summary><div class="mt-4"><button type="button" class="copy-btn" onclick="copyCode(this)">Copier le code</button></div><div class="mt-4 code"><pre id="code-complet"><span class="pp">#include</span> <span class="hd">&lt;stdio.h&gt;</span>
+<span class="pp">#include</span> <span class="hd">&lt;stdlib.h&gt;</span>
+<span class="pp">#include</span> <span class="hd">&lt;string.h&gt;</span>
+<span class="pp">#include</span> <span class="hd">&lt;time.h&gt;</span>
+<span class="pp">#include</span> <span class="hd">&lt;conio.h&gt;</span>    <span class="cm">/* _getch() et _kbhit() */</span>
+<span class="pp">#include</span> <span class="hd">&lt;windows.h&gt;</span>  <span class="cm">/* curseur et Sleep() */</span>
+
+<span class="pp">#define</span> LARGEUR   <span class="num">30</span>
+<span class="pp">#define</span> HAUTEUR   <span class="num">25</span>
+<span class="pp">#define</span> BORD      <span class="str">'|'</span>
+<span class="pp">#define</span> VIDE      <span class="str">' '</span>
+<span class="pp">#define</span> OBSTACLE  <span class="str">'X'</span>
+<span class="pp">#define</span> JOUEUR    <span class="str">'#'</span>
+
+<span class="cm">/* La carte : carte[y][x], la ligne 0 est en haut de l'écran.
+   Le joueur n'est PAS stocké dedans : il est dessiné par-dessus. */</span>
+<span class="kw">char</span> carte[HAUTEUR][LARGEUR];
+
+<span class="kw">void</span> allerA(<span class="kw">int</span> x, <span class="kw">int</span> y)
+{
+    <span class="kw">COORD</span> pos;
+    pos.X = (<span class="kw">SHORT</span>)x;
+    pos.Y = (<span class="kw">SHORT</span>)y;
+    SetConsoleCursorPosition(GetStdHandle(<span class="kw">STD_OUTPUT_HANDLE</span>), pos);
+}
+
+<span class="kw">void</span> cacherCurseur(<span class="kw">void</span>)
+{
+    <span class="kw">CONSOLE_CURSOR_INFO</span> info;
+    info.dwSize = <span class="num">1</span>;
+    info.bVisible = <span class="kw">FALSE</span>;
+    SetConsoleCursorInfo(GetStdHandle(<span class="kw">STD_OUTPUT_HANDLE</span>), &amp;info);
+}
+
+<span class="cm">/* Fabrique une ligne : des bords à gauche et à droite, du vide au milieu,
+   et éventuellement des obstacles placés au hasard */</span>
+<span class="kw">void</span> creerLigne(<span class="kw">int</span> y, <span class="kw">int</span> avecObstacles, <span class="kw">int</span> densite)
+{
+    <span class="kw">int</span> x;
+
+    carte[y][<span class="num">0</span>] = BORD;
+    carte[y][LARGEUR - <span class="num">1</span>] = BORD;
+
+    <span class="kw">for</span> (x = <span class="num">1</span>; x &lt; LARGEUR - <span class="num">1</span>; x++) {
+        carte[y][x] = VIDE;
+    }
+
+    <span class="kw">if</span> (avecObstacles) {
+        <span class="kw">for</span> (x = <span class="num">1</span>; x &lt; LARGEUR - <span class="num">1</span>; x++) {
+            <span class="cm">/* densite = chance en % qu'une case devienne un obstacle */</span>
+            <span class="kw">if</span> (rand() % <span class="num">100</span> &lt; densite) {
+                carte[y][x] = OBSTACLE;
+            }
+        }
+    }
+}
+
+<span class="cm">/* Au départ : une piste vide pour laisser le temps au joueur */</span>
+<span class="kw">void</span> initialiserCarte(<span class="kw">void</span>)
+{
+    <span class="kw">int</span> y;
+
+    <span class="kw">for</span> (y = <span class="num">0</span>; y &lt; HAUTEUR; y++) {
+        creerLigne(y, <span class="num">0</span>, <span class="num">0</span>);
+    }
+}
+
+<span class="cm">/* LE DÉFILEMENT : chaque ligne prend la place de celle du dessous.
+   On part du BAS vers le HAUT, sinon on écraserait les lignes
+   avant de les avoir copiées. La ligne du bas disparaît,
+   et on crée une nouvelle ligne tout en haut. */</span>
+<span class="kw">void</span> defiler(<span class="kw">int</span> avecObstacles, <span class="kw">int</span> densite)
+{
+    <span class="kw">int</span> y;
+
+    <span class="kw">for</span> (y = HAUTEUR - <span class="num">1</span>; y &gt; <span class="num">0</span>; y--) {
+        memcpy(carte[y], carte[y - <span class="num">1</span>], LARGEUR);
+    }
+    creerLigne(<span class="num">0</span>, avecObstacles, densite);
+}
+
+<span class="cm">/* Redessine tout l'écran sans l'effacer (on revient juste en haut à gauche),
+   ce qui évite le clignotement */</span>
+<span class="kw">void</span> dessiner(<span class="kw">int</span> joueurX, <span class="kw">int</span> joueurY, <span class="kw">int</span> score)
+{
+    <span class="kw">char</span> ligne[LARGEUR + <span class="num">2</span>];
+    <span class="kw">int</span> y;
+
+    allerA(<span class="num">0</span>, <span class="num">0</span>);
+    <span class="kw">for</span> (y = <span class="num">0</span>; y &lt; HAUTEUR; y++) {
+        memcpy(ligne, carte[y], LARGEUR);
+        <span class="kw">if</span> (y == joueurY) {
+            ligne[joueurX] = JOUEUR;
+        }
+        ligne[LARGEUR] = <span class="str">'\n'</span>;
+        ligne[LARGEUR + <span class="num">1</span>] = <span class="str">'\0'</span>;
+        fputs(ligne, <span class="kw">stdout</span>);
+    }
+    printf(<span class="str">"Score : %d     \n"</span>, score);
+    printf(<span class="str">"Fleches gauche/droite, Echap pour quitter"</span>);
+}
+
+<span class="kw">int</span> main(<span class="kw">void</span>)
+{
+    <span class="kw">int</span> joueurX = LARGEUR / <span class="num">2</span>;
+    <span class="kw">int</span> joueurY = HAUTEUR - <span class="num">2</span>;
+    <span class="kw">int</span> score = <span class="num">0</span>;
+    <span class="kw">int</span> frame = <span class="num">0</span>;
+    <span class="kw">int</span> vitesse = <span class="num">8</span>;     <span class="cm">/* la map défile toutes les "vitesse" frames */</span>
+    <span class="kw">int</span> densite = <span class="num">10</span>;    <span class="cm">/* % de chance d'obstacle par case */</span>
+    <span class="kw">int</span> enJeu = <span class="num">1</span>;
+    <span class="kw">int</span> perdu = <span class="num">0</span>;
+    <span class="kw">int</span> touche;
+    <span class="kw">int</span> avecObstacles;
+
+    srand((<span class="kw">unsigned</span>)time(<span class="kw">NULL</span>));
+    system(<span class="str">"cls"</span>);
+    cacherCurseur();
+    initialiserCarte();
+
+    <span class="cm">/* LA BOUCLE DE JEU : elle tourne en continu, même sans touche appuyée */</span>
+    <span class="kw">while</span> (enJeu) {
+
+        <span class="cm">/* 1) ENTRÉES : _kbhit() dit s'il y a une touche en attente,
+              sans bloquer. S'il n'y en a pas, on continue quand même. */</span>
+        <span class="kw">while</span> (_kbhit()) {
+            touche = _getch();
+            <span class="kw">if</span> (touche == <span class="num">27</span>) {
+                enJeu = <span class="num">0</span>;
+            } <span class="kw">else</span> <span class="kw">if</span> (touche == <span class="num">0</span> || touche == <span class="num">224</span>) {
+                touche = _getch();
+                <span class="cm">/* Les bords bloquent, comme les murs du premier jeu */</span>
+                <span class="kw">if</span> (touche == <span class="num">75</span> &amp;&amp; carte[joueurY][joueurX - <span class="num">1</span>] != BORD) {
+                    joueurX--;
+                }
+                <span class="kw">if</span> (touche == <span class="num">77</span> &amp;&amp; carte[joueurY][joueurX + <span class="num">1</span>] != BORD) {
+                    joueurX++;
+                }
+            }
+        }
+
+        <span class="cm">/* 2) MISE À JOUR : la map n'avance pas à chaque frame,
+              seulement toutes les "vitesse" frames */</span>
+        frame++;
+        <span class="kw">if</span> (frame % vitesse == <span class="num">0</span>) {
+            score++;
+
+            <span class="cm">/* Des obstacles une ligne sur trois, pour laisser des passages */</span>
+            <span class="kw">if</span> (score % <span class="num">3</span> == <span class="num">0</span>) {
+                avecObstacles = <span class="num">1</span>;
+            } <span class="kw">else</span> {
+                avecObstacles = <span class="num">0</span>;
+            }
+            defiler(avecObstacles, densite);
+
+            <span class="cm">/* Ça devient plus dur avec le temps */</span>
+            <span class="kw">if</span> (score % <span class="num">100</span> == <span class="num">0</span> &amp;&amp; vitesse &gt; <span class="num">2</span>) {
+                vitesse--;
+            }
+            <span class="kw">if</span> (score % <span class="num">150</span> == <span class="num">0</span> &amp;&amp; densite &lt; <span class="num">30</span>) {
+                densite = densite + <span class="num">3</span>;
+            }
+        }
+
+        <span class="cm">/* 3) COLLISION : un obstacle ne bloque pas, il fait perdre */</span>
+        <span class="kw">if</span> (carte[joueurY][joueurX] == OBSTACLE) {
+            perdu = <span class="num">1</span>;
+            enJeu = <span class="num">0</span>;
+        }
+
+        <span class="cm">/* 4) AFFICHAGE */</span>
+        dessiner(joueurX, joueurY, score);
+
+        <span class="cm">/* 5) PAUSE : environ 50 frames par seconde */</span>
+        Sleep(<span class="num">20</span>);
+    }
+
+    allerA(<span class="num">0</span>, HAUTEUR + <span class="num">3</span>);
+    <span class="kw">if</span> (perdu) {
+        printf(<span class="str">"PERDU ! Score final : %d\n"</span>, score);
+        printf(<span class="str">"Appuie sur une touche pour quitter..."</span>);
+        Sleep(<span class="num">800</span>);
+        <span class="kw">while</span> (_kbhit()) {
+            _getch();   <span class="cm">/* on vide les touches restées en attente */</span>
+        }
+        _getch();
+    }
+    printf(<span class="str">"\n"</span>);
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre></div></details></section>
+
+        <section class="rounded-3xl bg-ink p-8 text-white md:p-12">
+          <span class="text-sm font-bold text-cyanx">Pour résumer</span>
+          <h2 class="mt-3 text-3xl font-black">Un jeu, c'est une boucle qui lit, met à jour, teste, dessine et attend.</h2>
+          <p class="mt-4 max-w-3xl leading-7 text-slate-300">
+            Tout le reste n'est que de la préparation : une grille pour la piste, des fonctions pour la fabriquer, la
+            faire avancer et l'afficher. Une fois cette structure comprise, tu peux la réutiliser pour presque
+            n'importe quel petit jeu en console.
+          </p>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="border-t border-slate-200 bg-white">
+    <div class="mx-auto max-w-7xl px-5 py-10 text-sm text-slate-500">
+      <strong class="text-ink">Guide Langage C</strong> · Un jeu dans la console, expliqué pas à pas.
+    </div>
+  </footer>
+
+  <script>
+    function applyTheme(dark) {
+      document.body.classList.toggle('dark', dark);
+      const button = document.querySelector('button[onclick="toggleTheme()"]');
+      if (button) {
+        button.textContent = dark ? 'Mode jour' : 'Mode nuit';
+      }
+      localStorage.setItem('c-theme', dark ? 'dark' : 'light');
+    }
+
+    function toggleTheme() {
+      applyTheme(!document.body.classList.contains('dark'));
+    }
+
+    const savedTheme = localStorage.getItem('c-theme');
+    if (savedTheme === 'dark') {
+      applyTheme(true);
+    }
+
+    // Met en évidence automatiquement la section actuellement consultée
+    const sidebarLinks = document.querySelectorAll('.sidebar-link');
+    const sections = Array.from(sidebarLinks)
+      .map(link => document.querySelector(link.getAttribute('href')))
+      .filter(Boolean);
+
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter(entry => entry.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+      if (visible.length) {
+        sidebarLinks.forEach(link => link.classList.remove('active'));
+        const activeLink = document.querySelector('.sidebar-link[href="#' + visible[0].target.id + '"]');
+        if (activeLink) activeLink.classList.add('active');
+      }
+    }, {
+      rootMargin: '-25% 0px -65% 0px',
+      threshold: 0
+    });
+
+    sections.forEach(section => observer.observe(section));
+    function copyCode(btn) {
+      var text = document.getElementById('code-complet').textContent;
+      function ok() {
+        var old = btn.textContent;
+        btn.textContent = 'Copié !';
+        setTimeout(function () { btn.textContent = old; }, 1500);
+      }
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(ok);
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); ok(); } catch (e) { }
+        document.body.removeChild(ta);
+      }
+    }
+  </script>
+
+</body>
+
+</html>
