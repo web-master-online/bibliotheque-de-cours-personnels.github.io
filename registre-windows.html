@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Guide : ajouter des entrées au menu clic droit de Windows avec le registre (Ouvrir dans VS Code, Copier le chemin complet, afficher tree), avec fichiers .reg prêts à l'emploi.">
+  <title>Guide Menu clic droit Windows | Ajouter ses propres commandes via le registre</title>
+
+  <style>
+
+/* CSS autonome : remplacement de Tailwind CSS */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.5;
+  color: #52606d;
+  background:
+    radial-gradient(circle at 15% 0%, rgba(6,182,212,.10), transparent 30rem),
+    radial-gradient(circle at 85% 10%, rgba(0,212,255,.08), transparent 25rem),
+    #f6f9fc;
+}
+a { color: inherit; text-decoration: inherit; }
+button, input, textarea, select { font: inherit; }
+button { margin: 0; }
+h1,h2,h3,p,ul,ol { margin-top: 0; }
+ul, ol { padding-left: 1.5rem; }
+code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+pre { white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; }
+
+.mx-auto { margin-left:auto; margin-right:auto; }
+.max-w-7xl { max-width:80rem; }
+.max-w-4xl { max-width:56rem; }
+.max-w-3xl { max-width:48rem; }
+.min-w-0 { min-width:0; }
+.min-w-full { min-width:100%; }
+
+.flex { display:flex; }
+.inline-flex { display:inline-flex; }
+.grid { display:grid; }
+.hidden { display:none; }
+.block { display:block; }
+.items-center { align-items:center; }
+.items-start { align-items:flex-start; }
+.justify-between { justify-content:space-between; }
+.justify-center { justify-content:center; }
+.flex-wrap { flex-wrap:wrap; }
+.flex-col { flex-direction:column; }
+.gap-2 { gap:.5rem; }
+.gap-3 { gap:.75rem; }
+.gap-4 { gap:1rem; }
+.gap-5 { gap:1.25rem; }
+.gap-6 { gap:1.5rem; }
+.gap-10 { gap:2.5rem; }
+
+.grid-cols-2 { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.grid-cols-3 { grid-template-columns:repeat(3,minmax(0,1fr)); }
+
+.space-y-3 > :not([hidden]) ~ :not([hidden]) { margin-top:.75rem; }
+.space-y-5 > :not([hidden]) ~ :not([hidden]) { margin-top:1.25rem; }
+.space-y-14 > :not([hidden]) ~ :not([hidden]) { margin-top:3.5rem; }
+
+.mt-2 { margin-top:.5rem; }
+.mt-3 { margin-top:.75rem; }
+.mt-4 { margin-top:1rem; }
+.mt-5 { margin-top:1.25rem; }
+.mt-7 { margin-top:1.75rem; }
+.mt-9 { margin-top:2.25rem; }
+.mb-3 { margin-bottom:.75rem; }
+.mb-6 { margin-bottom:1.5rem; }
+
+.p-3 { padding:.75rem; }
+.p-4 { padding:1rem; }
+.p-5 { padding:1.25rem; }
+.p-6 { padding:1.5rem; }
+.p-8 { padding:2rem; }
+.px-2 { padding-left:.5rem; padding-right:.5rem; }
+.px-3 { padding-left:.75rem; padding-right:.75rem; }
+.px-4 { padding-left:1rem; padding-right:1rem; }
+.px-5 { padding-left:1.25rem; padding-right:1.25rem; }
+.px-6 { padding-left:1.5rem; padding-right:1.5rem; }
+.py-2 { padding-top:.5rem; padding-bottom:.5rem; }
+.py-3 { padding-top:.75rem; padding-bottom:.75rem; }
+.py-4 { padding-top:1rem; padding-bottom:1rem; }
+.py-10 { padding-top:2.5rem; padding-bottom:2.5rem; }
+.py-12 { padding-top:3rem; padding-bottom:3rem; }
+.py-20 { padding-top:5rem; padding-bottom:5rem; }
+
+.w-9 { width:2.25rem; }
+.h-9 { height:2.25rem; }
+
+.text-left { text-align:left; }
+.text-center { text-align:center; }
+.text-white { color:#fff; }
+.text-ink { color:#0a2540; }
+.text-slate-300 { color:#cbd5e1; }
+.text-slate-400 { color:#94a3b8; }
+.text-slate-500 { color:#64748b; }
+.text-slate-700 { color:#52606d; }
+.text-cyan-700 { color:#0e7490; }
+.text-red-800 { color:#991b1b; }
+.text-amber-900 { color:#78350f; }
+.text-cyanx { color:#00d4ff; }
+.text-cyan { color:#06b6d4; }
+
+.text-xs { font-size:.75rem; line-height:1rem; }
+.text-sm { font-size:.875rem; line-height:1.25rem; }
+.text-lg { font-size:1.125rem; line-height:1.75rem; }
+.text-xl { font-size:1.25rem; line-height:1.75rem; }
+.text-3xl { font-size:1.875rem; line-height:2.25rem; }
+.text-5xl { font-size:3rem; line-height:1; }
+
+.font-bold { font-weight:700; }
+.font-semibold { font-weight:600; }
+.font-black { font-weight:900; }
+.uppercase { text-transform:uppercase; }
+.tracking-tight { letter-spacing:-.025em; }
+.tracking-wider { letter-spacing:.05em; }
+.tracking-widest { letter-spacing:.1em; }
+.leading-6 { line-height:1.5rem; }
+.leading-7 { line-height:1.75rem; }
+.leading-8 { line-height:2rem; }
+
+.rounded-lg { border-radius:.5rem; }
+.rounded-xl { border-radius:.75rem; }
+.rounded-2xl { border-radius:1rem; }
+.rounded-3xl { border-radius:1.5rem; }
+.rounded-full { border-radius:9999px; }
+
+.border { border-width:1px; border-style:solid; }
+.border-b { border-bottom-width:1px; border-bottom-style:solid; }
+.border-t { border-top-width:1px; border-top-style:solid; }
+.border-slate-200 { border-color:#e2e8f0; }
+.border-slate-200\/70 { border-color:rgba(226,232,240,.7); }
+.border-cyan-100 { border-color:#cffafe; }
+.border-amber-200 { border-color:#fde68a; }
+.bg-white { background-color:#fff; }
+.bg-white\/85 { background-color:rgba(255,255,255,.85); }
+.bg-cyan-50 { background-color:#ecfeff; }
+.bg-slate-50 { background-color:#f8fafc; }
+.bg-red-50 { background-color:#fef2f2; }
+.bg-amber-50 { background-color:#fffbeb; }
+.bg-ink { background-color:#0a2540; }
+.bg-cyan { background-color:#06b6d4; }
+
+.shadow-sm { box-shadow:0 1px 2px 0 rgba(0,0,0,.05); }
+.shadow-glow { box-shadow:0 20px 60px rgba(6,182,212,.20); }
+.overflow-hidden { overflow:hidden; }
+.overflow-x-auto { overflow-x:auto; }
+.sticky { position:sticky; }
+.top-24 { top:6rem; }
+.top-0 { top:0; }
+.z-50 { z-index:50; }
+.backdrop-blur-xl { backdrop-filter:blur(24px); }
+.backdrop-blur-xl { -webkit-backdrop-filter:blur(24px); }
+
+.place-items-center { place-items:center; }
+.opacity-90:hover { opacity:.9; }
+.hover\:text-cyan:hover { color:#06b6d4; }
+.hover\:border-cyan:hover { border-color:#06b6d4; }
+
+.divide-y > :not([hidden]) ~ :not([hidden]) { border-top-width:1px; border-top-style:solid; }
+.divide-slate-100 > :not([hidden]) ~ :not([hidden]) { border-color:#f1f5f9; }
+
+header.sticky { position:sticky; }
+table { border-collapse:collapse; }
+
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(6,182,212,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6,182,212,.045) 1px, transparent 1px);
+  background-size:36px 36px;
+}
+.glass {
+  background:rgba(255,255,255,.78);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border:1px solid rgba(6,182,212,.10);
+}
+.c-card {
+  border:1px solid #e6ebf1;
+  background:#fff;
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:0 8px 30px rgba(50,50,93,.06);
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.c-card:hover {
+  transform:translateY(-2px);
+  box-shadow:0 16px 45px rgba(50,50,93,.10);
+}
+.code {
+  background:#0a2540;
+  color:#cffafe;
+  border-radius:14px;
+  padding:1rem;
+  font-size:.84rem;
+  line-height:1.65;
+  overflow-x:auto;
+}
+.constant {
+  font-family: 'Courier New', Courier, monospace;
+  background: #ecfeff;
+  color: #0e7490;
+  border-radius: 8px;
+  padding: .15rem .45rem;
+  font-size: .88rem;
+  font-weight: 700;
+}
+.tag {
+  display:inline-flex;
+  align-items:center;
+  gap:.35rem;
+  padding:.28rem .65rem;
+  border-radius:999px;
+  font-size:.72rem;
+  font-weight:700;
+  background:#ecfeff;
+  color:#0e7490;
+}
+.sidebar-link {
+  display:block;
+  padding:.55rem .7rem;
+  border-radius:.6rem;
+  color:#52606d;
+  font-size:.9rem;
+}
+.sidebar-link:hover { background:#ecfeff; color:#0e7490; }
+.sidebar-link.active { background:#ecfeff; color:#0e7490; font-weight:700; }
+.step-num {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:2.25rem;
+  height:2.25rem;
+  min-width:2.25rem;
+  border-radius:9999px;
+  background:#06b6d4;
+  color:#fff;
+  font-weight:900;
+  font-size:.95rem;
+}
+.flow {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:.6rem;
+}
+.flow-box {
+  padding:.55rem .9rem;
+  border-radius:.75rem;
+  background:#ecfeff;
+  color:#0e7490;
+  font-weight:700;
+  font-size:.85rem;
+  border:1px solid #cffafe;
+}
+.flow-arrow { color:#06b6d4; font-weight:900; }
+
+body.dark {
+  background:
+    radial-gradient(circle at 15% 0%, rgba(6,182,212,.12), transparent 30rem),
+    radial-gradient(circle at 85% 10%, rgba(0,212,255,.08), transparent 25rem),
+    #020617 !important;
+  color:#e2e8f0 !important;
+}
+body.dark .bg-white,
+body.dark .bg-white\/85 { background-color:#0f172a !important; }
+body.dark .bg-cyan-50 { background-color:#083344 !important; }
+body.dark .bg-slate-50 { background-color:#1e293b !important; }
+body.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) { border-color:#334155 !important; }
+body.dark .text-slate-400,
+body.dark .text-slate-500 { color:#94a3b8 !important; }
+body.dark .bg-red-50 { background-color:#450a0a !important; }
+body.dark .text-red-800 { color:#fecaca !important; }
+body.dark .bg-amber-50 { background-color:#451a03 !important; }
+body.dark .text-amber-900 { color:#fde68a !important; }
+body.dark .text-ink { color:#f8fafc !important; }
+body.dark .text-slate-700 { color:#cbd5e1 !important; }
+body.dark .text-slate-300 { color:#cbd5e1 !important; }
+body.dark .text-cyan-700 { color:#67e8f9 !important; }
+body.dark .constant { background:#083344 !important; color:#67e8f9 !important; }
+body.dark .flow-box { background:#083344 !important; color:#67e8f9 !important; border-color:#164e63 !important; }
+body.dark .border-slate-200,
+body.dark .border-slate-200\/70 { border-color:#334155 !important; }
+body.dark .border-cyan-100 { border-color:#164e63 !important; }
+body.dark .c-card {
+  background:#0f172a !important;
+  border-color:#334155 !important;
+  box-shadow:0 8px 30px rgba(0,0,0,.25);
+}
+body.dark .sidebar-link { color:#cbd5e1 !important; }
+body.dark .sidebar-link:hover { background:#1e293b !important; color:#a5f3fc !important; }
+body.dark .sidebar-link.active { background:#164e63 !important; color:#a5f3fc !important; }
+body.dark .grid-bg {
+  background-image:
+    linear-gradient(rgba(6,182,212,.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6,182,212,.08) 1px, transparent 1px);
+}
+body.dark .glass {
+  background:rgba(15,23,42,.82) !important;
+  border-color:rgba(148,163,184,.18) !important;
+}
+body.dark footer {
+  background-color:#020617 !important;
+  border-color:#334155 !important;
+}
+body.dark button { background-color:#0f172a !important; border-color:#475569 !important; color:#e2e8f0 !important; }
+body.dark button:hover { background-color:#1e293b !important; border-color:#22d3ee !important; color:#a5f3fc !important; }
+
+@media (min-width:768px) {
+  .md\:flex { display:flex; }
+  .md\:grid-cols-2 { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .md\:grid-cols-3 { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .md\:text-xl { font-size:1.25rem; line-height:1.75rem; }
+  .md\:text-7xl { font-size:4.5rem; line-height:1; }
+  .md\:py-28 { padding-top:7rem; padding-bottom:7rem; }
+  .md\:p-12 { padding:3rem; }
+}
+/* À partir de 1080px, le sommaire latéral remplace les liens de la barre de navigation */
+@media (min-width:1080px) {
+  .nav-links { display:none !important; }
+}
+
+@media (min-width:1024px) {
+  .lg\:block { display:block; }
+  .lg\:grid-cols-\[240px_minmax\(0\2c 1fr\)\] {
+    grid-template-columns:240px minmax(0,1fr);
+  }
+}
+
+  
+/* Coloration du code C */
+.code .kw { color:#67e8f9; font-weight:700; }
+.code .str { color:#fde68a; }
+.code .hd { color:#fde68a; }
+.code .cm { color:#93a4b7; font-style:italic; }
+.code .num { color:#fdba74; }
+.code .pp { color:#c4b5fd; }
+details > summary { cursor:pointer; font-weight:900; font-size:1.1rem; color:#0a2540; }
+body.dark details > summary { color:#f8fafc; }
+.copy-btn {
+  padding:.45rem .8rem;
+  border-radius:.6rem;
+  border:1px solid #e2e8f0;
+  background:#fff;
+  font-size:.8rem;
+  font-weight:700;
+  cursor:pointer;
+}
+.copy-btn:hover { border-color:#06b6d4; color:#0e7490; }
+</style>
+</head>
+
+<body class="text-slate-700">
+
+  <header class="sticky top-0 z-50 border-b border-slate-200/70 bg-white/85 backdrop-blur-xl">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
+      <a href="#" class="flex items-center gap-3 font-black text-ink">
+        <span class="grid h-9 w-9 place-items-center rounded-xl bg-cyan text-white shadow-glow">⌘</span>
+        <span>Guide Menu clic droit</span>
+      </a>
+      <nav class="nav-links hidden gap-6 text-sm font-semibold md:flex">
+        <a href="#projet" class="hover:text-cyan">Le projet</a>
+        <a href="#anatomie" class="hover:text-cyan">Le principe</a>
+        <a href="#vscode" class="hover:text-cyan">Les entrées</a>
+        <a href="#complets" class="hover:text-cyan">Fichiers .reg</a>
+      </nav>
+      <button onclick="toggleTheme()"
+        class="rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold hover:border-cyan hover:text-cyan">Mode
+        nuit</button>
+    </div>
+  </header>
+
+  <section class="grid-bg overflow-hidden">
+    <div class="mx-auto max-w-7xl px-5 py-20 md:py-28">
+      <div class="max-w-4xl">
+        <div
+          class="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan-100 bg-cyan-50 px-4 py-2 text-sm font-bold text-cyan-700">
+          Guide pratique · Windows & registre
+        </div>
+        <h1 class="max-w-4xl text-5xl font-black tracking-tight text-ink md:text-7xl">
+          Ajouter tes propres commandes au <span class="text-cyan-700">menu clic droit</span> de Windows.
+        </h1>
+        <p class="mt-7 max-w-3xl text-lg leading-8 md:text-xl">
+          Ouvrir un dossier dans VS Code, copier un chemin complet, afficher l'arborescence : tout se règle avec
+          quelques clés du registre. Ce guide explique comment ça marche, avec la méthode manuelle, la méthode par
+          fichier <code>.reg</code> et les fichiers prêts à copier.
+        </p>
+        <div class="mt-9 flex flex-wrap gap-3">
+          <a href="#projet"
+            class="rounded-xl bg-cyan px-6 py-3 font-bold text-white shadow-glow hover:opacity-90">Commencer le
+            guide</a>
+          <a href="#complets"
+            class="rounded-xl border border-slate-200 bg-white px-6 py-3 font-bold text-ink hover:border-cyan">Voir
+            les fichiers .reg</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="mx-auto max-w-7xl px-5 py-12">
+    <div class="grid gap-10 lg:grid-cols-[240px_minmax(0,1fr)]">
+
+      <aside class="hidden lg:block">
+        <div class="sticky top-24 glass rounded-2xl p-4 shadow-sm">
+          <p class="mb-3 px-2 text-xs font-black uppercase tracking-widest text-slate-400">Sommaire</p>
+          <a class="sidebar-link" href="#projet">01. Le projet</a>
+          <a class="sidebar-link" href="#registre">02. Le registre</a>
+          <a class="sidebar-link" href="#precautions">03. Précautions</a>
+          <a class="sidebar-link" href="#ou">04. Où ajouter</a>
+          <a class="sidebar-link" href="#anatomie">05. Anatomie d'une entrée</a>
+          <a class="sidebar-link" href="#manuel">06. Méthode regedit</a>
+          <a class="sidebar-link" href="#regfile">07. Méthode fichier .reg</a>
+          <a class="sidebar-link" href="#vscode">08. Ouvrir dans VS Code</a>
+          <a class="sidebar-link" href="#chemin">09. Copier le chemin</a>
+          <a class="sidebar-link" href="#tree">10. Afficher tree</a>
+          <a class="sidebar-link" href="#perso">11. Personnaliser</a>
+          <a class="sidebar-link" href="#supprimer">12. Supprimer</a>
+          <a class="sidebar-link" href="#depannage">13. Dépannage</a>
+          <a class="sidebar-link" href="#complets">14. Fichiers .reg complets</a>
+        </div>
+      </aside>
+
+      <div class="min-w-0 space-y-14">
+
+<section id="projet"><div class="mb-6"><span class="tag">01 · Le projet</span><h2 class="mt-4 text-3xl font-black text-ink">Ce qu'on va ajouter au menu clic droit</h2><p class="mt-3 leading-7">Le menu qui s'affiche quand tu fais un clic droit sur un dossier n'est pas figé : chaque entrée vient du <strong>registre de Windows</strong>, et tu peux en ajouter. Dans ce guide, on en crée trois.</p></div><div class="space-y-5"><div class="mt-4 overflow-x-auto rounded-xl border border-slate-200"><table class="min-w-full text-left text-sm"><thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500"><tr><th class="px-4 py-3">Entrée du menu</th><th class="px-4 py-3">Ce qu'elle fait</th><th class="px-4 py-3">Commande utilisée</th></tr></thead><tbody class="divide-y divide-slate-100"><tr><td class="px-4 py-3"><strong>Ouvrir dans VS Code</strong></td><td class="px-4 py-3">Ouvre le dossier cliqué dans Visual Studio Code</td><td class="px-4 py-3"><span class="constant">Code.exe "%1"</span></td></tr><tr><td class="px-4 py-3"><strong>Copier le chemin complet</strong></td><td class="px-4 py-3">Met dans le presse-papiers le chemin du fichier ou du dossier</td><td class="px-4 py-3"><span class="constant">cmd /c echo | set /p="%1"| clip</span></td></tr><tr><td class="px-4 py-3"><strong>Afficher l'arborescence (tree)</strong></td><td class="px-4 py-3">Affiche tous les dossiers et fichiers du dossier cliqué</td><td class="px-4 py-3"><span class="constant">cmd.exe /k tree "%1" /a /f</span></td></tr></tbody></table></div><div class="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm leading-6 text-amber-900"><strong>Résultat attendu :</strong> après ces réglages, un clic droit sur un dossier affiche directement ces trois lignes dans le menu, sans rien installer. Tout se fait avec quelques clés du registre.</div></div></section>
+
+<section id="registre"><div class="mb-6"><span class="tag">02 · Les bases</span><h2 class="mt-4 text-3xl font-black text-ink">Le registre de Windows, c'est quoi ?</h2><p class="mt-3 leading-7">Le registre est la grande <strong>base de réglages</strong> de Windows. Beaucoup de programmes y stockent leurs paramètres, et c'est aussi là que Windows lit la liste des entrées du clic droit.</p></div><div class="space-y-5"><div class="grid gap-5 md:grid-cols-2"><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Comment il est organisé</h3><ul class="mt-4 space-y-3 text-sm leading-6"><li>Une <strong>clé</strong> ressemble à un <strong>dossier</strong>. Elle peut contenir d'autres clés.</li><li>Une <strong>valeur</strong> ressemble à un <strong>fichier</strong> : un nom et une donnée rangés dans une clé.</li><li>La valeur sans nom s'appelle <strong>(Par défaut)</strong>. Dans un fichier <span class="constant">.reg</span>, on la note <span class="constant">@</span>.</li><li>On le consulte avec <strong>regedit</strong> : touche <span class="constant">Win + R</span>, tape <span class="constant">regedit</span>, Entrée.</li></ul></article><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Les types de valeurs utiles</h3><div class="mt-4 overflow-x-auto rounded-xl border border-slate-200"><table class="min-w-full text-left text-sm"><thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500"><tr><th class="px-4 py-3">Type</th><th class="px-4 py-3">Contenu</th></tr></thead><tbody class="divide-y divide-slate-100"><tr><td class="px-4 py-3"><span class="constant">REG_SZ</span></td><td class="px-4 py-3">Du texte simple (le plus courant ici)</td></tr><tr><td class="px-4 py-3"><span class="constant">REG_EXPAND_SZ</span></td><td class="px-4 py-3">Du texte avec des variables comme <span class="constant">%windir%</span>, remplacées au moment de l'utilisation</td></tr></tbody></table></div><p class="mt-3 text-sm leading-6">Pour nos entrées, le texte simple (<span class="constant">REG_SZ</span>) suffit.</p></article></div><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Les trois racines à connaître</h3><div class="mt-4 overflow-x-auto rounded-xl border border-slate-200"><table class="min-w-full text-left text-sm"><thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500"><tr><th class="px-4 py-3">Racine</th><th class="px-4 py-3">Contenu</th><th class="px-4 py-3">Droits</th></tr></thead><tbody class="divide-y divide-slate-100"><tr><td class="px-4 py-3"><span class="constant">HKEY_CLASSES_ROOT</span> (HKCR)</td><td class="px-4 py-3">Associations de fichiers et menus clic droit, pour <strong>tous les utilisateurs</strong></td><td class="px-4 py-3">Administrateur</td></tr><tr><td class="px-4 py-3"><span class="constant">HKEY_CURRENT_USER</span> (HKCU)</td><td class="px-4 py-3">Réglages de <strong>ton compte</strong> uniquement</td><td class="px-4 py-3">Utilisateur normal</td></tr><tr><td class="px-4 py-3"><span class="constant">HKEY_LOCAL_MACHINE</span> (HKLM)</td><td class="px-4 py-3">Réglages de <strong>toute la machine</strong></td><td class="px-4 py-3">Administrateur</td></tr></tbody></table></div><p class="mt-4 rounded-lg bg-slate-50 p-3 text-sm leading-6"><span class="constant">HKEY_CLASSES_ROOT</span> est une vue qui fusionne <span class="constant">HKEY_LOCAL_MACHINE\Software\Classes</span> et <span class="constant">HKEY_CURRENT_USER\Software\Classes</span>. Pour une entrée réservée à ton compte, sans droits administrateur, remplace <span class="constant">HKEY_CLASSES_ROOT</span> par <span class="constant">HKEY_CURRENT_USER\Software\Classes</span> dans tous les chemins de ce guide.</p></article></div></section>
+
+<section id="precautions"><div class="mb-6"><span class="tag">03 · Sécurité</span><h2 class="mt-4 text-3xl font-black text-ink">Avant de toucher au registre</h2><p class="mt-3 leading-7">Une mauvaise modification du registre peut perturber Windows. Ce qu'on fait ici est peu risqué, à condition de respecter quelques règles.</p></div><div class="space-y-5"><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Les bonnes habitudes</h3><ul class="mt-4 space-y-3 text-sm leading-6"><li><strong>Sauvegarde la clé</strong> avant de la modifier : dans regedit, clic droit sur la clé &gt; <strong>Exporter</strong>. Tu obtiens un fichier <span class="constant">.reg</span> que tu peux double-cliquer pour tout remettre.</li><li><strong>N'ajoute que de nouvelles clés</strong> et ne modifie ou ne supprime <strong>que celles que tu as créées</strong> toi-même.</li><li>Utilise des <strong>noms de clés simples</strong>, sans accents ni espaces : <span class="constant">OpenVSCode</span>, <span class="constant">CopyFullPath</span>, <span class="constant">ShowTree</span>.</li><li>Lis chaque commande avant de la lancer : une entrée du clic droit <strong>exécute un programme</strong> quand on clique dessus.</li></ul></article><div class="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm leading-6 text-amber-900"><strong>Si tu as déjà créé des entrées à la main :</strong> utilise des noms de clés différents pour tester (par exemple <span class="constant">OpenVSCode2</span>), afin de ne pas écraser ce qui fonctionne déjà.</div></div></section>
+
+<section id="ou"><div class="mb-6"><span class="tag">04 · Les emplacements</span><h2 class="mt-4 text-3xl font-black text-ink">Où ajouter une entrée ?</h2><p class="mt-3 leading-7">Selon l'endroit où tu fais ton clic droit, Windows lit une clé différente. Dans chacune, on crée une sous-clé dans <span class="constant">shell</span>.</p></div><div class="space-y-5"><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Les clés à connaître</h3><div class="mt-4 overflow-x-auto rounded-xl border border-slate-200"><table class="min-w-full text-left text-sm"><thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500"><tr><th class="px-4 py-3">Où tu cliques</th><th class="px-4 py-3">Clé du registre</th><th class="px-4 py-3">Variable</th></tr></thead><tbody class="divide-y divide-slate-100"><tr><td class="px-4 py-3">Sur un <strong>dossier</strong></td><td class="px-4 py-3"><span class="constant">HKEY_CLASSES_ROOT\Directory\shell</span></td><td class="px-4 py-3"><span class="constant">%1</span></td></tr><tr><td class="px-4 py-3">Dans le <strong>vide</strong> d'un dossier (arrière-plan)</td><td class="px-4 py-3"><span class="constant">HKEY_CLASSES_ROOT\Directory\Background\shell</span></td><td class="px-4 py-3"><span class="constant">%V</span></td></tr><tr><td class="px-4 py-3">Sur un <strong>fichier</strong> (tous types)</td><td class="px-4 py-3"><span class="constant">HKEY_CLASSES_ROOT\*\shell</span></td><td class="px-4 py-3"><span class="constant">%1</span></td></tr><tr><td class="px-4 py-3">Sur un <strong>lecteur</strong> (C:, D:…)</td><td class="px-4 py-3"><span class="constant">HKEY_CLASSES_ROOT\Drive\shell</span></td><td class="px-4 py-3"><span class="constant">%1</span></td></tr><tr><td class="px-4 py-3">Fichiers <strong>et</strong> dossiers à la fois</td><td class="px-4 py-3"><span class="constant">HKEY_CLASSES_ROOT\AllFilesystemObjects\shell</span></td><td class="px-4 py-3"><span class="constant">%1</span></td></tr></tbody></table></div></article><article class="c-card p-6 "><h3 class="text-xl font-black text-ink"><span class="constant">%1</span> et <span class="constant">%V</span> : le chemin cliqué</h3><ul class="mt-4 space-y-3 text-sm leading-6"><li><span class="constant">%1</span> est remplacé par le <strong>chemin complet</strong> de l'élément sur lequel tu as cliqué.</li><li><span class="constant">%V</span> est remplacé par le <strong>dossier dans lequel tu te trouves</strong>, quand tu cliques dans le vide.</li><li>Mets-les toujours <strong>entre guillemets</strong> : <span class="constant">"%1"</span>. Sans guillemets, un chemin contenant un espace serait coupé en deux.</li></ul><p class="mt-4 rounded-lg bg-slate-50 p-3 text-sm leading-6">Ta capture d'écran montre un clic droit <strong>sur</strong> un dossier : c'est la clé <span class="constant">Directory\shell</span>. Pour avoir les mêmes entrées quand tu cliques dans le vide d'un dossier ouvert, il faut aussi la clé <span class="constant">Directory\Background\shell</span>.</p></article></div></section>
+
+<section id="anatomie"><div class="mb-6"><span class="tag">05 · Le principe</span><h2 class="mt-4 text-3xl font-black text-ink">Anatomie d'une entrée de menu</h2><p class="mt-3 leading-7">Toutes les entrées du clic droit suivent la même structure : une clé pour l'entrée, et une sous-clé <span class="constant">command</span> pour ce qu'elle exécute.</p></div><div class="space-y-5"><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">La structure</h3><div class="mt-4 code"><pre>HKEY_CLASSES_ROOT
+└── Directory
+    └── shell
+        └── OpenVSCode                 &lt;- nom interne (jamais affiché)
+            ├── (Par défaut) = Ouvrir dans VS Code        &lt;- le texte du menu
+            ├── Icon         = ...\Code.exe,0             &lt;- l'icône (facultatif)
+            └── command
+                └── (Par défaut) = "...\Code.exe" "%1"   &lt;- la commande lancée</pre></div><ul class="mt-4 space-y-3 text-sm leading-6"><li>La clé <strong><span class="constant">OpenVSCode</span></strong> est le nom interne de l'entrée.</li><li>Sa valeur <strong>(Par défaut)</strong> est le <strong>texte affiché</strong> dans le menu.</li><li>La sous-clé <strong><span class="constant">command</span></strong> est <strong>obligatoire</strong> et s'écrit exactement comme ça. Sa valeur (Par défaut) contient la <strong>commande</strong> exécutée au clic.</li></ul></article><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Les valeurs facultatives</h3><div class="mt-4 overflow-x-auto rounded-xl border border-slate-200"><table class="min-w-full text-left text-sm"><thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500"><tr><th class="px-4 py-3">Valeur</th><th class="px-4 py-3">Rôle</th><th class="px-4 py-3">Exemple</th></tr></thead><tbody class="divide-y divide-slate-100"><tr><td class="px-4 py-3"><span class="constant">Icon</span></td><td class="px-4 py-3">Ajoute une icône devant le texte</td><td class="px-4 py-3"><span class="constant">C:\...\Code.exe,0</span> ou <span class="constant">cmd.exe</span></td></tr><tr><td class="px-4 py-3"><span class="constant">Position</span></td><td class="px-4 py-3">Place l'entrée en haut ou en bas du menu</td><td class="px-4 py-3"><span class="constant">Top</span> ou <span class="constant">Bottom</span></td></tr><tr><td class="px-4 py-3"><span class="constant">Extended</span></td><td class="px-4 py-3">Cache l'entrée sauf si tu maintiens <strong>Maj</strong> en cliquant</td><td class="px-4 py-3">valeur vide</td></tr></tbody></table></div><p class="mt-4 rounded-lg bg-slate-50 p-3 text-sm leading-6">Dans le texte du menu, un <span class="constant">&amp;</span> souligne la lettre qui suit et en fait un raccourci clavier : <span class="constant">E&amp;xplorer</span> s'affiche <strong>E</strong>&lt;u&gt;x&lt;/u&gt;plorer. Utilise-le avec parcimonie.</p></article></div></section>
+
+<section id="manuel"><div class="mb-6"><span class="tag">06 · Méthode 1</span><h2 class="mt-4 text-3xl font-black text-ink">Ajouter une entrée à la main avec regedit</h2><p class="mt-3 leading-7">C'est la méthode idéale pour comprendre. On crée l'entrée « Ouvrir dans VS Code » pour un clic droit sur un dossier.</p></div><div class="space-y-5"><article class="c-card p-6 flex gap-4 items-start"><span class="step-num">1</span><div class="min-w-0"><h3 class="text-lg font-black text-ink">Ouvrir regedit</h3><p class="mt-3 text-sm leading-6">Appuie sur <span class="constant">Win + R</span>, tape <span class="constant">regedit</span> puis valide. Accepte la fenêtre de contrôle de compte d'utilisateur.</p></div></article><article class="c-card p-6 flex gap-4 items-start"><span class="step-num">2</span><div class="min-w-0"><h3 class="text-lg font-black text-ink">Aller à la bonne clé</h3><p class="mt-3 text-sm leading-6">Dans la barre d'adresse de regedit, colle <span class="constant">Ordinateur\HKEY_CLASSES_ROOT\Directory\shell</span> puis Entrée. Tu peux aussi descendre à la main dans l'arborescence de gauche.</p></div></article><article class="c-card p-6 flex gap-4 items-start"><span class="step-num">3</span><div class="min-w-0"><h3 class="text-lg font-black text-ink">Créer la clé de l'entrée</h3><p class="mt-3 text-sm leading-6">Clic droit sur <strong>shell</strong> &gt; <strong>Nouveau</strong> &gt; <strong>Clé</strong>, puis nomme-la <span class="constant">OpenVSCode</span>.</p></div></article><article class="c-card p-6 flex gap-4 items-start"><span class="step-num">4</span><div class="min-w-0"><h3 class="text-lg font-black text-ink">Définir le texte du menu</h3><p class="mt-3 text-sm leading-6">Sélectionne la clé <span class="constant">OpenVSCode</span>, double-clique sur la valeur <strong>(Par défaut)</strong> à droite, et saisis <span class="constant">Ouvrir dans VS Code</span>.</p></div></article><article class="c-card p-6 flex gap-4 items-start"><span class="step-num">5</span><div class="min-w-0"><h3 class="text-lg font-black text-ink">Créer la sous-clé command</h3><p class="mt-3 text-sm leading-6">Clic droit sur <span class="constant">OpenVSCode</span> &gt; <strong>Nouveau</strong> &gt; <strong>Clé</strong>, nomme-la exactement <span class="constant">command</span>.</p></div></article><article class="c-card p-6 flex gap-4 items-start"><span class="step-num">6</span><div class="min-w-0"><h3 class="text-lg font-black text-ink">Définir la commande</h3><p class="mt-3 text-sm leading-6">Sélectionne <span class="constant">command</span>, double-clique sur <strong>(Par défaut)</strong> et saisis :</p><div class="mt-4 code"><pre>"C:\Users\TON_NOM\AppData\Local\Programs\Microsoft VS Code\Code.exe" "%1"</pre></div><p class="mt-3 text-sm leading-6">Remplace <span class="constant">TON_NOM</span> par ton nom d'utilisateur Windows. Si VS Code est installé pour tous les utilisateurs, le chemin est plutôt <span class="constant">C:\Program Files\Microsoft VS Code\Code.exe</span>. Pour le retrouver : clic droit sur le raccourci VS Code &gt; <strong>Propriétés</strong> &gt; champ <strong>Cible</strong>.</p></div></article><article class="c-card p-6 flex gap-4 items-start"><span class="step-num">7</span><div class="min-w-0"><h3 class="text-lg font-black text-ink">Tester</h3><p class="mt-3 text-sm leading-6">Fais un clic droit sur un dossier : l'entrée doit apparaître immédiatement. Si ce n'est pas le cas, ferme et rouvre l'Explorateur de fichiers.</p></div></article></div></section>
+
+<section id="regfile"><div class="mb-6"><span class="tag">07 · Méthode 2</span><h2 class="mt-4 text-3xl font-black text-ink">Ajouter une entrée avec un fichier .reg</h2><p class="mt-3 leading-7">Un fichier <span class="constant">.reg</span> contient tes entrées sous forme de texte. Un double-clic les ajoute, ce qui permet de <strong>refaire exactement la même chose</strong> sur un autre PC ou après une réinstallation.</p></div><div class="space-y-5"><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">La syntaxe d'un fichier .reg</h3><div class="mt-4 code"><pre>Windows Registry Editor Version 5.00
+
+<span class="kw">[HKEY_CLASSES_ROOT\Directory\shell\ShowTree]</span>
+@=<span class="str">"Afficher l'arborescence (tree)"</span>
+<span class="str">"Icon"</span>=<span class="str">"cmd.exe"</span>
+
+<span class="kw">[HKEY_CLASSES_ROOT\Directory\shell\ShowTree\command]</span>
+@=<span class="str">"cmd.exe /k tree \"%1\" /a /f"</span></pre></div><ul class="mt-4 space-y-3 text-sm leading-6"><li>La <strong>première ligne</strong> <span class="constant">Windows Registry Editor Version 5.00</span> est obligatoire.</li><li><span class="constant">[chemin]</span> désigne une <strong>clé</strong> (elle est créée si elle n'existe pas).</li><li><span class="constant">@="texte"</span> définit la valeur <strong>(Par défaut)</strong>.</li><li><span class="constant">"Nom"="texte"</span> définit une valeur nommée, comme <span class="constant">Icon</span>.</li><li>Les lignes qui commencent par <span class="constant">;</span> sont des <strong>commentaires</strong>.</li></ul></article><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Les caractères à doubler ou protéger</h3><div class="mt-4 overflow-x-auto rounded-xl border border-slate-200"><table class="min-w-full text-left text-sm"><thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500"><tr><th class="px-4 py-3">Dans le fichier .reg</th><th class="px-4 py-3">Valeur réelle dans le registre</th><th class="px-4 py-3">Pourquoi</th></tr></thead><tbody class="divide-y divide-slate-100"><tr><td class="px-4 py-3"><span class="constant">\\</span></td><td class="px-4 py-3"><span class="constant">\</span></td><td class="px-4 py-3">Le backslash est un caractère spécial : on le <strong>double</strong></td></tr><tr><td class="px-4 py-3"><span class="constant">\"</span></td><td class="px-4 py-3"><span class="constant">"</span></td><td class="px-4 py-3">Un guillemet à l'intérieur d'un texte doit être <strong>protégé</strong> par un backslash</td></tr></tbody></table></div><div class="mt-4 code"><pre>Dans le fichier .reg :
+@="\"C:\\Program Files\\Mon Appli\\app.exe\" \"%1\""
+
+Valeur réelle dans le registre :
+"C:\Program Files\Mon Appli\app.exe" "%1"</pre></div></article><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Utiliser le fichier</h3><ol class="mt-4 space-y-3 text-sm leading-6"><li>Copie le texte dans le Bloc-notes, puis <strong>Fichier &gt; Enregistrer sous</strong>.</li><li>Choisis le type <strong>Tous les fichiers</strong>, un nom finissant par <span class="constant">.reg</span> (par exemple <span class="constant">clic-droit.reg</span>) et l'encodage <strong>Unicode</strong> (ou ANSI). <strong>Pas UTF-8</strong>, sinon les accents peuvent s'afficher de travers.</li><li>Double-clique sur le fichier, confirme l'avertissement du registre et le contrôle de compte d'utilisateur.</li><li>Fais un clic droit sur un dossier pour vérifier.</li></ol><p class="mt-4 rounded-lg bg-slate-50 p-3 text-sm leading-6">Pour modifier une entrée, clic droit sur le fichier <span class="constant">.reg</span> &gt; <strong>Modifier</strong> : cela ouvre le fichier dans le Bloc-notes au lieu de l'appliquer.</p></article></div></section>
+
+<section id="vscode"><div class="mb-6"><span class="tag">08 · Entrée 1</span><h2 class="mt-4 text-3xl font-black text-ink">Ouvrir un dossier dans VS Code</h2></div><div class="space-y-5"><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Le fichier .reg</h3><div class="mt-4 code"><pre>Windows Registry Editor Version 5.00
+
+<span class="cm">; Clic droit SUR un dossier</span>
+<span class="kw">[HKEY_CLASSES_ROOT\Directory\shell\OpenVSCode]</span>
+@=<span class="str">"Ouvrir dans VS Code"</span>
+<span class="str">"Icon"</span>=<span class="str">"C:\\Users\\TON_NOM\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe,0"</span>
+
+<span class="kw">[HKEY_CLASSES_ROOT\Directory\shell\OpenVSCode\command]</span>
+@=<span class="str">"\"C:\\Users\\TON_NOM\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" \"%1\""</span>
+
+<span class="cm">; Clic droit DANS le vide d'un dossier</span>
+<span class="kw">[HKEY_CLASSES_ROOT\Directory\Background\shell\OpenVSCode]</span>
+@=<span class="str">"Ouvrir dans VS Code"</span>
+<span class="str">"Icon"</span>=<span class="str">"C:\\Users\\TON_NOM\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe,0"</span>
+
+<span class="kw">[HKEY_CLASSES_ROOT\Directory\Background\shell\OpenVSCode\command]</span>
+@=<span class="str">"\"C:\\Users\\TON_NOM\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" \"%V\""</span></pre></div><p class="mt-3 text-sm leading-6">Remplace <span class="constant">TON_NOM</span> par ton nom d'utilisateur Windows (chemin installé pour ton compte), ou utilise <span class="constant">C:\\Program Files\\Microsoft VS Code\\Code.exe</span> si VS Code est installé pour tous les utilisateurs.</p></article><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Ce que fait chaque ligne</h3><div class="mt-4 overflow-x-auto rounded-xl border border-slate-200"><table class="min-w-full text-left text-sm"><thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500"><tr><th class="px-4 py-3">Ligne</th><th class="px-4 py-3">Rôle</th></tr></thead><tbody class="divide-y divide-slate-100"><tr><td class="px-4 py-3"><span class="constant">@="Ouvrir dans VS Code"</span></td><td class="px-4 py-3">Le texte affiché dans le menu</td></tr><tr><td class="px-4 py-3"><span class="constant">"Icon"="...Code.exe,0"</span></td><td class="px-4 py-3">L'icône : la première icône (numéro 0) contenue dans <span class="constant">Code.exe</span></td></tr><tr><td class="px-4 py-3"><span class="constant">"...Code.exe" "%1"</span></td><td class="px-4 py-3">Lance VS Code en lui passant le dossier cliqué</td></tr><tr><td class="px-4 py-3"><span class="constant">"...Code.exe" "%V"</span></td><td class="px-4 py-3">Même chose, mais pour le dossier dans lequel tu cliques dans le vide</td></tr></tbody></table></div><p class="mt-4 rounded-lg bg-slate-50 p-3 text-sm leading-6">Il y a deux blocs : un pour le clic <strong>sur</strong> un dossier (<span class="constant">%1</span>), un pour le clic <strong>dans le vide</strong> d'un dossier (<span class="constant">%V</span>). Si tu n'as besoin que du premier, supprime le second.</p></article></div></section>
+
+<section id="chemin"><div class="mb-6"><span class="tag">09 · Entrée 2</span><h2 class="mt-4 text-3xl font-black text-ink">Copier le chemin complet</h2><p class="mt-3 leading-7">Cette entrée met dans le presse-papiers le chemin complet du fichier ou du dossier cliqué, par exemple <span class="constant">C:\Users\toi\Documents\projet</span>.</p></div><div class="space-y-5"><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Le fichier .reg</h3><div class="mt-4 code"><pre>Windows Registry Editor Version 5.00
+
+<span class="cm">; Clic droit SUR un dossier</span>
+<span class="kw">[HKEY_CLASSES_ROOT\Directory\shell\CopyFullPath]</span>
+@=<span class="str">"Copier le chemin complet"</span>
+
+<span class="kw">[HKEY_CLASSES_ROOT\Directory\shell\CopyFullPath\command]</span>
+@=<span class="str">"cmd /c echo | set /p=\"%1\"| clip"</span>
+
+<span class="cm">; Clic droit SUR un fichier</span>
+<span class="kw">[HKEY_CLASSES_ROOT\*\shell\CopyFullPath]</span>
+@=<span class="str">"Copier le chemin complet"</span>
+
+<span class="kw">[HKEY_CLASSES_ROOT\*\shell\CopyFullPath\command]</span>
+@=<span class="str">"cmd /c echo | set /p=\"%1\"| clip"</span>
+
+<span class="cm">; Clic droit DANS le vide d'un dossier</span>
+<span class="kw">[HKEY_CLASSES_ROOT\Directory\Background\shell\CopyFullPath]</span>
+@=<span class="str">"Copier le chemin du dossier"</span>
+
+<span class="kw">[HKEY_CLASSES_ROOT\Directory\Background\shell\CopyFullPath\command]</span>
+@=<span class="str">"cmd /c echo | set /p=\"%V\"| clip"</span></pre></div></article><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Comprendre la commande</h3><div class="mt-4 code"><pre>cmd /c echo | set /p="%1"| clip</pre></div><ul class="mt-4 space-y-3 text-sm leading-6"><li><span class="constant">cmd /c</span> : lance une commande dans une fenêtre invisible, puis la ferme.</li><li><span class="constant">set /p="%1"</span> : affiche le texte <span class="constant">%1</span> (le chemin) <strong>sans retour à la ligne</strong> à la fin.</li><li><span class="constant">echo |</span> : fournit une entrée à <span class="constant">set /p</span> pour qu'il n'attende pas que tu tapes quelque chose.</li><li><span class="constant">| clip</span> : envoie ce texte dans le <strong>presse-papiers</strong> (<span class="constant">clip</span> est un programme fourni avec Windows).</li></ul><p class="mt-4 rounded-lg bg-slate-50 p-3 text-sm leading-6">Pourquoi ne pas simplement écrire <span class="constant">echo "%1" | clip</span> ? Parce que <span class="constant">echo</span> ajoute les guillemets et un retour à la ligne à la fin. Avec <span class="constant">set /p</span>, tu obtiens le chemin <strong>tout propre</strong>, prêt à coller.</p></article><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Entrée intégrée à Windows</h3><p class="mt-3 text-sm leading-6">Windows propose déjà <strong>Maj + clic droit &gt; Copier en tant que chemin d'accès</strong>, mais le chemin copié est entouré de <strong>guillemets</strong>. Cette entrée personnalisée copie le chemin <strong>sans guillemets</strong>, en un seul clic droit, sans toucher à Maj.</p></article></div></section>
+
+<section id="tree"><div class="mb-6"><span class="tag">10 · Entrée 3</span><h2 class="mt-4 text-3xl font-black text-ink">Afficher l'arborescence avec tree</h2><p class="mt-3 leading-7"><span class="constant">tree</span> est une commande Windows qui dessine l'arborescence d'un dossier : tous ses sous-dossiers et ses fichiers.</p></div><div class="space-y-5"><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Le fichier .reg</h3><div class="mt-4 code"><pre>Windows Registry Editor Version 5.00
+
+<span class="cm">; Clic droit SUR un dossier</span>
+<span class="kw">[HKEY_CLASSES_ROOT\Directory\shell\ShowTree]</span>
+@=<span class="str">"Afficher l'arborescence (tree)"</span>
+<span class="str">"Icon"</span>=<span class="str">"cmd.exe"</span>
+
+<span class="kw">[HKEY_CLASSES_ROOT\Directory\shell\ShowTree\command]</span>
+@=<span class="str">"cmd.exe /k tree \"%1\" /a /f"</span>
+
+<span class="cm">; Clic droit DANS le vide d'un dossier</span>
+<span class="kw">[HKEY_CLASSES_ROOT\Directory\Background\shell\ShowTree]</span>
+@=<span class="str">"Afficher l'arborescence (tree)"</span>
+<span class="str">"Icon"</span>=<span class="str">"cmd.exe"</span>
+
+<span class="kw">[HKEY_CLASSES_ROOT\Directory\Background\shell\ShowTree\command]</span>
+@=<span class="str">"cmd.exe /k tree \"%V\" /a /f"</span></pre></div></article><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Comprendre la commande</h3><div class="mt-4 code"><pre>cmd.exe /k tree "%1" /a /f</pre></div><ul class="mt-4 space-y-3 text-sm leading-6"><li><span class="constant">cmd.exe /k</span> : ouvre une fenêtre d'invite de commandes et la <strong>laisse ouverte</strong> pour que tu puisses lire le résultat. Avec <span class="constant">/c</span>, elle se fermerait aussitôt.</li><li><span class="constant">tree "%1"</span> : affiche l'arborescence du dossier cliqué.</li><li><span class="constant">/f</span> : affiche aussi les <strong>fichiers</strong>, pas seulement les dossiers.</li><li><span class="constant">/a</span> : utilise des caractères <strong>ASCII</strong> (<span class="constant">|</span>, <span class="constant">+---</span>) au lieu de traits graphiques. Le résultat reste lisible dans n'importe quelle police et se copie proprement dans un fichier texte.</li></ul></article><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Exemple de résultat (simplifié)</h3><div class="mt-4 code"><pre>C:\MON-PROJET
+|   index.html
+|   style.css
+|
++---css
+|       main.css
+|
+\---img
+        logo.png</pre></div><div class="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm leading-6 text-amber-900"><strong>Dossiers volumineux :</strong> sur un dossier qui contient des milliers de fichiers (par exemple <span class="constant">node_modules</span>), <span class="constant">tree</span> peut afficher des pages et des pages. Appuie sur <span class="constant">Ctrl + C</span> pour l'arrêter.</div></article><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Variante : copier l'arborescence au lieu de l'afficher</h3><div class="mt-4 code"><pre>@=<span class="str">"cmd.exe /c tree \"%1\" /a /f | clip"</span></pre></div><p class="mt-3 text-sm leading-6">Avec <span class="constant">/c</span> à la place de <span class="constant">/k</span> et <span class="constant">| clip</span> à la fin, le résultat est envoyé dans le presse-papiers : pratique pour le coller dans un README ou dans la documentation d'un projet. Pour l'utiliser, crée une entrée supplémentaire (par exemple <span class="constant">CopyTree</span>) avec cette commande dans sa sous-clé <span class="constant">command</span>.</p></article></div></section>
+
+<section id="perso"><div class="mb-6"><span class="tag">11 · Aller plus loin</span><h2 class="mt-4 text-3xl font-black text-ink">Personnaliser tes entrées</h2></div><div class="space-y-5"><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Options utiles</h3><div class="mt-4 overflow-x-auto rounded-xl border border-slate-200"><table class="min-w-full text-left text-sm"><thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500"><tr><th class="px-4 py-3">Je veux…</th><th class="px-4 py-3">Ce que je fais</th></tr></thead><tbody class="divide-y divide-slate-100"><tr><td class="px-4 py-3">Mettre l'entrée <strong>en haut</strong> du menu</td><td class="px-4 py-3">Ajouter la valeur <span class="constant">"Position"="Top"</span> dans la clé de l'entrée</td></tr><tr><td class="px-4 py-3">Ne la voir <strong>qu'avec Maj</strong></td><td class="px-4 py-3">Ajouter la valeur vide <span class="constant">"Extended"=""</span> dans la clé de l'entrée</td></tr><tr><td class="px-4 py-3">Ajouter une <strong>icône</strong></td><td class="px-4 py-3">Ajouter la valeur <span class="constant">"Icon"="chemin\\programme.exe,0"</span></td></tr><tr><td class="px-4 py-3">Limiter à <strong>un type de fichier</strong> (par exemple <span class="constant">.php</span>)</td><td class="px-4 py-3">Créer l'entrée sous <span class="constant">HKEY_CLASSES_ROOT\SystemFileAssociations\.php\shell</span></td></tr><tr><td class="px-4 py-3">Réserver l'entrée à <strong>mon compte</strong></td><td class="px-4 py-3">Remplacer <span class="constant">HKEY_CLASSES_ROOT</span> par <span class="constant">HKEY_CURRENT_USER\Software\Classes</span></td></tr></tbody></table></div></article><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Windows 11</h3><p class="mt-3 text-sm leading-6">Sous Windows 11, le nouveau menu clic droit est plus court. Les entrées ajoutées par le registre n'y apparaissent pas directement : elles se trouvent sous <strong>Afficher plus d'options</strong> (ou avec <span class="constant">Maj + F10</span>). Le fonctionnement du registre est le même.</p></article><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Sélection multiple</h3><p class="mt-3 text-sm leading-6">Si tu sélectionnes <strong>plusieurs</strong> éléments avant le clic droit, Windows peut lancer la commande <strong>une fois par élément</strong> (donc plusieurs fenêtres). Pour VS Code ou <span class="constant">tree</span>, mieux vaut cliquer sur un seul dossier à la fois.</p></article></div></section>
+
+<section id="supprimer"><div class="mb-6"><span class="tag">12 · Annuler</span><h2 class="mt-4 text-3xl font-black text-ink">Supprimer une entrée</h2><p class="mt-3 leading-7">Tu as le choix entre trois méthodes, de la plus visuelle à la plus rapide.</p></div><div class="space-y-5"><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Avec regedit</h3><p class="mt-3 text-sm leading-6">Va dans la clé <span class="constant">shell</span> concernée, fais un clic droit sur la clé de l'entrée (par exemple <span class="constant">OpenVSCode</span>) &gt; <strong>Supprimer</strong>. Ne supprime que <strong>tes</strong> clés, jamais <span class="constant">shell</span> elle-même.</p></article><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Avec une commande</h3><div class="mt-4 code"><pre>reg delete "HKEY_CLASSES_ROOT\Directory\shell\OpenVSCode" /f</pre></div><p class="mt-3 text-sm leading-6">À lancer dans une invite de commandes <strong>ouverte en administrateur</strong>. <span class="constant">/f</span> supprime sans demander de confirmation.</p></article><article class="c-card p-6 "><h3 class="text-xl font-black text-ink">Avec un fichier .reg</h3><div class="mt-4 code"><pre>Windows Registry Editor Version 5.00
+
+<span class="kw">[-HKEY_CLASSES_ROOT\Directory\shell\OpenVSCode]</span>
+<span class="kw">[-HKEY_CLASSES_ROOT\Directory\Background\shell\OpenVSCode]</span>
+<span class="kw">[-HKEY_CLASSES_ROOT\Directory\shell\CopyFullPath]</span>
+<span class="kw">[-HKEY_CLASSES_ROOT\*\shell\CopyFullPath]</span>
+<span class="kw">[-HKEY_CLASSES_ROOT\Directory\Background\shell\CopyFullPath]</span>
+<span class="kw">[-HKEY_CLASSES_ROOT\Directory\shell\ShowTree]</span>
+<span class="kw">[-HKEY_CLASSES_ROOT\Directory\Background\shell\ShowTree]</span></pre></div><p class="mt-3 text-sm leading-6">Le signe <span class="constant">-</span> devant le chemin signifie « <strong>supprime cette clé</strong> ». Enregistre ce texte dans un fichier <span class="constant">.reg</span> et double-clique dessus : toutes les entrées de ce guide disparaissent d'un coup.</p></article></div></section>
+
+<section id="depannage"><div class="mb-6"><span class="tag">13 · Dépannage</span><h2 class="mt-4 text-3xl font-black text-ink">Problèmes fréquents</h2></div><article class="c-card p-6 "><ul class="mt-4 space-y-3 text-sm leading-6"><li><strong>L'entrée n'apparaît pas.</strong> Vérifie que la sous-clé s'appelle exactement <span class="constant">command</span>, que tu as bien utilisé la bonne clé (<span class="constant">Directory</span> pour un clic sur un dossier, <span class="constant">Directory\Background</span> pour un clic dans le vide, <span class="constant">*</span> pour un fichier), puis ferme et rouvre l'Explorateur. Sous Windows 11, regarde sous « Afficher plus d'options ».</li><li><strong>L'entrée apparaît mais rien ne se passe.</strong> Le chemin du programme est faux ou n'est pas entre guillemets. Teste la commande à la main dans une invite de commandes.</li><li><strong>Une fenêtre noire s'ouvre et se ferme aussitôt.</strong> Tu as utilisé <span class="constant">cmd /c</span> : remplace par <span class="constant">cmd /k</span> pour garder la fenêtre ouverte.</li><li><strong>Ça marche sur un dossier, mais pas dans le vide d'un dossier (ou l'inverse).</strong> Il manque le deuxième bloc : <span class="constant">Directory\shell</span> avec <span class="constant">%1</span> d'un côté, <span class="constant">Directory\Background\shell</span> avec <span class="constant">%V</span> de l'autre.</li><li><strong>Le chemin est coupé à un espace.</strong> Il manque les guillemets autour de <span class="constant">%1</span> ou de <span class="constant">%V</span>.</li><li><strong>Les accents s'affichent mal.</strong> Le fichier <span class="constant">.reg</span> a été enregistré en UTF-8 : enregistre-le en <strong>Unicode</strong>.</li><li><strong>« Accès refusé » en modifiant <span class="constant">HKEY_CLASSES_ROOT</span>.</strong> Il faut les droits administrateur : lance regedit en administrateur, ou travaille dans <span class="constant">HKEY_CURRENT_USER\Software\Classes</span>.</li></ul></article></section>
+
+<section id="complets"><div class="mb-6"><span class="tag">14 · Les fichiers complets</span><h2 class="mt-4 text-3xl font-black text-ink">Les fichiers .reg complets</h2><p class="mt-3 leading-7">Copie ces deux fichiers dans le Bloc-notes, enregistre-les en <span class="constant">.reg</span> (encodage <strong>Unicode</strong>) et double-clique dessus. Pense à remplacer <span class="constant">TON_NOM</span> dans l'entrée VS Code.</p></div><div class="space-y-5"><details class="c-card p-6"><summary>Ajouter les trois entrées (VS Code, copier le chemin, tree)</summary><div class="mt-4"><button type="button" class="copy-btn" data-target="reg-ajout" onclick="copyCode(this)">Copier le code</button></div><div class="mt-4 code"><pre id="reg-ajout">Windows Registry Editor Version 5.00
+
+<span class="cm">; ======== 1. Ouvrir dans VS Code ========</span>
+<span class="cm">; Clic droit SUR un dossier</span>
+<span class="kw">[HKEY_CLASSES_ROOT\Directory\shell\OpenVSCode]</span>
+@=<span class="str">"Ouvrir dans VS Code"</span>
+<span class="str">"Icon"</span>=<span class="str">"C:\\Users\\TON_NOM\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe,0"</span>
+
+<span class="kw">[HKEY_CLASSES_ROOT\Directory\shell\OpenVSCode\command]</span>
+@=<span class="str">"\"C:\\Users\\TON_NOM\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" \"%1\""</span>
+
+<span class="cm">; Clic droit DANS le vide d'un dossier</span>
+<span class="kw">[HKEY_CLASSES_ROOT\Directory\Background\shell\OpenVSCode]</span>
+@=<span class="str">"Ouvrir dans VS Code"</span>
+<span class="str">"Icon"</span>=<span class="str">"C:\\Users\\TON_NOM\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe,0"</span>
+
+<span class="kw">[HKEY_CLASSES_ROOT\Directory\Background\shell\OpenVSCode\command]</span>
+@=<span class="str">"\"C:\\Users\\TON_NOM\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" \"%V\""</span>
+
+<span class="cm">; ======== 2. Copier le chemin complet ========</span>
+<span class="cm">; Clic droit SUR un dossier</span>
+<span class="kw">[HKEY_CLASSES_ROOT\Directory\shell\CopyFullPath]</span>
+@=<span class="str">"Copier le chemin complet"</span>
+
+<span class="kw">[HKEY_CLASSES_ROOT\Directory\shell\CopyFullPath\command]</span>
+@=<span class="str">"cmd /c echo | set /p=\"%1\"| clip"</span>
+
+<span class="cm">; Clic droit SUR un fichier</span>
+<span class="kw">[HKEY_CLASSES_ROOT\*\shell\CopyFullPath]</span>
+@=<span class="str">"Copier le chemin complet"</span>
+
+<span class="kw">[HKEY_CLASSES_ROOT\*\shell\CopyFullPath\command]</span>
+@=<span class="str">"cmd /c echo | set /p=\"%1\"| clip"</span>
+
+<span class="cm">; Clic droit DANS le vide d'un dossier</span>
+<span class="kw">[HKEY_CLASSES_ROOT\Directory\Background\shell\CopyFullPath]</span>
+@=<span class="str">"Copier le chemin du dossier"</span>
+
+<span class="kw">[HKEY_CLASSES_ROOT\Directory\Background\shell\CopyFullPath\command]</span>
+@=<span class="str">"cmd /c echo | set /p=\"%V\"| clip"</span>
+
+<span class="cm">; ======== 3. Afficher tree ========</span>
+<span class="cm">; Clic droit SUR un dossier</span>
+<span class="kw">[HKEY_CLASSES_ROOT\Directory\shell\ShowTree]</span>
+@=<span class="str">"Afficher l'arborescence (tree)"</span>
+<span class="str">"Icon"</span>=<span class="str">"cmd.exe"</span>
+
+<span class="kw">[HKEY_CLASSES_ROOT\Directory\shell\ShowTree\command]</span>
+@=<span class="str">"cmd.exe /k tree \"%1\" /a /f"</span>
+
+<span class="cm">; Clic droit DANS le vide d'un dossier</span>
+<span class="kw">[HKEY_CLASSES_ROOT\Directory\Background\shell\ShowTree]</span>
+@=<span class="str">"Afficher l'arborescence (tree)"</span>
+<span class="str">"Icon"</span>=<span class="str">"cmd.exe"</span>
+
+<span class="kw">[HKEY_CLASSES_ROOT\Directory\Background\shell\ShowTree\command]</span>
+@=<span class="str">"cmd.exe /k tree \"%V\" /a /f"</span></pre></div></details><details class="c-card p-6"><summary>Supprimer les trois entrées</summary><div class="mt-4"><button type="button" class="copy-btn" data-target="reg-suppr" onclick="copyCode(this)">Copier le code</button></div><div class="mt-4 code"><pre id="reg-suppr">Windows Registry Editor Version 5.00
+
+<span class="kw">[-HKEY_CLASSES_ROOT\Directory\shell\OpenVSCode]</span>
+<span class="kw">[-HKEY_CLASSES_ROOT\Directory\Background\shell\OpenVSCode]</span>
+<span class="kw">[-HKEY_CLASSES_ROOT\Directory\shell\CopyFullPath]</span>
+<span class="kw">[-HKEY_CLASSES_ROOT\*\shell\CopyFullPath]</span>
+<span class="kw">[-HKEY_CLASSES_ROOT\Directory\Background\shell\CopyFullPath]</span>
+<span class="kw">[-HKEY_CLASSES_ROOT\Directory\shell\ShowTree]</span>
+<span class="kw">[-HKEY_CLASSES_ROOT\Directory\Background\shell\ShowTree]</span></pre></div></details></div></section>
+
+        <section class="rounded-3xl bg-ink p-8 text-white md:p-12">
+          <span class="text-sm font-bold text-cyanx">Pour résumer</span>
+          <h2 class="mt-3 text-3xl font-black">Une clé, un texte, une commande.</h2>
+          <p class="mt-4 max-w-3xl leading-7 text-slate-300">
+            Chaque entrée du menu clic droit se résume à une clé dans <strong>shell</strong>, un texte affiché et une
+            sous-clé <strong>command</strong> qui contient ce qui s'exécute. Une fois ce schéma compris, tu peux
+            ajouter n'importe quel outil à ton menu, en gardant toujours un fichier <code>.reg</code> de secours pour
+            l'annuler.
+          </p>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="border-t border-slate-200 bg-white">
+    <div class="mx-auto max-w-7xl px-5 py-10 text-sm text-slate-500">
+      <strong class="text-ink">Guide Menu clic droit</strong> · Ajouter ses propres commandes à Windows avec le registre.
+    </div>
+  </footer>
+
+  <script>
+    function applyTheme(dark) {
+      document.body.classList.toggle('dark', dark);
+      const button = document.querySelector('button[onclick="toggleTheme()"]');
+      if (button) {
+        button.textContent = dark ? 'Mode jour' : 'Mode nuit';
+      }
+      localStorage.setItem('menu-theme', dark ? 'dark' : 'light');
+    }
+
+    function toggleTheme() {
+      applyTheme(!document.body.classList.contains('dark'));
+    }
+
+    const savedTheme = localStorage.getItem('menu-theme');
+    if (savedTheme === 'dark') {
+      applyTheme(true);
+    }
+
+    // Met en évidence automatiquement la section actuellement consultée
+    const sidebarLinks = document.querySelectorAll('.sidebar-link');
+    const sections = Array.from(sidebarLinks)
+      .map(link => document.querySelector(link.getAttribute('href')))
+      .filter(Boolean);
+
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter(entry => entry.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+      if (visible.length) {
+        sidebarLinks.forEach(link => link.classList.remove('active'));
+        const activeLink = document.querySelector('.sidebar-link[href="#' + visible[0].target.id + '"]');
+        if (activeLink) activeLink.classList.add('active');
+      }
+    }, {
+      rootMargin: '-25% 0px -65% 0px',
+      threshold: 0
+    });
+
+    sections.forEach(section => observer.observe(section));
+    function copyCode(btn) {
+      var text = document.getElementById(btn.dataset.target).textContent;
+      function ok() {
+        var old = btn.textContent;
+        btn.textContent = 'Copié !';
+        setTimeout(function () { btn.textContent = old; }, 1500);
+      }
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(ok);
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); ok(); } catch (e) { }
+        document.body.removeChild(ta);
+      }
+    }
+  </script>
+
+</body>
+
+</html>
